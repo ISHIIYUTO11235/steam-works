@@ -213,6 +213,7 @@ input,textarea{-webkit-user-select:text;user-select:text}
 .firebar{height:10px;background:#140b06;border:2px solid #000;margin:6px 0 2px;position:relative}
 .firebar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#7a2a10,#ff8a2a 70%,#fff0b0);transition:width .3s}
 .dial{display:block;width:min(260px,100%);height:auto;aspect-ratio:1;margin:6px auto 2px}
+@media (max-width:700px){ .dial{width:min(170px,55vw)} }
 .detail .acts{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
 .detail .acts .pbtn{font-size:13px;padding:3px 10px}
 .recipe{display:flex;align-items:center;gap:4px;flex-wrap:wrap;font-size:12px;margin-top:6px}
@@ -326,8 +327,7 @@ input,textarea{-webkit-user-select:text;user-select:text}
   <div id="goalBody"></div>
 </div></div>
 <div class="modal" id="mOrders" hidden><div class="mbox" role="dialog" aria-modal="true" aria-labelledby="hOrders">
-  <header><h2 id="hOrders">案件ボード</h2><button class="pbtn" data-close>閉じる</button></header>
-  <p class="lead">受けた案件の品を出荷口へ届けると報酬が入ります。本筋の依頼を片付けると新しい設計書が買えるようになります。</p>
+  <header><h2 id="hOrders">案件ボード</h2><span class="note" id="ordSlots"></span><button class="pbtn" data-close>閉じる</button></header>
   <div id="orderCards"></div>
 </div></div>
 <div class="modal" id="mGacha" hidden><div class="mbox" role="dialog" aria-modal="true" aria-labelledby="hGacha" style="width:min(760px,100%)">
@@ -766,8 +766,12 @@ function addS(sg,k,v){ if(!sg||k==null||!sg.s) return; const j=sg.B.nodeIdx?sg.B
 function phiAt(sg,k){ if(!sg||k==null||!sg.phi) return 0; const j=sg.B.nodeIdx?sg.B.nodeIdx[k]:-1; return j>=0?sg.phi[j]:0; }
 function localP(sg,k){ if(!sg) return 0; const v=Math.max(0,sg.p+phiAt(sg,k)); return sg.pmx?Math.min(sg.pmx,v):v; }
 function solveSeg(sg,pv){ if(pv==null) pv=sg.p; const n=sg.nOrd||0; if(n<2||!sg.s){ if(sg.phi) sg.phi.fill(0); return; }
-  let tot=0; for(let j=0;j<n;j++) tot+=sg.s[j]; const m=tot/sg.mem.length, sub=sg.sub;
-  for(let j=0;j<sg.mem.length;j++) sub[j]=sg.s[j]-m;
+  const M=sg.mem.length, sub=sg.sub; if(!sg.sa) sg.sa=new Float32Array(M);
+  /* 定常に近い分布にする：その刻みに入ってこなかった分は、最近の供給口から来たものとみなす */
+  let pos=0,neg=0,sat=0; for(let j=0;j<M;j++){ const v=sg.s[j]; if(v>0) pos+=v; else neg-=v; sg.sa[j]=sg.sa[j]*0.9+0.1*Math.max(0,v); sat+=sg.sa[j]; }
+  for(let j=0;j<M;j++) sub[j]=sg.s[j];
+  if(neg>pos&&sat>1e-6){ const def=neg-pos; for(let j=0;j<M;j++) sub[j]+=sg.sa[j]/sat*def; }
+  let tot=0; for(let j=0;j<M;j++) tot+=sub[j]; const m=tot/M; for(let j=0;j<M;j++) sub[j]-=m;
   for(let t=n-1;t>0;t--){ const v=sg.ord[t]; sub[sg.par[v]]+=sub[v]; }
   const phi=sg.phi; phi[sg.ord[0]]=0; for(let t=1;t<n;t++){ const v=sg.ord[t]; phi[v]=phi[sg.par[v]]+sg.pr[v]*sub[v]; }
   let mp=0; for(let j=0;j<n;j++) mp+=phi[j]; mp/=n; for(let j=0;j<n;j++){ phi[j]-=mp; if(pv+phi[j]<0) phi[j]=-pv; } }
@@ -835,7 +839,7 @@ function steamPhase1(G,W,srcFn){
     const o=valveOpen(L,W); if(L.bit!=null){ L.open=o; continue; } if(L.c.open&&!o&&W&&L.B===W) W.events.push(['vent',L.i]); if(W&&L.B===W&&(L.c.t==='vNC'||L.c.t==='vNO')&&(L.c.open?1:0)!==o) W.flags.flip=1; L.c.open=o; L.open=o; }
   if(srcFn) srcFn();
   for(const L of G.links){ if(!L.port&&L.c.t==='superheat'){ if(L.a&&L.b){ const tg=Math.min(1.5,L.a.p*1.6)*L.b.cap,room=tg-L.b.q; if(room>0){ const f=Math.min(0.6,room,L.a.q/1.6); L.a.q-=f*1.6; L.b.q+=f; L.b.inflow+=f; addS(L.a,L.ka,-f*1.6); addS(L.b,L.kb,f); L.c.act=f>0.02?1:0; } else L.c.act=0; L.b.held=1; } continue; }
-    if(L.open&&L.a&&L.b){ if(!L.port&&L.c.t==='prv'){ const lim=Math.max(0,(L.c.set||200)/KPA*L.b.cap-L.b.q); if(lim>0) flow(L.a,L.b,Math.min(1.6,lim),L.ka,L.kb); L.b.held=1; } else flow(L.a,L.b,1.6,L.ka,L.kb); } else if(!L.open&&L.b) L.b.vent=1; }
+    if(L.open&&L.a&&L.b){ if(!L.port&&L.c.t==='prv'){ const tg=(L.c.set||200)/KPA; const err=(tg-phiAt(L.b,L.kb))*L.b.cap-L.b.q; L.c._i=Math.max(0,Math.min(1.6,(L.c._i||0)+err*0.1)); const lim=Math.min(Math.max(0,err*0.5+L.c._i),Math.max(0,tg*L.b.cap-L.b.q)); if(lim>0) flow(L.a,L.b,Math.min(1.6,lim),L.ka,L.kb); L.b.held=1; L.b.pmx=Math.max(L.b.pmx||0,Math.min(tg,L.a.pmx||tg)); } else flow(L.a,L.b,1.6,L.ka,L.kb); } else if(!L.open&&L.b) L.b.vent=1; }
   if(G.reliefs) for(const r of G.reliefs){ if(r.c.t==='whistle'||r.c.t==='organ'){ const on=r.s.p>=SIG_ON; if(r.c.t==='whistle'){ if(on){ r.s.q=Math.max(0,r.s.q-0.015); if(W&&r.B===W&&(!r.c.act||(W.tick+r.i)%12===0)) W.events.push(['whistle',r.i,r.s.p]); } r.c.act=on?1:0; } else { if(on&&!r.c.act&&W&&r.B===W){ W.events.push(['note',r.i,r.c.set||0]); onNote(W,r.c.set||0); } r.c.act=on?1:0; } continue; }
     const st=(r.c.set||500)/KPA; if(r.s.p>st){ r.s.q=st*r.s.cap; r.c.act=1; if(W&&r.B===W&&Math.random()<.3) W.events.push(['vent',r.i]); } else r.c.act=0; }
   for(const s of G.segs){ s.p=Math.max(0,s.q/s.cap); s.p1=s.p; }
@@ -2102,8 +2106,10 @@ function renderOrders(){
     if(o.type==='chip'&&o.par&&W.owned.testbench&&st.st!=='done') foot='<span class="note" style="color:#6b4f2f">試験台：部品 '+o.par+' 個以下で報酬1.5倍</span>'+foot;
     if(o.type==='chip'&&st.st==='avail'){ const ds=Object.keys(W.defs); foot=!W.owned.chip?'<span class="note" style="color:#6b4f2f">チップ鋳造台の設計書が必要</span>':ds.length?'<select data-chipsel="'+o.id+'">'+ds.map(id=>'<option value="'+id+'">'+W.defs[id].name.replace(/</g,'')+'</option>').join('')+'</select><button class="pbtn pri" data-chipsub="'+o.id+'">納品</button>':'<span class="note" style="color:#6b4f2f">まず鋳造台でチップを作る</span>'; }
     return '<div class="card'+(st.st==='done'?' done':'')+'">'+(st.st==='done'?'<div class="stamp">納品済</div>':'')+'<div class="cl">'+o.client+'　<span class="badge">'+TYPEN[o.type]+'</span>'+(rep?' <span class="badge">何度でも</span>':'')+' '+starsOf(o.lv)+'</div><h4>'+o.title+'</h4><div class="req">'+orderReqHtml(o)+'</div><p>'+o.desc+'</p>'+(o.type==='chip'?specHtml(o):'')+(unl?'<p><b>達成で解禁：</b>'+unl+'</p>':'')+(rep&&st.cnt?'<p>これまで '+st.cnt+' 回</p>':'')+'<div class="foot"><span class="rw">¥'+fmt(o.reward)+'</span>'+foot+'</div></div>'; };
-  const sect=(name,lead,grp)=>'<div class="sect"><h3>'+name+'</h3><p class="note">'+lead+'</p><div class="cards">'+ORDERS.filter(o=>o.grp===grp).slice().sort((a,b)=>a.lv-b.lv).map(card).join('')+'</div></div>';
-  box.innerHTML='<p class="note">いま同時に受けられる案件：'+activeOrders(W).length+' / '+maxActive(W)+'（「至急・歯車」「灯油の補給」の達成で枠が増える）</p>'+sect('本筋の依頼','片付けると新しい設計書が解禁される。','main')+sect('定期契約','何度でも受けられる。少し待つと次の注文が来る。','rep')+sect('特注','条件の厳しい腕試し。報酬が高い。','sp')+sect('最上級・回路設計','チップの設計図そのものを納める。ポートの向きと真理値表が仕様どおりなら合格。鋳造台の「仕様に合わせる」でポートを揃えられる。','chip');
+  const RANK={active:0,avail:1,cool:2,locked:3,done:4};
+  const sect=(name,lead,grp)=>'<div class="sect"><h3>'+name+'</h3>'+(lead?'<p class="note">'+lead+'</p>':'')+'<div class="cards">'+ORDERS.filter(o=>o.grp===grp).slice().sort((a,b)=>(RANK[W.orders[a.id].st]-RANK[W.orders[b.id].st])||(a.lv-b.lv)).map(card).join('')+'</div></div>';
+  $('ordSlots').textContent='受注中 '+activeOrders(W).length+' / '+maxActive(W);
+  box.innerHTML=sect('本筋の依頼','','main')+sect('定期契約','','rep')+sect('特注','','sp')+sect('最上級・回路設計','チップの設計図を納める。','chip');
   paintIcons(box);
   box.querySelectorAll('[data-accept]').forEach(b=>b.onclick=()=>{ const why=acceptOrder(W,b.dataset.accept); if(why){ toast(why); SFX.err(); } else { toast('受注：'+ORD[b.dataset.accept].title,1); SFX.buy(); closeModal('mOrders'); save(); } renderOrders(); });
   box.querySelectorAll('[data-drop]').forEach(b=>b.onclick=()=>{ dropOrder(W,b.dataset.drop); renderOrders(); });
