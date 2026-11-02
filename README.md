@@ -105,6 +105,14 @@ cd steam-works
 open index.html   # Windows は start index.html
 ```
 
+## 開拓地（別ワールド）
+
+「自動人形の出展」を納めると、メニューの「土地」から新しい土地を拓けます。地形（平原・丘陵・渓谷・湖沼）は拓くたびにランダムに生成され、最大8か所まで持てます。お金・設計書・チップ・案件・実績は全部の土地で共通です。
+
+## 言語
+
+日本語・English・简体中文・Português に対応しています（メニュー／ホームの「設定」で切り替え）。訳は `i18n/*.json` にあり、`python3 tools/build_i18n.py` で `index.html` に埋め込みます。`--missing` を付けると、訳のない文字列を一覧にします。
+
 ## 技術
 
 - 1ファイルの HTML（Canvas 2D、素の JavaScript）
