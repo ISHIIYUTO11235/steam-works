@@ -961,7 +961,6 @@
 "弁": "Válvulas",
 "は背中から入って矢印へ出ます。常閉弁は横の操作口に圧があると開き、常開弁は閉じます。閉じた弁は出口側の蒸気を抜きます。": " recebem vapor pelas costas e soltam pela seta. A válvula NF abre quando a porta de controle lateral tem pressão; a NA fecha. Uma válvula fechada esvazia o vapor do lado da saída.",
 "品物": "Itens",
-"は重力で落ちます。ベルトの端から落とせば下の設備へ。上げるには昇降機。床で止まったままの品は約3分で消えます（消える前に点滅）。": " caem pela gravidade. Solte-os da ponta de uma esteira na máquina abaixo. Para subir, use um elevador. Itens parados no chão somem após cerca de 3 minutos (piscam antes de sumir).",
 "詳しく見る": "Detalhes",
 "：下の設備一覧は、長押し（PC は右クリック）で説明・使用圧力・作れる物が見られます。": ": toque longo numa máquina da lista inferior (botão direito no PC) para ver descrição, pressão de operação e o que ela produz.",
 "資金": "Fundos",
@@ -971,5 +970,11 @@
 "福引き機": "Máquina de sorteio",
 "チップ内部": "Interior do chip",
 "案件の仕様に合わせる": "Ajustar à especificação de um pedido",
-"サウンド": "Som"
+"サウンド": "Som",
+"分配器（下と横）": "Divisor (baixo/lado)",
+"入った品物を下と矢印の側へ交互に出す。下が空いていれば落とす。": "Envia itens alternadamente para baixo e para o lado da seta. Se embaixo estiver livre, deixa cair.",
+"分配・下横": "Divisor baixo/lado",
+"設備一覧の段数を切り替え": "Alternar linhas da paleta",
+"新しい土地を拓けるようになった：メニューの「土地」から": "Agora você pode abrir novas terras — em “Terras”, no menu",
+"は重力で落ちます。ベルトの端から落とせば下の設備へ。上げるには昇降機。床で止まったままの品は約1分で消えます（消える前に点滅。倍速ならそのぶん早く）。": " caem pela gravidade. Solte-os da ponta de uma esteira na máquina abaixo. Para subir, use um elevador. Itens parados no chão somem após cerca de 1 minuto (piscam antes; mais rápido em 2×/4×)."
 }

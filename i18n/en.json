@@ -961,7 +961,6 @@
 "弁": "Valves",
 "は背中から入って矢印へ出ます。常閉弁は横の操作口に圧があると開き、常開弁は閉じます。閉じた弁は出口側の蒸気を抜きます。": " take steam in at the back and out at the arrow. A normally-closed valve opens when its side control port has pressure; a normally-open one closes. A closed valve vents the steam on its outlet side.",
 "品物": "Items",
-"は重力で落ちます。ベルトの端から落とせば下の設備へ。上げるには昇降機。床で止まったままの品は約3分で消えます（消える前に点滅）。": " fall by gravity. Drop them off the end of a belt into the machine below. To raise them, use a lift. Items left sitting still on the floor vanish after about 3 minutes (they blink before vanishing).",
 "詳しく見る": "Details",
 "：下の設備一覧は、長押し（PC は右クリック）で説明・使用圧力・作れる物が見られます。": ": long-press a machine in the list at the bottom (right-click on PC) to see its description, operating pressure and what it makes.",
 "資金": "Funds",
@@ -971,5 +970,11 @@
 "福引き機": "Lottery machine",
 "チップ内部": "Chip interior",
 "案件の仕様に合わせる": "Match an order's spec",
-"サウンド": "Sound"
+"サウンド": "Sound",
+"分配器（下と横）": "Splitter (down/side)",
+"入った品物を下と矢印の側へ交互に出す。下が空いていれば落とす。": "Sends incoming items alternately down and toward the arrow. Drops them if the space below is empty.",
+"分配・下横": "Split down/side",
+"設備一覧の段数を切り替え": "Switch palette rows",
+"新しい土地を拓けるようになった：メニューの「土地」から": "You can now open up new land — from “Land” in the menu",
+"は重力で落ちます。ベルトの端から落とせば下の設備へ。上げるには昇降機。床で止まったままの品は約1分で消えます（消える前に点滅。倍速ならそのぶん早く）。": " fall by gravity. Drop them off the end of a belt into the machine below. To raise them, use a lift. Items left sitting still on the floor vanish after about 1 minute (they blink first; faster at 2×/4×)."
 }
