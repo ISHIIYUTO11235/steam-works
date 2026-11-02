@@ -210,6 +210,8 @@ input,textarea{-webkit-user-select:text;user-select:text}
 .gscale{display:flex;justify-content:space-between;font-size:10px;color:var(--muted);font-family:var(--f-pixel)}
 .detail .kv{margin-top:6px}
 .plate{display:inline-block;margin:2px 0 4px;padding:3px 10px;background:linear-gradient(#c9a25a,#8d6b2c);color:#20150a;border:2px solid #000;box-shadow:inset 0 1px 0 #f3d68a;font-family:"Shippori Mincho B1","Hiragino Mincho ProN",serif;font-size:13px;letter-spacing:.06em}
+.firebar{height:10px;background:#140b06;border:2px solid #000;margin:6px 0 2px;position:relative}
+.firebar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#7a2a10,#ff8a2a 70%,#fff0b0);transition:width .3s}
 .dial{display:block;width:min(260px,100%);height:auto;aspect-ratio:1;margin:6px auto 2px}
 .detail .acts{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
 .detail .acts .pbtn{font-size:13px;padding:3px 10px}
@@ -355,6 +357,7 @@ input,textarea{-webkit-user-select:text;user-select:text}
     <li><b>置く</b>：PC はクリック。スマホはパレットから地図へドラッグするか、選んでから地図を長押ししてなぞります。</li>
     <li><b>調べる</b>：設備をタップ（クリック）すると、状態・圧力・操作がまとめて出ます。設備の上に赤い印が出たら、何か困っている合図です。</li>
     <li><b>蒸気と圧力</b>：ボイラーは水に隣接させ、燃料を入れると最高 400 kPa の蒸気を管へ送ります。設備には銘板どおりの使用圧力があり、足りなくても強すぎても止まります。圧力は<b>圧力計</b>を管に付けて、針を目で読むしかありません。強すぎるときは減圧弁で下げます。</li>
+    <li><b>圧力の落ち方</b>：蒸気は管を流れるほど圧が落ちます。遠くの設備ほど圧が低く、たくさん使う設備の先はさらに下がります。ボイラーを使う場所の近くに足すか、太管に替えると改善します。ボイラーを増やして増えるのは蒸気の<b>量</b>で、上限の圧力（銘板の値）は変わりません。火力が「全開」のボイラーは蒸気が足りていない合図です。</li>
     <li><b>管</b>はなぞった向きにだけつながります。動力も信号も同じ管で、100 kPa 以上が信号の「1」です。</li>
     <li><b>弁</b>は背中から入って矢印へ出ます。常閉弁は横の操作口に圧があると開き、常開弁は閉じます。閉じた弁は出口側の蒸気を抜きます。</li>
     <li><b>品物</b>は重力で落ちます。ベルトの端から落とせば下の設備へ。上げるには昇降機。</li>
@@ -423,6 +426,7 @@ const BD={
   prv:{L:'bg',name:'減圧弁',cost:30,rot:'4',set:200,desc:'矢印側の圧力を設定値まで下げて通す。逆流はしない。タップで設定値を変える。'},
   relief:{L:'bg',name:'安全弁',cost:40,rot:'4',set:500,desc:'背中につないだ管の圧が設定値を超えると、余分な蒸気を逃がす。'},
   pswitch:{L:'bg',name:'圧力スイッチ弁',cost:50,rot:'4',set:300,desc:'入口の圧が設定値以上のときだけ開く。圧が足りない間は下流を止めて、大事な設備を優先できる。'},
+  pipe2:{L:'bg',name:'太管',cost:6,rot:'none',desc:'太い蒸気の管。流れても圧が落ちにくい（普通の管の約5分の1）。幹線に向く。'},
   accum:{L:'bg',name:'蒸気だめ',cost:60,rot:'none',desc:'管と同じようにつながる大きなタンク。圧をためて、需要が跳ねたときに吐き出す。少しずつ冷えて抜ける。'},
   superheat:{L:'bg',name:'過熱器',cost:120,rot:'4',desc:'背中の蒸気を余分に食って、矢印側に1.6倍の圧を作る（最大1500 kPa）。燃料をそのぶん多く使う。'},
   whistle:{L:'bg',name:'汽笛',cost:30,rot:'4',desc:'背中に圧が来ると鳴る。圧が高いほど高い音。回路の状態を音で知らせる。'},
@@ -452,7 +456,7 @@ const RECIPES={
 const BELTS=new Set(['belt','gate','divert','chute']);
 const REPL=new Set(['belt','gate','divert','lift','splitLR','splitUS','splitUD','chute','rail','station']);
 const SPLITS={splitLR:c=>[3,1],splitUS:c=>[0,c.d],splitUD:c=>[0,2]};
-const isPipeLike=c=>!!c&&(c.t==='pipe'||c.t==='lamp'||c.t==='gauge'||c.t==='accum');
+const isPipeLike=c=>!!c&&(c.t==='pipe'||c.t==='pipe2'||c.t==='lamp'||c.t==='gauge'||c.t==='accum');
 const VALVES=new Set(['chk','vNC','vNO','lever','clock','scale','prv','pswitch','superheat','counter','delay','latch']);
 const NOTE_N=['ド','レ','ミ','ソ','ラ','高いド','高いレ','高いミ','高いソ','高いラ','最高ド','最高レ','最高ミ','最高ソ','最高ラ'];
 const SETS={counter:[2,3,4,5,6,8,10,12,15,20],delay:[5,10,15,20,30,40,60],organ:[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14],prv:[50,80,100,150,200,250,300,400,500,600,800,1000,1200,1300],relief:[200,300,400,500,600,700,800,900],pswitch:[100,150,200,250,300,350,400,500,600,800]};
@@ -470,6 +474,7 @@ const BLUEPRINTS=[
   {id:'assembler',tools:['assembler'],price:1200,req:'o5',name:'組立台',desc:'ぜんまいと自動人形を組む。'},
   {id:'bigboiler',tools:['bigboiler'],price:1500,req:'o6',name:'大型ボイラー',desc:'蒸気を大量に作る。'},
   {id:'tube',tools:['tube'],price:1800,req:'o7',name:'気送管',desc:'離れた場所へ品物を瞬時に送る。'},
+  {id:'pipe2',tools:['pipe2'],price:300,req:'o2',name:'太管',desc:'圧が落ちにくい太い管。'},
   {id:'chute',tools:['chute'],price:80,req:'o1',name:'滑り台',desc:'重力で斜め下へ運ぶ。'},
   {id:'accum',tools:['accum'],price:250,req:'o1',name:'蒸気だめ',desc:'圧の山と谷をならす。'},
   {id:'sound',tools:['whistle','organ'],price:200,req:'o2',name:'汽笛と音階管',desc:'回路の状態を音にする。'},
@@ -598,7 +603,7 @@ function mkCell(t,d){
     case 'dock': c.n=0; break;
     case 'tube': c.ch=1; c.ob=[]; break;
     case 'belt': case 'gate': case 'divert': case 'lift': case 'chute': c.it=0; c.p=0; c.open=0; break;
-    case 'pipe': case 'lamp': case 'gauge': c.m=0; c.col=0; break;
+    case 'pipe': case 'pipe2': case 'lamp': case 'gauge': c.m=0; c.col=0; break;
     case 'prv': case 'relief': case 'pswitch': case 'counter': case 'delay': case 'organ': c.set=BD[t].set; c.open=0; break;
     case 'latch': c.on=0; c.open=0; break;
     case 'card': c.rows=Array.from({length:8},()=>[0,0]); c.row=0; break;
@@ -687,7 +692,7 @@ function linkPipes(W,a,b){
 function portSlots(c,defs){
   const r=[-1,-1,-1,-1];
   switch(c.t){
-    case 'pipe': case 'lamp': case 'gauge': case 'accum': for(let s=0;s<4;s++) if(c.m&(1<<s)) r[s]=0; break;
+    case 'pipe': case 'pipe2': case 'lamp': case 'gauge': case 'accum': for(let s=0;s<4;s++) if(c.m&(1<<s)) r[s]=0; break;
     case 'relief': case 'whistle': case 'organ': r[(c.d+2)%4]=0; break;
     case 'card': case 'latch': r[(c.d+2)%4]=0; r[c.d]=1; r[(c.d+3)%4]=2; r[(c.d+1)%4]=3; break;
     case 'delay': r[(c.d+2)%4]=0; r[c.d]=1; r[(c.d+1)%4]=2; r[(c.d+3)%4]=2; break;
@@ -699,15 +704,27 @@ function portSlots(c,defs){
   }
   return r;
 }
-function nodeSlots(c,sl){ if(c.t==='pipe'||c.t==='port'||c.t==='lamp'||c.t==='gauge'||c.t==='relief'||c.t==='accum'||c.t==='whistle'||c.t==='organ') return [0]; if(c.t==='card'||c.t==='latch') return [0,1,2,3]; if(c.t==='delay') return [0,1,2]; if(c.t==='cross') return [0,1]; if(c.t==='vNC'||c.t==='vNO') return [0,1,2]; if(VALVES.has(c.t)) return [0,1]; const o=[]; for(let s=0;s<4;s++) if(sl[s]>=0) o.push(s); return o; }
+function nodeSlots(c,sl){ if(c.t==='pipe'||c.t==='pipe2'||c.t==='port'||c.t==='lamp'||c.t==='gauge'||c.t==='relief'||c.t==='accum'||c.t==='whistle'||c.t==='organ') return [0]; if(c.t==='card'||c.t==='latch') return [0,1,2,3]; if(c.t==='delay') return [0,1,2]; if(c.t==='cross') return [0,1]; if(c.t==='vNC'||c.t==='vNO') return [0,1,2]; if(VALVES.has(c.t)) return [0,1]; const o=[]; for(let s=0;s<4;s++) if(sl[s]>=0) o.push(s); return o; }
+/* 管の圧力損失：マスごとの抵抗 */
+const R_PIPE=0.008,R_PIPE2=0.0015,R_OTHER=0.003;
+function tileR(c){ return c.t==='pipe'?R_PIPE:(c.t==='pipe2'||c.t==='accum')?R_PIPE2:R_OTHER; }
+function addS(sg,k,v){ if(!sg||k==null||!sg.s) return; const j=sg.B.nodeIdx?sg.B.nodeIdx[k]:-1; if(j>=0) sg.s[j]+=v; }
+function phiAt(sg,k){ if(!sg||k==null||!sg.phi) return 0; const j=sg.B.nodeIdx?sg.B.nodeIdx[k]:-1; return j>=0?sg.phi[j]:0; }
+function localP(sg,k){ if(!sg) return 0; const v=Math.max(0,sg.p+phiAt(sg,k)); return sg.pmx?Math.min(sg.pmx,v):v; }
+function solveSeg(sg,pv){ if(pv==null) pv=sg.p; const n=sg.nOrd||0; if(n<2||!sg.s){ if(sg.phi) sg.phi.fill(0); return; }
+  let tot=0; for(let j=0;j<n;j++) tot+=sg.s[j]; const m=tot/sg.mem.length, sub=sg.sub;
+  for(let j=0;j<sg.mem.length;j++) sub[j]=sg.s[j]-m;
+  for(let t=n-1;t>0;t--){ const v=sg.ord[t]; sub[sg.par[v]]+=sub[v]; }
+  const phi=sg.phi; phi[sg.ord[0]]=0; for(let t=1;t<n;t++){ const v=sg.ord[t]; phi[v]=phi[sg.par[v]]+sg.pr[v]*sub[v]; }
+  let mp=0; for(let j=0;j<n;j++) mp+=phi[j]; mp/=n; for(let j=0;j<n;j++){ phi[j]-=mp; if(pv+phi[j]<0) phi[j]=-pv; } }
 function rebuild(B,defs){
   const w=B.w,h=B.h,N=w*h,bg=B.bg; const par=new Int32Array(N*4).fill(-1);
   const find=k=>{while(par[k]!==k){par[k]=par[par[k]];k=par[k];}return k;};
-  const uni=(a,b)=>{a=find(a);b=find(b);if(a!==b)par[a]=b;};
+  const uni=(a,b)=>{a=find(a);b=find(b);if(a!==b)par[a]=b;}; const edges=[];
   for(let i=0;i<N;i++){const c=bg[i]; if(!c)continue; c._sl=portSlots(c,defs); for(const k of nodeSlots(c,c._sl)) par[i*4+k]=i*4+k;}
   for(let y=0;y<h;y++)for(let x=0;x<w;x++){const i=y*w+x,c=bg[i]; if(!c)continue;
     for(const s of [1,2]){const nx=x+DX[s],ny=y+DY[s]; if(nx>=w||ny>=h)continue; const j=ny*w+nx,n=bg[j]; if(!n)continue;
-      const a=c._sl[s],b=n._sl[(s+2)%4]; if(a>=0&&b>=0) uni(i*4+a,j*4+b);}}
+      const a=c._sl[s],b=n._sl[(s+2)%4]; if(a>=0&&b>=0){ uni(i*4+a,j*4+b); edges.push(i*4+a,j*4+b,(tileR(c)+tileR(n))/2); } }}
   const segs=[],rm=new Map(),ns=new Int32Array(N*4).fill(-1);
   for(let k=0;k<N*4;k++){ if(par[k]<0)continue; const r=find(k); let id=rm.get(r); if(id===undefined){id=segs.length;rm.set(r,id);segs.push({q:0,cap:0,size:0,mem:[],p:0,B:B,inflow:0,vent:0,src:0,dem:0});}
     const sg=segs[id]; sg.mem.push(k); ns[k]=id; sg.size++; }
@@ -717,11 +734,16 @@ function rebuild(B,defs){
   const links=[],chips=[],reliefs=[]; const sgx=k=>ns[k]>=0?segs[ns[k]]:null;
   for(let i=0;i<N;i++){const c=bg[i]; if(!c)continue;
     if(c.t==='relief'||c.t==='whistle'||c.t==='organ'){ const a=ns[i*4]; if(a>=0) reliefs.push({c:c,s:segs[a],i:i,B:B}); continue; }
-    if(c.t==='card'){ links.push({a:sgx(i*4),b:sgx(i*4+1),c:c,i:i,B:B,bit:0,step:sgx(i*4+2)}); links.push({a:sgx(i*4),b:sgx(i*4+3),c:c,i:i,B:B,bit:1}); continue; }
-    if(c.t==='latch'){ links.push({a:sgx(i*4),b:sgx(i*4+1),c:c,i:i,B:B,ps:sgx(i*4+2),pr:sgx(i*4+3)}); continue; }
-    if(VALVES.has(c.t)){ const a=ns[i*4],b=ns[i*4+1]; links.push({a:a>=0?segs[a]:null,b:b>=0?segs[b]:null,c:c,i:i,pil:(c.t==='vNC'||c.t==='vNO'||c.t==='delay')&&ns[i*4+2]>=0?segs[ns[i*4+2]]:null,B:B}); }
+    if(c.t==='card'){ links.push({a:sgx(i*4),b:sgx(i*4+1),ka:i*4,kb:i*4+1,c:c,i:i,B:B,bit:0,step:sgx(i*4+2)}); links.push({a:sgx(i*4),b:sgx(i*4+3),ka:i*4,kb:i*4+3,c:c,i:i,B:B,bit:1}); continue; }
+    if(c.t==='latch'){ links.push({a:sgx(i*4),b:sgx(i*4+1),ka:i*4,kb:i*4+1,c:c,i:i,B:B,ps:sgx(i*4+2),pr:sgx(i*4+3)}); continue; }
+    if(VALVES.has(c.t)){ const a=ns[i*4],b=ns[i*4+1]; links.push({a:a>=0?segs[a]:null,b:b>=0?segs[b]:null,ka:i*4,kb:i*4+1,c:c,i:i,pil:(c.t==='vNC'||c.t==='vNO'||c.t==='delay')&&ns[i*4+2]>=0?segs[ns[i*4+2]]:null,B:B}); }
     else if(c.t==='chip'&&c.inst) chips.push(i);
   }
+  const ni=new Int32Array(N*4).fill(-1); for(const sg of segs){ for(let j=0;j<sg.mem.length;j++) ni[sg.mem[j]]=j; const n=sg.mem.length; sg.s=new Float32Array(n); sg.phi=new Float32Array(n); sg.sub=new Float32Array(n); sg.adj=Array.from({length:n},()=>[]); }
+  for(let e=0;e<edges.length;e+=3){ const ka=edges[e],kb=edges[e+1],r=edges[e+2],sg=segs[ns[ka]]; if(!sg||ns[ka]!==ns[kb]) continue; const a=ni[ka],b=ni[kb]; sg.adj[a].push(b,r); sg.adj[b].push(a,r); }
+  for(const sg of segs){ const n=sg.mem.length; sg.ord=new Int32Array(n); sg.par=new Int32Array(n).fill(-1); sg.pr=new Float32Array(n); const seen=new Uint8Array(n); let h=0,t=0; sg.ord[t++]=0; seen[0]=1;
+    while(h<t){ const v=sg.ord[h++],ad=sg.adj[v]; for(let q=0;q<ad.length;q+=2){ const u=ad[q]; if(seen[u]) continue; seen[u]=1; sg.par[u]=v; sg.pr[u]=ad[q+1]; sg.ord[t++]=u; } } sg.nOrd=t; sg.adj=null; }
+  B.nodeIdx=ni;
   B.segs=segs; B.links=links; B.chips=chips; B.reliefs=reliefs; B.nodeSeg=ns; B.dirty=false;
 }
 const segAt=(B,k)=>{const id=B.nodeSeg?B.nodeSeg[k]:-1; return id>=0?B.segs[id]:null;};
@@ -732,7 +754,7 @@ function gather(B,defs,G){
   if(B.reliefs&&G.reliefs) for(const r of B.reliefs) G.reliefs.push(r);
   for(const i of B.chips){ const c=B.bg[i]; const def=defs[c.def]; if(!def||!c.inst) continue; const inst=c.inst; if(inst.dirty) rebuild(inst,defs);
     for(let s=0;s<4;s++){ const ls=(s-c.d+4)%4,m=def.ports[ls]; if(!m) continue; const outer=segAt(B,i*4+s); const pp=PORT_POS[ls]; const inner=segAt(inst,(pp[1]*CHIP_N+pp[0])*4);
-      if(!outer||!inner) continue; G.links.push(m==='in'?{a:outer,b:inner,port:1}:{a:inner,b:outer,port:1}); }
+      if(!outer||!inner) continue; const ko=i*4+s,kin=(pp[1]*CHIP_N+pp[0])*4; G.links.push(m==='in'?{a:outer,b:inner,ka:ko,kb:kin,port:1}:{a:inner,b:outer,ka:kin,kb:ko,port:1}); }
     gather(inst,defs,G); }
 }
 function valveOpen(L,W){
@@ -752,17 +774,17 @@ function valveOpen(L,W){
   }
   return 0;
 }
-function flow(a,b,maxF){ const pa=a.q/a.cap,pb=b.q/b.cap; if(pa<=pb+1e-4) return; let f=(pa-pb)/(1/a.cap+1/b.cap)*0.9; if(f>maxF)f=maxF; a.q-=f; b.q+=f; b.inflow+=f; }
+function flow(a,b,maxF,ka,kb){ const pa=a.q/a.cap+phiAt(a,ka),pb=b.q/b.cap+phiAt(b,kb); if(pa<=pb+1e-4) return 0; let f=(pa-pb)/(1/a.cap+1/b.cap)*0.9; if(f>maxF)f=maxF; if(f>a.q)f=a.q; a.q-=f; b.q+=f; b.inflow+=f; addS(a,ka,-f); addS(b,kb,f); return f; }
 function steamPhase1(G,W,srcFn){
-  for(const s of G.segs){s.inflow=0;s.vent=0;s.src=0;s.held=0;}
+  for(const s of G.segs){s.inflow=0;s.vent=0;s.src=0;s.held=0; s.pmx=0; if(s.s) s.s.fill(0);}
   for(const L of G.links){ if(L.port){L.open=1;continue;} if(L.c.t==='clock') L.c.ph=((L.c.ph||0)+1)%L.c.per;
     const o=valveOpen(L,W); if(L.bit!=null){ L.open=o; continue; } if(L.c.open&&!o&&W&&L.B===W) W.events.push(['vent',L.i]); if(W&&L.B===W&&(L.c.t==='vNC'||L.c.t==='vNO')&&(L.c.open?1:0)!==o) W.flags.flip=1; L.c.open=o; L.open=o; }
   if(srcFn) srcFn();
-  for(const L of G.links){ if(!L.port&&L.c.t==='superheat'){ if(L.a&&L.b){ const tg=Math.min(1.5,L.a.p*1.6)*L.b.cap,room=tg-L.b.q; if(room>0){ const f=Math.min(0.6,room,L.a.q/1.6); L.a.q-=f*1.6; L.b.q+=f; L.b.inflow+=f; L.c.act=f>0.02?1:0; } else L.c.act=0; L.b.held=1; } continue; }
-    if(L.open&&L.a&&L.b){ if(!L.port&&L.c.t==='prv'){ const lim=Math.max(0,(L.c.set||200)/KPA*L.b.cap-L.b.q); if(lim>0) flow(L.a,L.b,Math.min(1.6,lim)); L.b.held=1; } else flow(L.a,L.b,1.6); } else if(!L.open&&L.b) L.b.vent=1; }
+  for(const L of G.links){ if(!L.port&&L.c.t==='superheat'){ if(L.a&&L.b){ const tg=Math.min(1.5,L.a.p*1.6)*L.b.cap,room=tg-L.b.q; if(room>0){ const f=Math.min(0.6,room,L.a.q/1.6); L.a.q-=f*1.6; L.b.q+=f; L.b.inflow+=f; addS(L.a,L.ka,-f*1.6); addS(L.b,L.kb,f); L.c.act=f>0.02?1:0; } else L.c.act=0; L.b.held=1; } continue; }
+    if(L.open&&L.a&&L.b){ if(!L.port&&L.c.t==='prv'){ const lim=Math.max(0,(L.c.set||200)/KPA*L.b.cap-L.b.q); if(lim>0) flow(L.a,L.b,Math.min(1.6,lim),L.ka,L.kb); L.b.held=1; } else flow(L.a,L.b,1.6,L.ka,L.kb); } else if(!L.open&&L.b) L.b.vent=1; }
   if(G.reliefs) for(const r of G.reliefs){ if(r.c.t==='whistle'||r.c.t==='organ'){ const on=r.s.p>=SIG_ON; if(r.c.t==='whistle'){ if(on){ r.s.q=Math.max(0,r.s.q-0.015); if(W&&r.B===W&&(!r.c.act||(W.tick+r.i)%12===0)) W.events.push(['whistle',r.i,r.s.p]); } r.c.act=on?1:0; } else { if(on&&!r.c.act&&W&&r.B===W){ W.events.push(['note',r.i,r.c.set||0]); onNote(W,r.c.set||0); } r.c.act=on?1:0; } continue; }
     const st=(r.c.set||500)/KPA; if(r.s.p>st){ r.s.q=st*r.s.cap; r.c.act=1; if(W&&r.B===W&&Math.random()<.3) W.events.push(['vent',r.i]); } else r.c.act=0; }
-  for(const s of G.segs) s.p=Math.max(0,s.q/s.cap);
+  for(const s of G.segs){ s.p=Math.max(0,s.q/s.cap); s.p1=s.p; }
 }
 function steamPhase2(G){
   for(const s of G.segs){
@@ -770,7 +792,7 @@ function steamPhase2(G){
     if(s.vent&&s.inflow<1e-4&&!s.src&&!s.held) s.q*=0.45;
     if(s.q<1e-4) s.q=0;
     s.p=s.q/s.cap;
-    for(const k of s.mem) s.B.np[k]=s.p;
+    const pv=s.vent&&s.inflow<1e-4&&!s.src&&!s.held?s.p:Math.max(s.p,Math.min(s.p1||0,s.p+0.2)); solveSeg(s,pv); for(let j=0;j<s.mem.length;j++) { const v=Math.max(0,pv+(s.phi?s.phi[j]:0)); s.B.np[s.mem[j]]=s.pmx?Math.min(s.pmx,v):v; }
   }
 }
 /* チップ単体の試験（鋳造台・真理値表用）。testIn[side]=1 の入力ポートは常に満圧 */
@@ -785,7 +807,7 @@ function portValue(B,side){ const pp=PORT_POS[side]; const sg=segAt(B,(pp[1]*CHI
 function makeInst(id,defs,depth){
   const B={w:CHIP_N,h:CHIP_N,bg:new Array(CHIP_N*CHIP_N).fill(null),np:new Float32Array(CHIP_N*CHIP_N*4),dirty:true,segs:[],links:[],chips:[],nodeSeg:null};
   const def=defs[id]; if(!def||(depth||0)>6) return B;
-  for(let i=0;i<def.cells.length;i++){const s=def.cells[i]; if(!s)continue; const c=mkCell(s.t,s.d); if(s.t==='pipe')c.m=s.m||0; if(s.t==='clock')c.per=s.per||40;
+  for(let i=0;i<def.cells.length;i++){const s=def.cells[i]; if(!s)continue; const c=mkCell(s.t,s.d); if(s.t==='pipe'||s.t==='pipe2')c.m=s.m||0; if(s.t==='clock')c.per=s.per||40;
     if(s.t==='lamp'||s.t==='gauge'||s.t==='accum')c.m=s.m||0; if(s.rows)c.rows=JSON.parse(JSON.stringify(s.rows)); if(s.set)c.set=s.set; if(s.t==='chip'){c.def=s.def; c.inst=makeInst(s.def,defs,(depth||0)+1);} B.bg[i]=c;}
   for(let side=0;side<4;side++){const m=def.ports[side]; if(!m)continue; const pp=PORT_POS[side]; B.bg[pp[1]*CHIP_N+pp[0]]={t:'port',side:side,mode:m,d:0};}
   return B;
@@ -854,7 +876,8 @@ function giveTo(W,x,y,it,dir){
   W.loose.push({x:x,y:y+.5,it:it,rest:0}); return true;
 }
 function effDir(W,f,i){ if(f.t==='divert'){ return f.open?(f.d+2)%4:f.d; } return f.d; }
-function tapSeg(W,i){ const b=W.bg[i]; if(!b||b.t!=='pipe') return null; return segAt(W,i*4); }
+function useSteam(c,amt){ const sg=c._sg; if(!sg) return; const a=Math.min(amt,sg.q); sg.q-=a; addS(sg,c._k,-a); }
+function tapSeg(W,i){ const b=W.bg[i]; if(!isPipeLike(b)) return null; return segAt(W,i*4); }
 
 /* ---------- 案件 ---------- */
 function refreshOrders(W){ for(const o of ORDERS){ const st=W.orders[o.id]; if(st.st==='locked'&&o.req.every(r=>W.orders[r].st==='done')&&(!o.office||countType(W,'office')>0)) st.st='avail'; } }
@@ -892,29 +915,30 @@ function tickWorld(W){
   const G={segs:[],links:[],reliefs:[]}; gather(W,W.defs,G);
   W._tubes=[];
   steamPhase1(G,W,()=>{
-    for(let i=0;i<fg.length;i++){const c=fg[i]; if(!c)continue; c._sg=tapSeg(W,i);
+    for(let i=0;i<fg.length;i++){const c=fg[i]; if(!c)continue; c._sg=tapSeg(W,i); c._k=i*4;
       if(c.t==='tube') W._tubes.push(c);
       if(c.t==='boiler'||c.t==='bigboiler'){ const x=i%w,y=(i/w)|0; c._w=hasWater(W,x,y)||nearCond(W,x,y); c.act=0; const sg=c._sg; c.state=!c._w?'nowater':!sg?'nopipe':(c.fuel<=0&&c.burn<=0)?'nofuel':'ok'; if(!sg||!c._w) continue;
         const rate=c.t==='bigboiler'?2.0:0.6; if(c.burn<=0&&c.fuel>0){ const it=(c.fk&&c.fk.length)?c.fk.shift():1; c.fuel--; c.burn=FUEL[it]||90; }
-        if(c.burn>0){ const room=Math.max(0,sg.cap*BD[c.t].pout/KPA-sg.q); const add=Math.min(rate,room); sg.q+=add; sg.src=1; sg.inflow+=add; c.burn-=Math.max(0.15,add/rate); c.act=add>0.05?1:0.5; c.out=add; } }
+        if(c.burn<=0) c.lv=(c.lv||0)*0.9;
+        if(c.burn>0){ const room=Math.max(0,sg.cap*(BD[c.t].pout/KPA-phiAt(sg,c._k))-sg.q); const add=Math.min(rate,room); sg.q+=add; sg.src=1; sg.inflow+=add; addS(sg,c._k,add); sg.pmx=Math.max(sg.pmx||0,BD[c.t].pout/KPA); c.lv=(c.lv||0)*0.9+0.1*(add/rate); c.burn-=Math.max(0.15,add/rate); c.act=add>0.05?1:0.5; c.out=add; } }
     }
   });
   // 機械
   for(let i=0;i<fg.length;i++){const c=fg[i]; if(!c)continue; const b=BD[c.t]; const x=i%w,y=(i/w)|0;
-    if(b.dem){ const sg=c._sg; const p=sg?sg.p:0; c.P=p; const P=p*KPA;
+    if(b.dem){ const sg=c._sg; const p=sg?localP(sg,i*4):0; c.P=p; const P=p*KPA;
       if(c.t==='autoclave'&&sg&&P>b.pmax){ explode(W,x,y); continue; }
       if(!sg){ c.run=0; c.pst='nopipe'; } else if(P>b.pmax){ c.run=0; c.pst='over'; if(Math.random()<.02) W.events.push(['puff',i]); } else if(c.run){ if(P<b.pmin*0.92){ c.run=0; c.pst='low'; } } else if(P>=b.pmin){ c.run=1; c.pst='ok'; } else c.pst='low';
       const sp=c.run?1:0; c.sp=sp;
       if(c.t==='drill'||c.t==='pump'||c.t==='plant'||c.t==='orchard'){
         let item=0; if(c.t==='plant'){ if(hasSky(W,x,y)) item=5; } else if(c.t==='orchard'){ if(hasSky(W,x,y)) item=(P>=150&&P<=250)?15:14; } else { const tg=drillTarget(W,c,x,y); item=c.t==='pump'?(tg===T.OIL?4:0):tg===T.COAL?1:tg===T.IRON?2:tg===T.CU?3:tg===T.MIX?(Math.random()<.5?2:3):0; }
-        c.act=0; c.state=!item?((c.t==='plant'||c.t==='orchard')?'nosky':'notarget'):c.ob.length>=4?'blocked':c.pst; if(item&&c.ob.length<4&&sp>0){ c.prog+=sp/b.time; c.act=1; sg.q=Math.max(0,sg.q-b.dem*sp); if(c.prog>=1){c.prog=0; c.ob.push(item);} }
+        c.act=0; c.state=!item?((c.t==='plant'||c.t==='orchard')?'nosky':'notarget'):c.ob.length>=4?'blocked':c.pst; if(item&&c.ob.length<4&&sp>0){ c.prog+=sp/b.time; c.act=1; useSteam(c,b.dem*sp); if(c.prog>=1){c.prog=0; c.ob.push(item);} }
       } else if(RECIPES[c.t]){
         c.act=0;
         if(!c.cur&&c.ob.length<6){ const rs=c.t==='assembler'?[RECIPES.assembler[c.rc||0]]:RECIPES[c.t]; for(let k=0;k<rs.length;k++){ const r=rs[(k+(c.alt||0))%rs.length]; if(Object.keys(r.i).every(it=>(c.inv[it]||0)>=r.i[it])){ for(const it in r.i) c.inv[it]-=r.i[it]; c.cur=r.o; c.prog=0; c.alt=(c.alt||0)+1; break; } } }
         c.state=c.ob.length>=6?'blocked':!c.cur?'wait':c.pst;
-        if(c.cur&&sp>0){ c.prog+=sp/b.time; c.act=1; sg.q=Math.max(0,sg.q-b.dem*sp); if(c.prog>=1){ c.ob.push(c.cur); if(c.cur===15) W.flags.quality=1; c.cur=0; c.prog=0; } }
+        if(c.cur&&sp>0){ c.prog+=sp/b.time; c.act=1; useSteam(c,b.dem*sp); if(c.prog>=1){ c.ob.push(c.cur); if(c.cur===15) W.flags.quality=1; c.cur=0; c.prog=0; } }
       } else {
-        c.act=0; c.state=c.pst; if(c.run&&c.t==='condenser'){ c.act=1; sg.q=Math.max(0,sg.q-b.dem); }
+        c.act=0; c.state=c.pst; if(c.run&&c.t==='condenser'){ c.act=1; useSteam(c,b.dem); }
         if(c.t==='catapult'){ if(c.cd>0) c.cd--; if(c.run&&c.buf.length&&c.cd<=0){ const v=0.12+0.3*Math.min(1.2,p); const dir=c.d===3?-1:1; W.fly.push({x:x+0.5+dir*0.5,y:y+0.2,vx:dir*v,vy:-v*0.85,it:c.buf.shift()}); sg.q=Math.max(0,sg.q-0.4); c.cd=10; c.act=1; W.flags.launch=1; W.events.push(['launch',i]); } }
         if(c.t==='crane'){ if(c.buf.length&&c.run){ c._wt=(c._wt||0)+1; if(c.buf.length>=5||c._wt>40){ c._wt=0; let ty=-1; for(let yy=y-1;yy>=Math.max(0,y-16);yy--){ if(W.ter[yy*w+x]!==T.AIR) break; const f=fg[yy*w+x]; if(f&&f.t!=='scaffold'){ ty=yy; break; } }
             if(ty>=0){ let n=0; while(c.buf.length&&giveTo(W,x,ty,c.buf[0],0)){ c.buf.shift(); n++; } if(n){ sg.q=Math.max(0,sg.q-0.5); c._ly=ty; c._lt=15; c.act=1; W.events.push(['launch',i]); } } } } if(c._lt>0) c._lt--; }
@@ -979,7 +1003,7 @@ function deserialize(s){
   W.fly=d.fly||[]; W.locos=d.locos||{}; W.newT=d.newT||{}; W.ach=d.ach||{}; START_OWNED.forEach(k=>W.owned[k]=1); for(const o of ORDERS) if(!W.orders[o.id]) W.orders[o.id]={st:'locked',prog:0}; refreshOrders(W);
   rebuildChips(W); return W;
 }
-if(typeof module!=="undefined") module.exports={explode,trains,countType,activeOrders,kpa,makeWorld,tickWorld,placeAt,canPlace,removeAt,digAt,linkPipes,mkCell,sampleXor,truthTable,makeInst,stepChipBoard,portValue,acceptOrder,serialize,deserialize,segAt,S0,T,BD,ORDERS,buyBlueprint};
+if(typeof module!=="undefined") module.exports={localP,explode,trains,countType,activeOrders,kpa,makeWorld,tickWorld,placeAt,canPlace,removeAt,digAt,linkPipes,mkCell,sampleXor,truthTable,makeInst,stepChipBoard,portValue,acceptOrder,serialize,deserialize,segAt,S0,T,BD,ORDERS,buyBlueprint};
 
 /* 回路設計案件の検査 */
 function verifyChip(W,o,def){
@@ -1271,6 +1295,7 @@ function toolIcon(t,size,def){
     case 'lamp': drawLamp(g,0,0,10,1); break;
     case 'gauge': drawGauge(g,0,0,10,0.35); break;
     case 'accum': drawAccum(g,0,0,10,0.3); break;
+    case 'pipe2': drawPipe2(g,0,0,10,0); break;
     case 'paint': R(3,2,6,7,'B');R(4,3,4,5,'Y');R(5,9,2,6,'N');R(2,1,8,2,'k');R(10,9,4,4,'e');R(11,12,2,3,'#3b5f94'); break;
     case 'cross': drawCross(g,0,0,0,0); break;
     case 'belt': g.drawImage(SPR.belt[0],0,-4); break;
@@ -1373,6 +1398,14 @@ function drawAccum(g,X,Y,m,p,ci){ const col=presCol(p); for(let s=0;s<4;s++) if(
 
 SPR.chuteL=(()=>{ const c=document.createElement('canvas'); c.width=c.height=16; const k=c.getContext('2d'); k.translate(16,0); k.scale(-1,1); k.drawImage(SPR.chute[0],0,0); return c; })();
 
+/* 太管 */
+function drawPipe2(g,X,Y,m,p,ci){ const col=presCol(p),pc=PIPECOL[ci||0];
+  for(let s=0;s<4;s++){ if(!(m&(1<<s))) continue; const H=s===1||s===3,x0=s===1?X+8:X,y0=s===2?Y+8:Y;
+    if(H){ g.fillStyle=PAL.k; g.fillRect(x0,Y+3,8,10); g.fillStyle=pc[1]; g.fillRect(x0,Y+4,8,8); g.fillStyle=pc[2]; g.fillRect(x0,Y+4,8,2); g.fillStyle=pc[3]; g.fillRect(x0,Y+11,8,1); g.fillStyle=col; g.fillRect(x0,Y+7,8,2); g.fillStyle=pc[3]; g.fillRect(x0+(s===1?6:1),Y+3,1,10); }
+    else { g.fillStyle=PAL.k; g.fillRect(X+3,y0,10,8); g.fillStyle=pc[1]; g.fillRect(X+4,y0,8,8); g.fillStyle=pc[2]; g.fillRect(X+4,y0,2,8); g.fillStyle=pc[3]; g.fillRect(X+11,y0,1,8); g.fillStyle=col; g.fillRect(X+7,y0,2,8); g.fillStyle=pc[3]; g.fillRect(X+3,y0+(s===2?6:1),10,1); } }
+  g.fillStyle=PAL.k; g.fillRect(X+3,Y+3,10,10); g.fillStyle=pc[3]; g.fillRect(X+4,Y+4,8,8); g.fillStyle=pc[2]; g.fillRect(X+4,Y+4,8,2); g.fillStyle=col; g.fillRect(X+6,Y+6,4,4);
+  g.fillStyle=PAL.B; [[4,4],[11,4],[4,11],[11,11]].forEach(q=>g.fillRect(X+q[0],Y+q[1],1,1)); }
+
 </script>
 <script>
 'use strict';
@@ -1464,7 +1497,7 @@ const isBgTool=()=>{const t=toolType(); return t==='paint'||(BD[t]&&BD[t].L==='b
 function drawFg(c,x,y,now){
   const X=x*16,Y=y*16,f2=((now/140)|0)%2;
   switch(c.t){
-    case 'boiler': case 'bigboiler': g.drawImage(SPR[c.t][c.act?1+f2:0],X,Y); if(c._w===false){g.fillStyle=PAL.e; g.fillRect(X+1,Y+1,3,3);} break;
+    case 'boiler': case 'bigboiler': g.drawImage(SPR[c.t][c.act?1+f2:0],X,Y); if(c.act&&(c.lv||0)>0.5){ const lv=c.lv; g.fillStyle=lv>0.85?'#fff3c0':'#ffd27a'; const fy=c.t==='boiler'?13:12; g.fillRect(X+(c.t==='boiler'?6:3),Y+fy-Math.round(lv*2),c.t==='boiler'?4:10,1); if(lv>0.85&&f2){ g.fillStyle='#ff8a2a'; g.fillRect(X+5,Y+fy-3,6,1); } } if(c._w===false){g.fillStyle=PAL.e; g.fillRect(X+1,Y+1,3,3);} break;
     case 'drill': drawDir(g,SPR.drill[c.act?((now/70)|0)%4:0],X,Y,c.d,true); outArrow(g,X,Y,outDir(c)); break;
     case 'pump': g.drawImage(SPR.pump[c.act?((now/220)|0)%4:0],X,Y); outArrow(g,X,Y,outDir(c)); break;
     case 'plant': g.drawImage(SPR.plant[c.act?f2:0],X,Y); outArrow(g,X,Y,c.d); break;
@@ -1497,6 +1530,7 @@ function drawBgOn(k,c,x,y,i,np,B){
   const X=x*16,Y=y*16;
   switch(c.t){
     case 'pipe': drawPipe(k,X,Y,c.m,np[i*4],c.col); break;
+    case 'pipe2': drawPipe2(k,X,Y,c.m,np[i*4],c.col); break;
     case 'lamp': drawLamp(k,X,Y,c.m,np[i*4],c.col); break;
     case 'gauge': drawGauge(k,X,Y,c.m,np[i*4],c.col); break;
     case 'accum': drawAccum(k,X,Y,c.m,np[i*4],c.col); break;
@@ -1563,7 +1597,7 @@ function render(now){
   for(let y=y0;y<=y1;y++)for(let x=x0;x<=x1;x++){const c=W.fg[y*W.w+x]; if(!c||!c.state||c.state==='ok'||c.state==='wait') continue; drawBadge(c.state,x*16+10,y*16-3,blink); }
   // 蒸気
   if(speed>0) for(let y=y0;y<=y1;y++)for(let x=x0;x<=x1;x++){const c=W.fg[y*W.w+x]; if(!c||!c.act) continue; const r=Math.random();
-    if((c.t==='boiler'||c.t==='bigboiler')&&r<.18) spawn(x*16+(c.t==='bigboiler'?4:8),y*16,1,1);
+    if((c.t==='boiler'||c.t==='bigboiler')&&r<.03+.32*(c.lv||0)) spawn(x*16+(c.t==='bigboiler'?4:8),y*16,(c.lv||0)>0.85?2:1,1,(c.lv||0)>0.85?'200,190,185':'246,236,216');
     else if((c.t==='furnace'||c.t==='kiln')&&r<.08) spawn(x*16+(c.t==='furnace'?11:8),y*16+1,1,0,'90,80,80');
     else if(c.t==='refinery'&&r<.05) spawn(x*16+7,y*16,1,0,'255,200,120');
     else if(r<.03) spawn(x*16+8,y*16+4,1,0); }
@@ -1591,7 +1625,7 @@ function autoLinkComp(x,y){ const c=W.bg[y*W.w+x]; if(!c||c.t==='pipe') return; 
   for(let s=0;s<4;s++){ if(sl[s]<0) continue; const nx=x+DX[s],ny=y+DY[s]; if(nx<0||ny<0||nx>=W.w||ny>=W.h) continue; const n=W.bg[ny*W.w+nx]; if(isPipeLike(n)){n.m|=1<<((s+2)%4); W.dirty=true;} } }
 function build(t,prev,quiet){
   const tt=toolType(),x=t.x,y=t.y; if(x<0||y<0||x>=W.w||y>=W.h) return;
-  if(tt==='pipe'){ const cur=W.bg[y*W.w+x]; if(!cur){ const why=canPlace(W,'pipe',x,y,0); if(why){ if(!quiet){toast(why);SFX.err();} } else { placeAt(W,'pipe',x,y,0); W.bg[y*W.w+x].col=pipeCol; SFX.place(); if(!prev) autoLinkPipe(x,y); } }
+  if(tt==='pipe'||tt==='pipe2'){ const cur=W.bg[y*W.w+x]; if(!cur||(tt==='pipe2'&&cur.t==='pipe')){ const why=canPlace(W,tt,x,y,0); if(why){ if(!quiet){toast(why);SFX.err();} } else { placeAt(W,tt,x,y,0); W.bg[y*W.w+x].col=pipeCol; SFX.place(); if(!prev) autoLinkPipe(x,y); } }
     if(prev) linkPipes(W,prev,t); return; }
   if(tt==='paint'){ const cur=W.bg[y*W.w+x]; if(isPipeLike(cur)&&cur.col!==pipeCol){ cur.col=pipeCol; SFX.paint(); } return; }
   if(BELTS.has(tt)&&prev&&prev.y===y&&prev.x!==x){ rot=x>prev.x?1:3; updRot(); const pc=W.fg[prev.y*W.w+prev.x]; if(pc&&BELTS.has(pc.t)) pc.d=rot; }
@@ -1605,7 +1639,7 @@ function erase(t){ if(t.x<0||t.y<0||t.x>=W.w||t.y>=W.h) return; const i=t.y*W.w+
 function dig(t){ if(t.x<0||t.y<0||t.x>=W.w||t.y>=W.h) return; const was=W.ter[t.y*W.w+t.x]; const why=digAt(W,t.x,t.y); if(why){ toast(why); SFX.err(); } else if(was!==0) SFX.dig(); }
 function walk(a,b,fn){ let x=a.x,y=a.y,n=0; while((x!==b.x||y!==b.y)&&n++<300){ const p={x,y}; if(Math.abs(b.x-x)>=Math.abs(b.y-y)) x+=Math.sign(b.x-x); else y+=Math.sign(b.y-y); fn(p,{x,y}); } }
 const LONG=320; const ptrs=new Map(); let act=null,lpT=0,tapHint=0;
-const isDragTool=()=>{ const tt=toolType(); return tt==='rail'||tt==='pipe'||tt==='paint'||BELTS.has(tt)||tt==='scaffold'||tt==='lift'||tt==='erase'||tt==='dig'; };
+const isDragTool=()=>{ const tt=toolType(); return tt==='rail'||tt==='pipe'||tt==='pipe2'||tt==='paint'||BELTS.has(tt)||tt==='scaffold'||tt==='lift'||tt==='erase'||tt==='dig'; };
 function doAction(t,prev){ if(!t) return; if(tool==='erase') erase(t); else if(tool==='dig') dig(t); else if(tool==='paint') build(t,prev,true); else if(tool!=='hand') build(t,prev,!!prev); }
 function inMap(e){ const r=cv.getBoundingClientRect(); return e.clientX>=r.left&&e.clientX<=r.right&&e.clientY>=r.top&&e.clientY<=r.bottom; }
 cv.addEventListener('contextmenu',e=>e.preventDefault());
@@ -1635,7 +1669,7 @@ function endPtr(e){ ptrs.delete(e.pointerId); clearTimeout(lpT);
   if(act&&e.type==='pointerup'){
     if(act.m==='pan'&&act.mouse&&!act.moved&&e.button===0) openDetail(act.t);
     else if(act.m==='pend'){ const t=act.t; if(tool==='erase'||tool==='dig'||tool==='paint') doAction(t,null); else { openDetail(t); if(tool!=='hand'&&tapHint<2){ tapHint++; toast('置くときは、パレットから地図へドラッグするか、長押ししてなぞる'); } } }
-    if(act.m==='act'&&toolType()==='pipe') autoLinkPipe(act.last.x,act.last.y); }
+    if(act.m==='act'&&(toolType()==='pipe'||toolType()==='pipe2')) autoLinkPipe(act.last.x,act.last.y); }
   if(e.pointerType!=='mouse') hov=null;
   if(!ptrs.size) act=null; else if(act&&act.m==='pinch') act=null; }
 cv.addEventListener('pointerup',endPtr); cv.addEventListener('pointercancel',endPtr);
@@ -1659,7 +1693,7 @@ document.addEventListener('pointerup',e=>palEnd(e,true)); document.addEventListe
 /* ---------- パレット ---------- */
 const GROUPS=[
   {g:'道具',items:['hand','dig','erase','paint']},
-  {g:'動力と圧力',items:['boiler','bigboiler','pipe','prv','gauge','accum','relief','pswitch','superheat','condenser']},
+  {g:'動力と圧力',items:['boiler','bigboiler','pipe','pipe2','prv','gauge','accum','relief','pswitch','superheat','condenser']},
   {g:'採掘と栽培',items:['drill','pump','plant','orchard']},
   {g:'加工',items:['furnace','kiln','refinery','hammer','canner','assembler','autoclave','atelier']},
   {g:'搬送',items:['belt','chute','splitLR','splitUS','splitUD','lift','crane','catapult','rail','station','gate','divert','tube','chest','scaffold','dock']},
@@ -1668,7 +1702,7 @@ const GROUPS=[
 ];
 const TOOLNAME={hand:'指',dig:'掘削',erase:'撤去',paint:'塗装'};
 const SHORT={catapult:'カタパルト',card:'パンチカード',condenser:'復水器',autoclave:'圧力釜',atelier:'人形工房',orchard:'果樹温室',superheat:'過熱器',splitLR:'分配・左右',splitUS:'分配・上横',splitUD:'分配・上下',bigboiler:'大型ボイラ',pswitch:'圧スイッチ',hammer:'ハンマー',divert:'振り分け',gate:'遮断ベルト',refinery:'精製塔',plant:'植物プラント'};
-const COLOR_TOOLS=['pipe','paint','lamp','gauge'];
+const COLOR_TOOLS=['pipe','pipe2','paint','lamp','gauge','accum'];
 function buildPalette(){
   const pal=$('pal'); pal.innerHTML='';
   for(const gr of GROUPS){ const items=gr.items.filter(t=>!BD[t]||W.owned[t]); if(!items.length) continue;
@@ -1697,7 +1731,7 @@ function updRot(){ const r2=$('btnRot2'); if(r2) r2.textContent='向き '+['↑'
 /* ---------- 詳細カード ---------- */
 function kv(rows){ return '<dl class="kv">'+rows.map(r=>'<dt>'+r[0]+'</dt><dd>'+r[1]+'</dd>').join('')+'</dl>'; }
 const ST={ok:['稼働中','ok'],low:['止まっている','bad'],over:['止まっている','bad'],nopipe:['蒸気が来ていない','bad'],nofuel:['燃料切れ','bad'],nowater:['水がない','bad'],blocked:['出口が詰まっている','warn'],wait:['材料待ち','idle'],notarget:['鉱脈に向いていない','bad'],nosky:['空がふさがっている','bad']};
-const HINT={low:'動きが止まっている。圧が足りないのかもしれない。近くの管に圧力計を付けて、銘板の使用圧力と見比べよう。',over:'安全装置がシューシューと蒸気を逃がしている。圧が強すぎるのかもしれない。圧力計で確かめよう。',nopipe:'設備の背後のマスに管を通し、ボイラーまでつなぐ。',nofuel:'ベルトで石炭・木炭・灯油を運び入れる。',nowater:'水のマスに隣接させる。',blocked:'出口（矢印）の先にベルトか設備を置く。',wait:'材料をベルトで運び入れる。',notarget:'回転で刃を鉱脈に向ける。',nosky:'真上の土や岩を掘って空を見せる。'};
+const HINT={low:'動きが止まっている。圧が足りないのかもしれない。管は長いほど、たくさん流れるほど先で圧が落ちる。近くに圧力計を付けて確かめ、ボイラーを近くに足すか太管に替えよう。',over:'安全装置がシューシューと蒸気を逃がしている。圧が強すぎるのかもしれない。圧力計で確かめよう。',nopipe:'設備の背後のマスに管を通し、ボイラーまでつなぐ。',nofuel:'ベルトで石炭・木炭・灯油を運び入れる。',nowater:'水のマスに隣接させる。',blocked:'出口（矢印）の先にベルトか設備を置く。',wait:'材料をベルトで運び入れる。',notarget:'回転で刃を鉱脈に向ける。',nosky:'真上の土や岩を掘って空を見せる。'};
 let sel=null,detRows=[],dials=[];
 function openDetail(t){ if(!t||t.x<0||t.y<0||t.x>=W.w||t.y>=W.h) return; sel={x:t.x,y:t.y}; const f=W.fg[t.y*W.w+t.x]; if(f&&f.t==='drill') W.flags.inspDrill=1; renderDetail(); }
 function closeDetail(){ sel=null; dials=[]; $('detail').hidden=true; $('mapwrap').classList.remove('has-detail'); }
@@ -1708,7 +1742,7 @@ function describe(layer,c,i){
     if(b.dem){ d.st=()=>c.state; d.plate='使用圧力 '+b.pmin+'〜'+b.pmax+' kPa'; if(b.time) d.rows.push(['進み',()=>pct(c.prog)]); }
     switch(c.t){
       case 'boiler': case 'bigboiler': d.st=()=>c.state; d.plate='最高使用圧力 '+b.pout+' kPa';
-        d.rows.push(['燃料',()=>c.fuel+' 個'],['火',()=>c.act?'燃えている':'消えている']); break;
+        d.rows.push(['燃料',()=>c.fuel+' 個'],['火力',()=>!c.act?'消えている':(c.lv||0)>=0.85?'全開（蒸気の量が足りない）':(c.lv||0)>=0.35?'中くらい':'余力あり']); d.fire=c; break;
       case 'drill': case 'pump': d.rows.unshift(['掘るもの',()=>TERN[drillTarget(W,c,x,y)]||'—']); break;
       case 'plant': d.rows.unshift(['空',()=>hasSky(W,x,y)?'見える':'ふさがっている']); break;
       case 'assembler': d.acts.push(['作るものを切替',()=>{ c.rc=c.rc?0:1; c.inv={}; }]); d.rows.unshift(['作るもの',()=>c.rc?'自動人形':'ぜんまい']); break;
@@ -1783,6 +1817,7 @@ function renderDetail(){
     h+='<p class="ds">'+d.desc+'</p>';
     if(d.st) h+='<p class="hint2" data-dk="'+key+'hint"></p>';
     if(d.plate) h+='<div class="plate">'+d.plate+'</div>';
+    if(d.fire) h+='<div class="firebar" aria-label="火力"><i data-fire="'+key+'"></i></div>';
     if(d.dial) h+='<canvas class="dial" data-dial="'+key+'" width="320" height="320" aria-label="圧力計の文字盤"></canvas>';
     h+='<dl class="kv">'+d.rows.map((r,j)=>'<dt>'+r[0]+'</dt><dd data-dk="'+key+'r'+j+'"></dd>').join('')+'</dl>';
     if(d.recipe) h+='<div class="recipe">'+d.recipe+'</div>';
@@ -1804,6 +1839,7 @@ function updateDetail(){ if(!sel||$('detail').hidden) return; const el=$('detail
   for(const {key,d} of detRows){
     if(d.st){ const s=d.st()||'ok',m=ST[s]||ST.ok; const p=el.querySelector('[data-dk="'+key+'st"]'); if(p) p.innerHTML='<span class="pill '+m[1]+'">'+m[0]+'</span>'; const hn=el.querySelector('[data-dk="'+key+'hint"]'); if(hn){ hn.textContent=HINT[s]&&s!=='ok'?'→ '+HINT[s]:''; hn.hidden=!(HINT[s]&&s!=='ok'); } }
     d.rows.forEach((r,j)=>{ const dd=el.querySelector('[data-dk="'+key+'r'+j+'"]'); if(dd){ const v=typeof r[1]==='function'?r[1]():r[1]; if(dd.textContent!==String(v)) dd.textContent=v; } });
+    if(d.fire){ const f=el.querySelector('[data-fire="'+key+'"]'); if(f) f.style.width=Math.round((d.fire.act?(d.fire.lv||0):0)*100)+'%'; }
     if(d.gauge){ const n=el.querySelector('[data-gn="'+key+'"]'); if(n) n.style.left=Math.max(0,Math.min(100,d.gauge.v()/10))+'%'; const gs=el.querySelector('[data-gs="'+key+'"]'); if(gs&&d.gauge.set) gs.style.left=Math.min(100,d.gauge.set()/10)+'%'; } } }
 const starsOf=lv=>'<span class="stars" title="難易度 '+lv+'">'+'★'.repeat(lv)+'<i>'+'★'.repeat(5-lv)+'</i></span>';
 function specHtml(o){ const nm=['上','右','下','左']; const ports=o.ports.map((p,s)=>p?nm[s]+'：'+(p.r==='sup'?'給気（常に圧あり）':p.r==='in'?'入力 '+p.k:'出力 '+p.k):null).filter(Boolean).join('<br>');
