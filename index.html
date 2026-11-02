@@ -403,6 +403,7 @@ const BD={
   office:{L:'fg',name:'営業所',cost:500,rot:'none',mach:1,desc:'置くと新しい依頼人が訪れ、同時に受けられる案件が1件増える（2か所まで）。'},
   testbench:{L:'none',name:'試験台',cost:0,rot:'none',desc:'鋳造台で回路の部品数と応答時間を測る。回路設計の案件で、基準の部品数以下なら報酬が1.5倍。'},
   tubenet:{L:'none',name:'気送管網',cost:0,rot:'none',desc:'気送管に「受け取る品」を決められるようになる。送る側は品物に合った気送管へ自動で振り分ける。'},
+  trash:{L:'fg',name:'廃棄炉',cost:30,rot:'none',mach:1,desc:'入ってきた品物を何でも燃やして消す。動力はいらない。ベルトの終点や、落とした品物の受け口に。'},
   chest:{L:'fg',name:'貯蔵箱',cost:40,rot:'4',mach:1,desc:'何でも50個までためて、矢印へ少しずつ出す。'},
   dock:{L:'fg',name:'出荷口',cost:150,rot:'none',mach:1,desc:'受注中の案件へ納品する。案件に要らない品はくず値（1円）で引き取られる。'},
   tube:{L:'fg',name:'気送管',cost:500,rot:'4',mach:1,desc:'同じ番号の気送管へ品物を一瞬で送る。送る側は背後の管から 200 kPa 以上の蒸気を使う。'},
@@ -460,7 +461,7 @@ const isPipeLike=c=>!!c&&(c.t==='pipe'||c.t==='pipe2'||c.t==='lamp'||c.t==='gaug
 const VALVES=new Set(['chk','vNC','vNO','lever','clock','scale','prv','pswitch','superheat','counter','delay','latch']);
 const NOTE_N=['ド','レ','ミ','ソ','ラ','高いド','高いレ','高いミ','高いソ','高いラ','最高ド','最高レ','最高ミ','最高ソ','最高ラ'];
 const SETS={counter:[2,3,4,5,6,8,10,12,15,20],delay:[5,10,15,20,30,40,60],organ:[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14],prv:[50,80,100,150,200,250,300,400,500,600,800,1000,1200,1300],relief:[200,300,400,500,600,700,800,900],pswitch:[100,150,200,250,300,350,400,500,600,800]};
-const START_OWNED=['pipe','cross','lamp','gauge','prv','splitLR','splitUS','splitUD','scaffold','belt','drill','boiler','chest','dock','chk','vNC','vNO','lever'];
+const START_OWNED=['trash','pipe','cross','lamp','gauge','prv','splitLR','splitUS','splitUD','scaffold','belt','drill','boiler','chest','dock','chk','vNC','vNO','lever'];
 const BLUEPRINTS=[
   {id:'furnace',tools:['furnace'],price:150,req:'o1',name:'反射炉',desc:'鉱石を焼いて板にする。'},
   {id:'pressure',tools:['relief','pswitch'],price:200,req:'o1',name:'安全弁と圧力スイッチ弁',desc:'圧力を守る・圧力で切り替える。'},
@@ -854,6 +855,7 @@ function machAccept(W,c,it){
       for(const r of rs) if(r.i[it]){ if((c.inv[it]||0)<10){c.inv[it]=(c.inv[it]||0)+1; return true;} return false; }
       return false; }
     case 'chest': if(c.q.length<50){c.q.push(it); return true;} return false;
+    case 'trash': c.n=(c.n||0)+1; c._f=12; W.stats.trashed=(W.stats.trashed||0)+1; return true;
     case 'splitLR': case 'splitUS': case 'splitUD': if(c.buf.length<2){c.buf.push(it); return true;} return false;
     case 'dock': c.n++; deliver(W,it); return true;
     case 'tube': { const tgt=tubeTarget(W,c,it); if(!tgt) return false; const sg=c._sg; if(!sg||sg.p<0.2) return false; sg.q=Math.max(0,sg.q-0.35); tgt.ob.push(it); return true; }
@@ -950,6 +952,7 @@ function tickWorld(W){
       for(let k=0;k<2;k++){ const idx=(c.alt+k)%2,d=os[idx],tx=x+DX[d],ty=y+DY[d];
         if(d===0){ const ab=inB(W,tx,ty)?fg[ty*w+tx]:null; if(!ab||ab.t==='scaffold') continue; }
         if(giveTo(W,tx,ty,c.buf[0],d)){ c.buf.shift(); c.alt=(idx+1)%2; c.cd=2; c['u'+idx]=1; if(c.u0&&c.u1) W.flags.split=1; break; } } }
+    if(c.t==='trash'&&c._f>0){ c._f--; if(c._f===11) W.events.push(['puff',i]); }
     if(c.t==='chest'&&c.q.length){ if(--c.cd<=0){ if(giveTo(W,x+DX[c.d],y+DY[c.d],c.q[0],c.d)) c.q.shift(); c.cd=4; } }
     if(c.t==='gate'||c.t==='divert'){ const sg=c._sg,p=sg?sg.p:0; c.open=c.open?(p>SIG_OFF?1:0):(p>=SIG_ON?1:0); }
   }
@@ -1406,6 +1409,9 @@ function drawPipe2(g,X,Y,m,p,ci){ const col=presCol(p),pc=PIPECOL[ci||0];
   g.fillStyle=PAL.k; g.fillRect(X+3,Y+3,10,10); g.fillStyle=pc[3]; g.fillRect(X+4,Y+4,8,8); g.fillStyle=pc[2]; g.fillRect(X+4,Y+4,8,2); g.fillStyle=col; g.fillRect(X+6,Y+6,4,4);
   g.fillStyle=PAL.B; [[4,4],[11,4],[4,11],[11,11]].forEach(q=>g.fillRect(X+q[0],Y+q[1],1,1)); }
 
+frames('trash',3,(R,f)=>{ R(2,3,12,13,'k');R(3,4,10,11,'i');R(3,4,10,1,'I'); for(let x=4;x<13;x+=3) R(x,6,1,8,'d'); R(1,2,14,3,'k');R(2,2,12,1,'s'); R(6,0,4,2,'k');R(7,0,2,1,'b');
+  R(5,10,6,4,'k'); if(f){ R(6,11,4,3,'f');R(f===1?7:8,11,1,1,'F'); } else R(6,11,4,3,'o'); });
+
 </script>
 <script>
 'use strict';
@@ -1523,6 +1529,7 @@ function drawFg(c,x,y,now){
     case 'orchard': g.drawImage(SPR.orchard[c.act?f2:0],X,Y); outArrow(g,X,Y,c.d); break;
     case 'canner': case 'atelier': g.drawImage(SPR[c.t][c.act?f2:0],X,Y); outArrow(g,X,Y,c.d); break;
     case 'office': g.drawImage(SPR.office[0],X,Y); break;
+    case 'trash': g.drawImage(SPR.trash[c._f>0?1+(((now/120)|0)%2):0],X,Y); break;
     case 'lift': { g.drawImage(SPR.lift[((now/90)|0)%4],X,Y); const ab=y>0&&W.fg[(y-1)*W.w+x]; if(!(ab&&ab.t==='lift')) outArrow(g,X,Y,c.d); break; }
   }
 }
@@ -1696,12 +1703,12 @@ const GROUPS=[
   {g:'動力と圧力',items:['boiler','bigboiler','pipe','pipe2','prv','gauge','accum','relief','pswitch','superheat','condenser']},
   {g:'採掘と栽培',items:['drill','pump','plant','orchard']},
   {g:'加工',items:['furnace','kiln','refinery','hammer','canner','assembler','autoclave','atelier']},
-  {g:'搬送',items:['belt','chute','splitLR','splitUS','splitUD','lift','crane','catapult','rail','station','gate','divert','tube','chest','scaffold','dock']},
+  {g:'搬送',items:['trash','belt','chute','splitLR','splitUS','splitUD','lift','crane','catapult','rail','station','gate','divert','tube','chest','scaffold','dock']},
   {g:'論理と音',items:['lever','chk','vNC','vNO','cross','lamp','clock','scale','counter','delay','latch','card','whistle','organ']},
   {g:'社長',items:['office']},
 ];
 const TOOLNAME={hand:'指',dig:'掘削',erase:'撤去',paint:'塗装'};
-const SHORT={catapult:'カタパルト',card:'パンチカード',condenser:'復水器',autoclave:'圧力釜',atelier:'人形工房',orchard:'果樹温室',superheat:'過熱器',splitLR:'分配・左右',splitUS:'分配・上横',splitUD:'分配・上下',bigboiler:'大型ボイラ',pswitch:'圧スイッチ',hammer:'ハンマー',divert:'振り分け',gate:'遮断ベルト',refinery:'精製塔',plant:'植物プラント'};
+const SHORT={trash:'廃棄炉',catapult:'カタパルト',card:'パンチカード',condenser:'復水器',autoclave:'圧力釜',atelier:'人形工房',orchard:'果樹温室',superheat:'過熱器',splitLR:'分配・左右',splitUS:'分配・上横',splitUD:'分配・上下',bigboiler:'大型ボイラ',pswitch:'圧スイッチ',hammer:'ハンマー',divert:'振り分け',gate:'遮断ベルト',refinery:'精製塔',plant:'植物プラント'};
 const COLOR_TOOLS=['pipe','pipe2','paint','lamp','gauge','accum'];
 function buildPalette(){
   const pal=$('pal'); pal.innerHTML='';
@@ -1747,6 +1754,7 @@ function describe(layer,c,i){
       case 'plant': d.rows.unshift(['空',()=>hasSky(W,x,y)?'見える':'ふさがっている']); break;
       case 'assembler': d.acts.push(['作るものを切替',()=>{ c.rc=c.rc?0:1; c.inv={}; }]); d.rows.unshift(['作るもの',()=>c.rc?'自動人形':'ぜんまい']); break;
       case 'chest': d.rows.push(['中身',()=>c.q.length+' / 50']); break;
+      case 'trash': d.rows.push(['燃やした数',()=>(c.n||0)+' 個']); break;
       case 'dock': d.rows.push(['受け取った数',()=>c.n+' 個']); d.acts.push(['案件ボード',()=>openOrders()]); break;
       case 'belt': case 'gate': case 'divert': case 'lift': d.rows.push(['運搬中',()=>c.it?ITEMN[c.it]:'—']); if(c.t==='gate'||c.t==='divert') d.rows.push([c.t==='gate'?'ゲート':'向き',()=>c.t==='gate'?(c.open?'開':'閉'):SIDEN[effDir(W,c,i)]]); break;
       case 'splitLR': case 'splitUS': case 'splitUD': d.rows.push(['出口',()=>SPLITS[c.t](c).map(k=>SIDEN[k]).join('と')],['次の行き先',()=>SIDEN[SPLITS[c.t](c)[c.alt]]]); break;
@@ -1822,8 +1830,8 @@ function renderDetail(){
     h+='<dl class="kv">'+d.rows.map((r,j)=>'<dt>'+r[0]+'</dt><dd data-dk="'+key+'r'+j+'"></dd>').join('')+'</dl>';
     if(d.recipe) h+='<div class="recipe">'+d.recipe+'</div>';
     if(d.card) h+='<div class="cardgrid"><span></span><b>前</b><b>右</b>'+d.card.rows.map((r,ri)=>'<span data-cr="'+ri+'">'+(ri+1)+'</span>'+r.map((v,bi)=>'<button class="hole'+(v?' on':'')+'" data-hole="'+ri+','+bi+'" aria-label="'+(ri+1)+'行目の穴"></button>').join('')).join('')+'</div>';
-    if(d.acts.length) h+='<div class="acts">'+d.acts.map((a,j)=>'<button class="pbtn'+(a[2]?' danger':'')+'" data-act="'+acts.length+j+'">'+a[0]+'</button>').join('')+'</div>';
-    d.acts.forEach((a,j)=>acts.push([String(acts.length)+j,a[1]]));
+    if(d.acts.length) h+='<div class="acts">'+d.acts.map((a,j)=>'<button class="pbtn'+(a[2]?' danger':'')+'" data-act="'+key+'_'+j+'">'+a[0]+'</button>').join('')+'</div>';
+    d.acts.forEach((a,j)=>acts.push([key+'_'+j,a[1]]));
     detRows.push({key:key,d:d}); h+='</div>'; });
   el.innerHTML=h; el.hidden=false; $('mapwrap').classList.add('has-detail');
   dials=detRows.filter(r=>r.d.dial).map(r=>({cv:el.querySelector('[data-dial="'+r.key+'"]'),get:r.d.dial,v:r.d.dial(),w:0}));
