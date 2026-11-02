@@ -212,8 +212,16 @@ input,textarea{-webkit-user-select:text;user-select:text}
 .plate{display:inline-block;margin:2px 0 4px;padding:3px 10px;background:linear-gradient(#c9a25a,#8d6b2c);color:#20150a;border:2px solid #000;box-shadow:inset 0 1px 0 #f3d68a;font-family:"Shippori Mincho B1","Hiragino Mincho ProN",serif;font-size:13px;letter-spacing:.06em}
 .firebar{height:10px;background:#140b06;border:2px solid #000;margin:6px 0 2px;position:relative}
 .firebar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#7a2a10,#ff8a2a 70%,#fff0b0);transition:width .3s}
-.dial{display:block;width:min(260px,100%);height:auto;aspect-ratio:1;margin:6px auto 2px}
-@media (max-width:700px){ .dial{width:min(170px,55vw)} }
+.dial{display:block;width:min(320px,100%);height:auto;aspect-ratio:400/330;margin:6px auto 2px;border:2px solid #000;box-shadow:inset 0 0 0 1px var(--line);background:#120c08}
+@media (max-width:700px){ .dial{width:min(260px,76vw)} }
+#mHowto,#mInfo{z-index:55}
+#pal .tool{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}
+.tool.lp{outline:2px solid var(--brass);outline-offset:-2px}
+.infohd{display:flex;gap:12px;align-items:center;margin-bottom:6px}
+.infohd canvas{width:56px;height:56px;image-rendering:pixelated;flex:none;background:var(--panel2);border:2px solid #000}
+.infohd .lay{font-size:11px;color:var(--muted)}
+.infohd h2{margin:0;font-size:20px}
+#infoBody .ds{margin:4px 0 8px;line-height:1.7}
 .detail .acts{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
 .detail .acts .pbtn{font-size:13px;padding:3px 10px}
 .recipe{display:flex;align-items:center;gap:4px;flex-wrap:wrap;font-size:12px;margin-top:6px}
@@ -284,6 +292,10 @@ input,textarea{-webkit-user-select:text;user-select:text}
   .detail{left:0;right:0;bottom:0;top:auto;width:auto;max-height:62%;border-width:3px 0 0 0;padding:10px 14px max(12px,env(safe-area-inset-bottom,0px))}
   .mapwrap.has-detail .tut{display:none}
   .edbody{grid-template-columns:minmax(0,1fr)}
+  #edTools{display:grid;grid-template-columns:repeat(auto-fill,minmax(66px,1fr));gap:5px}
+  #edTools .tool{width:auto;padding:5px 2px 4px;gap:2px;min-height:58px}
+  #edTools .tool canvas{width:30px;height:30px}
+  #edTools .tool .nm{max-width:none;white-space:normal;overflow:visible;font-size:11px;line-height:1.2;word-break:keep-all;overflow-wrap:anywhere}
   .mbox{padding:12px}
   .toasts{top:116px}
 }
@@ -389,6 +401,10 @@ input,textarea{-webkit-user-select:text;user-select:text}
     <div class="confirm" id="mConfirm" hidden>保存データを消して始めますか？ <button class="pbtn" id="mYes">はい</button><button class="pbtn" id="mNo">やめる</button></div>
   </div>
 </div>
+<div class="modal" id="mInfo" hidden><div class="mbox" role="dialog" aria-modal="true" aria-labelledby="hInfo" style="width:min(440px,100%)">
+  <div class="infohd"><canvas id="infoIc" width="32" height="32"></canvas><div style="flex:1;min-width:0"><div class="lay" id="infoLay"></div><h2 id="hInfo"></h2></div><button class="pbtn" data-close>閉じる</button></div>
+  <div id="infoBody"></div>
+</div></div>
 <div class="modal" id="mHowto" hidden><div class="mbox howto">
   <header><h2>遊び方</h2><button class="pbtn" data-close>閉じる</button></header>
   <ul>
@@ -399,7 +415,8 @@ input,textarea{-webkit-user-select:text;user-select:text}
     <li><b>圧力の落ち方</b>：蒸気は管を流れるほど圧が落ちます。遠くの設備ほど圧が低く、たくさん使う設備の先はさらに下がります。ボイラーを使う場所の近くに足すか、太管に替えると改善します。ボイラーを増やして増えるのは蒸気の<b>量</b>で、上限の圧力（銘板の値）は変わりません。火力が「全開」のボイラーは蒸気が足りていない合図です。</li>
     <li><b>管</b>はなぞった向きにだけつながります。動力も信号も同じ管で、100 kPa 以上が信号の「1」です。</li>
     <li><b>弁</b>は背中から入って矢印へ出ます。常閉弁は横の操作口に圧があると開き、常開弁は閉じます。閉じた弁は出口側の蒸気を抜きます。</li>
-    <li><b>品物</b>は重力で落ちます。ベルトの端から落とせば下の設備へ。上げるには昇降機。</li>
+    <li><b>品物</b>は重力で落ちます。ベルトの端から落とせば下の設備へ。上げるには昇降機。床で止まったままの品は約3分で消えます（消える前に点滅）。</li>
+    <li><b>詳しく見る</b>：下の設備一覧は、長押し（PC は右クリック）で説明・使用圧力・作れる物が見られます。</li>
   </ul>
 </div></div>
 <div class="arrowmk" id="mkArrow" hidden></div>
@@ -412,7 +429,7 @@ input,textarea{-webkit-user-select:text;user-select:text}
 'use strict';
 /* ================= 汽械仕掛けの夜明け 中核 ================= */
 const DX=[0,1,0,-1],DY=[-1,0,1,0];
-const KPA=1000, SIG_ON=0.1, SIG_OFF=0.06, TEST_P=0.4;
+const KPA=1000, SIG_ON=0.1, SIG_OFF=0.06, TEST_P=0.4, LOOSE_LIFE=1800;
 const kpa=p=>Math.round((p||0)*KPA);
 const T={AIR:0,DIRT:1,GRASS:2,STONE:3,COAL:4,IRON:5,CU:6,MIX:7,OIL:8,WATER:9,BED:10};
 const TERN=['空洞','土','草地','岩','石炭鉱脈','鉄鉱脈','銅鉱脈','混合鉱脈','原油だまり','水','岩盤'];
@@ -1054,6 +1071,8 @@ function tickWorld(W){
       l.rest=0; l.y=ny; }
     else { l.y=ny; l.rest=0; }
   }
+  // 止まったまま約3分（1800tick）経った品は消える
+  for(let k=W.loose.length-1;k>=0;k--){ const l=W.loose[k]; l.st=l.rest?(l.st||0)+1:0; if(l.st>=LOOSE_LIFE) W.loose.splice(k,1); }
   steamPhase2(G);
   for(const o of ORDERS){ const st=W.orders[o.id]; if(st.st==='cool'&&W.tick>=st.until){ st.st='avail'; } }
   if(W.tick%20===0) refreshOrders(W);
@@ -1753,7 +1772,7 @@ function render(now){
   for(let y=y0;y<=y1;y++)for(let x=x0;x<=x1;x++){const c=W.fg[y*W.w+x]; if(c) drawFg(c,x,y,now);}
   for(let y=y0;y<=y1;y++)for(let x=x0;x<=x1;x++){const c=W.fg[y*W.w+x]; if(!c||!c.it) continue; const X=x*16,Y=y*16;
     if(c.t==='lift') drawItemAt(c.it,X+4,Y+8-c.p*16+4); else if(c.t==='chute'){ drawItemAt(c.it,X+4+(c.d===1?(c.p-.5):(.5-c.p))*16,Y+1+c.p*13); } else { const d=effDir(W,c,y*W.w+x); drawItemAt(c.it,X+4+(d===1?(c.p-.5):(.5-c.p))*16,Y+2); } }
-  for(const l of W.loose){ if(l.x<x0-1||l.x>x1+1) continue; drawItemAt(l.it,l.x*16+4,l.y*16-4); }
+  for(const l of W.loose){ if(l.x<x0-1||l.x>x1+1) continue; const left=LOOSE_LIFE-(l.st||0); if(left<100&&Math.floor(now/(left<40?90:180))%2) continue; drawItemAt(l.it,l.x*16+4,l.y*16-4); }
   for(const f of W.fly) drawItemAt(f.it,f.x*16-4,f.y*16-4);
   for(const k in W.locos){ const L=W.locos[k]; const X=Math.round(L.pos*16-8),Y=L.y*16-4; if(L.y<y0-1||L.y>y1+1) continue; g.save(); if(L.dir<0){ g.translate(X*2+16,0); g.scale(-1,1); } g.drawImage(SPR.loco[((now/150)|0)%2*(L.wait>0?0:1)],X,Y); g.restore(); if(L.cargo.length){ g.fillStyle=PAL.Y; g.fillRect(X+3,Y+4,Math.min(8,L.cargo.length),1); } if(speed>0&&Math.random()<.15) spawn(X+(L.dir>0?4:12),Y,1,1); }
   for(let y=y0;y<=y1;y++)for(let x=x0;x<=x1;x++){ const c=W.fg[y*W.w+x]; if(c&&c.t==='crane'&&c._lt>0&&c._ly!=null){ g.fillStyle='#c9c2b4'; g.fillRect(x*16+7,c._ly*16+12,1,(y-c._ly)*16-6); } }
@@ -1886,6 +1905,31 @@ document.addEventListener('pointermove',e=>{ if(!pd||e.pointerId!==pd.id) return
 function palEnd(e,place){ if(!pd||e.pointerId!==pd.id) return; if(pd.on){ const q=dropPoint(e); if(place&&inMap(q)){ const t=tileAt(q); doAction(t,null); if(toolType()==='pipe') autoLinkPipe(t.x,t.y); } $('dragGhost').hidden=true; if(e.pointerType!=='mouse') hov=null; } pd=null; }
 document.addEventListener('pointerup',e=>palEnd(e,true)); document.addEventListener('pointercancel',e=>palEnd(e,false));
 
+/* ---------- 長押しで詳細 ---------- */
+const TOOLDESC={hand:'設備をタップして状態を調べる。ドラッグで画面を動かす。',dig:'土や岩のマスを掘って空間を空ける。鉱脈を掘ると採れることもある。',erase:'設備や管を撤去する。買った金額の一部が戻る。',paint:'管をなぞって色を塗り替える。系統ごとに色を分けると見やすい。',chipnew:'チップ鋳造台を開いて、弁と管で新しい回路（チップ）を組む。'};
+let lp=null,lpAt=0;
+function lpCancel(){ if(lp){ clearTimeout(lp.t); lp.el.classList.remove('lp'); lp=null; } }
+$('pal').addEventListener('pointerdown',e=>{ const b=e.target.closest('.tool'); if(!b||e.button) return; lpCancel();
+  lp={el:b,id:e.pointerId,sx:e.clientX,sy:e.clientY,t:setTimeout(()=>{ const k=b.dataset.tool; lpCancel(); lpAt=Date.now(); pd=null; $('dragGhost').hidden=true; try{ navigator.vibrate&&navigator.vibrate(12); }catch(_){} showInfo(k); },450)}; b.classList.add('lp'); },true);
+document.addEventListener('pointermove',e=>{ if(lp&&e.pointerId===lp.id&&Math.hypot(e.clientX-lp.sx,e.clientY-lp.sy)>10) lpCancel(); });
+document.addEventListener('pointerup',lpCancel); document.addEventListener('pointercancel',lpCancel);
+$('pal').addEventListener('click',e=>{ if(Date.now()-lpAt<700){ e.stopPropagation(); e.preventDefault(); } },true);
+$('pal').addEventListener('contextmenu',e=>{ e.preventDefault(); const b=e.target.closest('.tool'); if(b&&Date.now()-lpAt>700&&e.pointerType!=='touch'){ lpAt=Date.now(); showInfo(b.dataset.tool); } });
+function showInfo(key){ if(!key) return; const isChip=key.startsWith('chip:'), t=isChip?'chip':key, b=BD[t];
+  const ic=$('infoIc'), g=ic.getContext('2d'); g.clearRect(0,0,32,32); g.imageSmoothingEnabled=false; g.drawImage(toolIcon(isChip?'chip':t==='chipnew'?'chipnew':t,32),0,0);
+  let name=TOOLNAME[t]||(b&&b.name)||'鋳造台', lay='道具', h='';
+  if(isChip){ const df=W.defs[key.slice(5)]; name=df?df.name:'チップ'; lay='自作チップ（管の層）';
+    h+='<p class="ds">鋳造台で組んだ回路。管の途中に置くと、中の弁が入力ポートの蒸気で動く。</p>';
+    if(df) h+=kv(df.ports.map((m,k)=>[SIDEN[k],m==='in'?'入力':m==='out'?'出力':'なし']).concat([['部品数',df.cells.filter(Boolean).length+' 個'],['値段','¥'+BD.chip.cost]]));
+  } else if(b){ lay=b.L==='bg'?'管の層':'設備';
+    h+='<p class="ds">'+(b.desc||'')+'</p>'; const rows=[['値段','¥'+fmt(b.cost)]];
+    if(b.pmin) rows.push(['使用圧力',b.pmin+'〜'+b.pmax+' kPa']); if(b.pout) rows.push(['最高使用圧力',b.pout+' kPa']); if(b.set) rows.push(['初期設定',b.set+' kPa']);
+    if(b.time) rows.push(['1個あたり',(b.time/10).toFixed(1)+' 秒']); const n=countType(W,t); rows.push(['工場にある数',n+' 台']);
+    h+=kv(rows);
+    if(RECIPES[t]) h+='<div class="recipe">'+RECIPES[t].map(r=>itemIcons(r.i)+' → <canvas data-it="'+r.o+'"></canvas> '+ITEMN[r.o]).join('<br>')+'</div>';
+  } else h+='<p class="ds">'+(TOOLDESC[t]||'')+'</p>';
+  $('infoLay').textContent=lay; $('hInfo').textContent=name; const box=$('infoBody'); box.innerHTML=h; paintIcons(box); openModal('mInfo'); }
+
 /* ---------- パレット ---------- */
 const GROUPS=[
   {g:'道具',items:['hand','dig','erase','paint']},
@@ -1970,7 +2014,7 @@ function describe(layer,c,i){
     if(b.rot!=='none') d.acts.push(['回転',()=>{ c.d=b.rot==='lr'?(c.d===1?3:1):(c.d+1)%4; }]);
     d.acts.push(['撤去',()=>{ if(removeAt(W,x,y,'fg')) SFX.remove(); },1]);
   } else if(layer==='bg'){ const b=c.t==='port'?{name:'ポート',desc:''}:BD[c.t]; d.name=c.t==='chip'&&W.defs[c.def]?W.defs[c.def].name:b.name; d.desc=b.desc;
-    if(c.t==='gauge'){ d.dial=()=>W.np[i*4]; W.flags.readGauge=1; }
+    if(c.t==='gauge'){ d.dial=()=>W.np[i*4]; d.at=i; W.flags.readGauge=1; }
     if(isPipeLike(c)) d.rows.push(['つながりの長さ',()=>{ const sg=segAt(W,i*4); return sg?sg.size+' マス':'—'; }],['色',PIPECOL[c.col||0][0]]);
     else if(c.t==='card'){ d.card=c; d.rows.push(['向き',()=>roleText(c)]); d.rows.push(['いまの行',()=>(c.row+1)+' / '+c.rows.length]); d.acts.push(['1行目に戻す',()=>{ c.row=0; }]); }
     else if(VALVES.has(c.t)||c.t==='relief'||c.t==='whistle'||c.t==='organ'){
@@ -1993,10 +2037,44 @@ function describe(layer,c,i){
   return d;
 }
 /* アナログ圧力計の文字盤 */
-function drawDial(D,now){ const c=D.cv; if(!c) return; const g2=c.getContext('2d'),S=c.width,cx=S/2,cy=S/2,R0=S*0.43;
+/* 圧力計の情景：背後の工場を写し、管と継手、漏れる蒸気を描く */
+function pipeSeg(g2,x1,y1,x2,y2,th,pc){ const hz=y1===y2; g2.save();
+  const gr=hz?g2.createLinearGradient(0,y1-th/2,0,y1+th/2):g2.createLinearGradient(x1-th/2,0,x1+th/2,0);
+  gr.addColorStop(0,pc[3]); gr.addColorStop(.22,pc[1]); gr.addColorStop(.38,pc[2]); gr.addColorStop(.5,pc[1]); gr.addColorStop(.85,pc[3]); gr.addColorStop(1,'#120a06');
+  g2.fillStyle=gr; if(hz) g2.fillRect(Math.min(x1,x2),y1-th/2,Math.abs(x2-x1),th); else g2.fillRect(x1-th/2,Math.min(y1,y2),th,Math.abs(y2-y1));
+  const L=hz?Math.abs(x2-x1):Math.abs(y2-y1), dir=hz?Math.sign(x2-x1):Math.sign(y2-y1);
+  for(let d=70;d<L-20;d+=130){ const fx=hz?x1+dir*d:x1, fy=hz?y1:y1+dir*d; const fg=hz?g2.createLinearGradient(0,fy-th*.75,0,fy+th*.75):g2.createLinearGradient(fx-th*.75,0,fx+th*.75,0);
+    fg.addColorStop(0,'#2a1a0e'); fg.addColorStop(.35,pc[2]); fg.addColorStop(.6,pc[1]); fg.addColorStop(1,'#1a0f08'); g2.fillStyle=fg;
+    if(hz) g2.fillRect(fx-7,fy-th*.75,14,th*1.5); else g2.fillRect(fx-th*.75,fy-7,th*1.5,14);
+    g2.fillStyle='#2a1b0e'; for(const o of [-.5,.5]){ g2.beginPath(); if(hz) g2.arc(fx,fy+o*th*1.1,2.2,0,7); else g2.arc(fx+o*th*1.1,fy,2.2,0,7); g2.fill(); } }
+  g2.restore(); }
+function drawDial(D,now){ const c=D.cv; if(!c) return; const g2=c.getContext('2d'),SW=c.width,SH=c.height;
   const tgt=Math.max(0,Math.min(1.05,D.get())); D.w+=(tgt-D.v)*0.08; D.w*=0.78; D.v+=D.w; const jit=tgt>0.01?Math.sin(now/37)*0.002+Math.sin(now/91)*0.003:0;
   const ang=v=>(-135+270*Math.max(0,Math.min(1.05,v)))*Math.PI/180;
-  g2.clearRect(0,0,S,S);
+  const dt=Math.min(100,D.lt?now-D.lt:16); D.lt=now;
+  const i=D.at, bc=i!=null?W.bg[i]:null, pc=PIPECOL[(bc&&bc.col)||0]||PIPECOL[0], m=bc?bc.m||0:10;
+  const DX0=SW/2, DY0=128, K=0.7, JX=SW/2, JY=SH-40, TH=34;
+  // 1) 背後：工場の地図をそのまま写し、ぼかして暗く
+  g2.setTransform(1,0,0,1,0,0); g2.clearRect(0,0,SW,SH); g2.fillStyle='#17100b'; g2.fillRect(0,0,SW,SH);
+  if(i!=null&&typeof cv!=='undefined'){ const zs=zsNow(), tx=i%W.w, ty=(i/W.w)|0;
+    const px=Math.round(cv.width/2-cam.x*zs)+(tx+.5)*16*zs, py=Math.round(cv.height/2-cam.y*zs)+(ty+.5)*16*zs;
+    const sw=16*zs*7, sh=sw*SH/SW; let sx=px-sw/2, sy=py-sh*0.62;
+    const cx0=Math.max(0,sx),cy0=Math.max(0,sy),cx1=Math.min(cv.width,sx+sw),cy1=Math.min(cv.height,sy+sh);
+    if(cx1-cx0>4&&cy1-cy0>4){ g2.save(); g2.imageSmoothingEnabled=false; try{ g2.filter='blur(2.5px) saturate(.75) brightness(.62)'; }catch(_){}
+      g2.drawImage(cv,cx0,cy0,cx1-cx0,cy1-cy0,(cx0-sx)/sw*SW,(cy0-sy)/sh*SH,(cx1-cx0)/sw*SW,(cy1-cy0)/sh*SH); g2.restore(); } }
+  const vg=g2.createRadialGradient(SW/2,SH*.45,SH*.25,SW/2,SH*.45,SW*.7); vg.addColorStop(0,'rgba(0,0,0,0)'); vg.addColorStop(1,'rgba(8,5,3,.72)'); g2.fillStyle=vg; g2.fillRect(0,0,SW,SH);
+  const p=tgt; g2.fillStyle='rgba(255,150,70,'+(0.05+0.08*Math.min(1,p))+')'; g2.fillRect(0,0,SW,SH);
+  // 2) 管（つながっている向きだけ）と継手
+  const sides=m?[0,1,2,3].filter(s=>m&(1<<s)):[1,3];
+  for(const s of sides){ if(s===1) pipeSeg(g2,JX,JY,SW+4,JY,TH,pc); if(s===3) pipeSeg(g2,JX,JY,-4,JY,TH,pc); if(s===0) pipeSeg(g2,JX,JY,JX,-4,TH,pc); if(s===2) pipeSeg(g2,JX,JY,JX,SH+4,TH,pc); }
+  const tg=g2.createRadialGradient(JX-8,JY-8,2,JX,JY,TH*.85); tg.addColorStop(0,pc[2]); tg.addColorStop(.6,pc[1]); tg.addColorStop(1,pc[3]); g2.fillStyle=tg; g2.fillRect(JX-TH*.62,JY-TH*.68,TH*1.24,TH*1.36); g2.fillStyle='rgba(0,0,0,.35)'; g2.fillRect(JX-TH*.62,JY+TH*.5,TH*1.24,TH*.18); g2.fillStyle='rgba(255,235,190,.25)'; g2.fillRect(JX-TH*.62,JY-TH*.68,TH*1.24,4);
+  // 3) 真鍮の導圧管と六角ナット
+  const sTop=DY0+(137.6+14)*K-4; const sg=g2.createLinearGradient(JX-7,0,JX+7,0); sg.addColorStop(0,'#5e3f12'); sg.addColorStop(.4,'#f0cf7a'); sg.addColorStop(1,'#6e4a16');
+  g2.fillStyle=sg; g2.fillRect(JX-6,sTop,12,JY-sTop-TH*.5);
+  const nutY=JY-TH*.5-14; g2.fillStyle='#8a6424'; g2.beginPath(); for(let k=0;k<6;k++){ const a=k*Math.PI/3; g2.lineTo(JX+Math.cos(a)*15,nutY+Math.sin(a)*9); } g2.fill(); g2.fillStyle='rgba(255,230,160,.35)'; g2.fillRect(JX-12,nutY-6,24,3);
+  // 4) 文字盤（元のデザインを縮小して描く）
+  g2.save(); g2.translate(DX0,DY0); g2.scale(K,K); const cx=0,cy=0,R0=137.6;
+  g2.fillStyle='rgba(0,0,0,.45)'; g2.beginPath(); g2.arc(cx+8,cy+10,R0+16,0,Math.PI*2); g2.fill();
   g2.fillStyle='#1a120b'; g2.beginPath(); g2.arc(cx,cy,R0+16,0,Math.PI*2); g2.fill();
   const br=g2.createRadialGradient(cx-30,cy-40,10,cx,cy,R0+14); br.addColorStop(0,'#f6d98a'); br.addColorStop(.6,'#b8862f'); br.addColorStop(1,'#5e3f12');
   g2.fillStyle=br; g2.beginPath(); g2.arc(cx,cy,R0+12,0,Math.PI*2); g2.fill();
@@ -2011,7 +2089,17 @@ function drawDial(D,now){ const c=D.cv; if(!c) return; const g2=c.getContext('2d
   g2.save(); g2.translate(cx+3,cy+4); g2.rotate(a); g2.fillStyle='rgba(0,0,0,.25)'; g2.beginPath(); g2.moveTo(-18,-4); g2.lineTo(R0-20,0); g2.lineTo(-18,4); g2.fill(); g2.restore();
   g2.save(); g2.translate(cx,cy); g2.rotate(a); g2.fillStyle='#1b120a'; g2.beginPath(); g2.moveTo(-22,-5); g2.lineTo(R0-18,-1); g2.lineTo(R0-18,1); g2.lineTo(-22,5); g2.closePath(); g2.fill(); g2.fillStyle='#a3281e'; g2.fillRect(R0-40,-2,22,4); g2.restore();
   const hb=g2.createRadialGradient(cx-3,cy-3,1,cx,cy,11); hb.addColorStop(0,'#f6d98a'); hb.addColorStop(1,'#6e4a16'); g2.fillStyle=hb; g2.beginPath(); g2.arc(cx,cy,11,0,Math.PI*2); g2.fill();
-  const gl=g2.createLinearGradient(cx-R0,cy-R0,cx+R0,cy+R0); gl.addColorStop(0,'rgba(255,255,255,.28)'); gl.addColorStop(.45,'rgba(255,255,255,0)'); g2.fillStyle=gl; g2.beginPath(); g2.arc(cx,cy,R0,0,Math.PI*2); g2.fill(); }
+  const gl=g2.createLinearGradient(cx-R0,cy-R0,cx+R0,cy+R0); gl.addColorStop(0,'rgba(255,255,255,.28)'); gl.addColorStop(.45,'rgba(255,255,255,0)'); g2.fillStyle=gl; g2.beginPath(); g2.arc(cx,cy,R0,0,Math.PI*2); g2.fill(); 
+  g2.restore();
+  // 5) 継手からの漏れ蒸気：圧が高いほど多い
+  const rate=p<0.03?0:(0.6+p*4.5); D.acc=(D.acc||0)+rate*dt/100;
+  while(D.acc>=1&&D.puffs.length<60){ D.acc--; const src=Math.random()<.6?[JX+(Math.random()<.5?-16:16),nutY]:[JX+(Math.random()<.5?-1:1)*TH*.7,JY-TH*.2];
+    D.puffs.push({x:src[0],y:src[1],vx:(src[0]<JX?-1:1)*(0.15+Math.random()*.35)+(Math.random()-.5)*.2,vy:-(0.35+Math.random()*.5+p*.4),r:4+Math.random()*4,a:0,life:0,max:900+Math.random()*900}); }
+  if(rate===0) D.acc=0;
+  for(let k=D.puffs.length-1;k>=0;k--){ const q=D.puffs[k]; q.life+=dt; if(q.life>q.max){ D.puffs.splice(k,1); continue; } const f=dt/16;
+    q.x+=q.vx*f+Math.sin((q.life+k*97)/260)*.25*f; q.y+=q.vy*f; q.vy*=0.995; q.r+=0.09*f; const t=q.life/q.max, al=(t<.15?t/.15:1-(t-.15)/.85)*0.32;
+    const gr=g2.createRadialGradient(q.x,q.y,0,q.x,q.y,q.r); gr.addColorStop(0,'rgba(236,232,224,'+al+')'); gr.addColorStop(1,'rgba(236,232,224,0)'); g2.fillStyle=gr; g2.beginPath(); g2.arc(q.x,q.y,q.r,0,7); g2.fill(); }
+}
 function gaugeHtml(gd,key){ const mx=1000, P=v=>Math.max(0,Math.min(100,v/mx*100));
   let h='<div class="gbar">'; if(gd.hi>gd.lo) h+='<div class="band" style="left:'+P(gd.lo)+'%;width:'+(P(gd.hi)-P(gd.lo))+'%"></div>';
   if(gd.sig) h+='<div class="mk" style="left:'+P(SIG_ON*KPA)+'%" title="信号のしきい値"></div>';
@@ -2027,7 +2115,7 @@ function renderDetail(){
     if(d.st) h+='<p class="hint2" data-dk="'+key+'hint"></p>';
     if(d.plate) h+='<div class="plate">'+d.plate+'</div>';
     if(d.fire) h+='<div class="firebar" aria-label="火力"><i data-fire="'+key+'"></i></div>';
-    if(d.dial) h+='<canvas class="dial" data-dial="'+key+'" width="320" height="320" aria-label="圧力計の文字盤"></canvas>';
+    if(d.dial) h+='<canvas class="dial" data-dial="'+key+'" width="400" height="330" aria-label="圧力計の文字盤"></canvas>';
     h+='<dl class="kv">'+d.rows.map((r,j)=>'<dt>'+r[0]+'</dt><dd data-dk="'+key+'r'+j+'"></dd>').join('')+'</dl>';
     if(d.recipe) h+='<div class="recipe">'+d.recipe+'</div>';
     if(d.card) h+='<div class="cardgrid"><span></span><b>前</b><b>右</b>'+d.card.rows.map((r,ri)=>'<span data-cr="'+ri+'">'+(ri+1)+'</span>'+r.map((v,bi)=>'<button class="hole'+(v?' on':'')+'" data-hole="'+ri+','+bi+'" aria-label="'+(ri+1)+'行目の穴"></button>').join('')).join('')+'</div>';
@@ -2035,7 +2123,7 @@ function renderDetail(){
     d.acts.forEach((a,j)=>acts.push([key+'_'+j,a[1]]));
     detRows.push({key:key,d:d}); h+='</div>'; });
   el.innerHTML=h; el.hidden=false; $('mapwrap').classList.add('has-detail');
-  dials=detRows.filter(r=>r.d.dial).map(r=>({cv:el.querySelector('[data-dial="'+r.key+'"]'),get:r.d.dial,v:r.d.dial(),w:0}));
+  dials=detRows.filter(r=>r.d.dial).map(r=>({cv:el.querySelector('[data-dial="'+r.key+'"]'),get:r.d.dial,v:r.d.dial(),w:0,at:r.d.at,puffs:[],lt:0}));
   el.querySelectorAll('canvas[data-tl]').forEach(cnv=>{ const ic=toolIcon(cnv.dataset.tl,32); cnv.width=cnv.height=32; cnv.getContext('2d').drawImage(ic,0,0); });
   paintIcons(el);
   $('detClose').onclick=closeDetail;
