@@ -1196,5 +1196,9 @@
 "やり直せる操作がない": "Nada para refazer",
 "資金が足りないのでやり直せない": "Dinheiro insuficiente para refazer",
 "やり直した": "Refeito",
-"：Shift を押しながらドラッグで範囲を選び、Ctrl+C でコピー、Ctrl+V で貼り付けの影が出ます。費用を確かめてクリックで置きます（続けて置けます）。Esc か右クリックでやめます。置いた設備は、指で選んで R で回せます。Ctrl+Z で一つ前に戻し、Ctrl+Y でやり直せます。": ": Segure Shift e arraste para selecionar uma área, Ctrl+C copia e Ctrl+V mostra uma prévia da colagem. Confira o custo e clique para colocar (pode continuar colocando). Esc ou clique direito para sair. Máquinas já colocadas giram ao selecioná-las com a Mão e apertar R. Ctrl+Z desfaz o último passo e Ctrl+Y refaz."
+"：Shift を押しながらドラッグで範囲を選び、Ctrl+C でコピー、Ctrl+V で貼り付けの影が出ます。費用を確かめてクリックで置きます（続けて置けます）。Esc か右クリックでやめます。置いた設備は、指で選んで R で回せます。Ctrl+Z で一つ前に戻し、Ctrl+Y でやり直せます。": ": Segure Shift e arraste para selecionar uma área, Ctrl+C copia e Ctrl+V mostra uma prévia da colagem. Confira o custo e clique para colocar (pode continuar colocando). Esc ou clique direito para sair. Máquinas já colocadas giram ao selecioná-las com a Mão e apertar R. Ctrl+Z desfaz o último passo e Ctrl+Y refaz.",
+"出荷口はいくつ置いてもよい。どれに届けても案件の数に入るから、作る設備の横に置いてしまえ。": "Construa quantas docas quiser. Qualquer uma que receba os itens conta para o pedido, então ponha uma bem ao lado da máquina que os produz.",
+"出荷口はいくつでも": "Quantas docas quiser",
+"<p>出荷口は<b>何個でも</b>置けます。どれに届けても、案件の数に入ります。</p><p>作る設備のすぐ横に置けば、ベルトが短くて済みます。</p>": "<p>Você pode construir <b>quantas docas quiser</b>. Qualquer uma que receba os itens conta para o pedido.</p><p>Ponha uma ao lado da máquina que os produz e a esteira fica curta.</p>",
+"出荷口はここ": "As docas ficam aqui"
 }
