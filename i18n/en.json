@@ -976,5 +976,8 @@
 "分配・下横": "Split down/side",
 "設備一覧の段数を切り替え": "Switch palette rows",
 "新しい土地を拓けるようになった：メニューの「土地」から": "You can now open up new land — from “Land” in the menu",
-"は重力で落ちます。ベルトの端から落とせば下の設備へ。上げるには昇降機。床で止まったままの品は約1分で消えます（消える前に点滅。倍速ならそのぶん早く）。": " fall by gravity. Drop them off the end of a belt into the machine below. To raise them, use a lift. Items left sitting still on the floor vanish after about 1 minute (they blink first; faster at 2×/4×)."
+"は重力で落ちます。ベルトの端から落とせば下の設備へ。上げるには昇降機。床で止まったままの品は約1分で消えます（消える前に点滅。倍速ならそのぶん早く）。": " fall by gravity. Drop them off the end of a belt into the machine below. To raise them, use a lift. Items left sitting still on the floor vanish after about 1 minute (they blink first; faster at 2×/4×).",
+"納期まで残り20秒：": "20 seconds left: ",
+"汽械の夜明け": "Dawn of Steamwork",
+"納品完了": "DELIVERED"
 }
