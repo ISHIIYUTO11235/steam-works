@@ -1206,5 +1206,9 @@
 "先に Shift+ドラッグで範囲を選んで Ctrl+X": "First Shift+drag to select an area, then Ctrl+X",
 " 個を切り取った：クリックで置く・Esc でやめる（あとで Ctrl+V でも置ける）": " items cut: click to place · Esc to stop (Ctrl+V later works too)",
 "番号 −": "No. −",
-"番号 ＋": "No. +"
+"番号 ＋": "No. +",
+"撤去・掘削": "Remove / Dig",
+"設備は宙にも置ける。品物は落ちるから、ベルトの端の真下に受け手を置けば、重力で運べるんじゃ。": "Machines can be placed in mid-air. Goods fall, so put a receiver right below the end of a belt and gravity does the carrying.",
+"X で撤去・掘削の道具、Esc で指に戻る。右クリックでも、設備があれば撤去、なければ掘削じゃ。": "X picks the Remove/Dig tool, Esc goes back to the Hand. A right-click also removes a machine if there is one, or digs if there isn't.",
+"撤去・掘削の道具か、右クリックで掘れる。": "Dig it with the Remove/Dig tool or a right-click."
 }

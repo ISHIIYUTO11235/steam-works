@@ -1206,5 +1206,9 @@
 "先に Shift+ドラッグで範囲を選んで Ctrl+X": "Primeiro Shift+arraste para selecionar uma área, depois Ctrl+X",
 " 個を切り取った：クリックで置く・Esc でやめる（あとで Ctrl+V でも置ける）": " itens recortados: clique para colocar · Esc para sair (Ctrl+V depois também funciona)",
 "番号 −": "Nº −",
-"番号 ＋": "Nº +"
+"番号 ＋": "Nº +",
+"撤去・掘削": "Remover / Escavar",
+"設備は宙にも置ける。品物は落ちるから、ベルトの端の真下に受け手を置けば、重力で運べるんじゃ。": "Máquinas podem ficar no ar. Os itens caem, então ponha um receptor logo abaixo da ponta da esteira e a gravidade faz o transporte.",
+"X で撤去・掘削の道具、Esc で指に戻る。右クリックでも、設備があれば撤去、なければ掘削じゃ。": "X pega a ferramenta Remover/Escavar, Esc volta à Mão. O clique direito também remove a máquina se houver, ou escava se não houver.",
+"撤去・掘削の道具か、右クリックで掘れる。": "Escave com a ferramenta Remover/Escavar ou com o clique direito."
 }
