@@ -1078,7 +1078,6 @@
 "クリックで貼り付け（続けて置ける）・Esc か右クリックでやめる": "Clique para colar (pode repetir) · Esc ou clique direito para sair",
 "先に Shift+ドラッグで範囲を選んで Ctrl+C": "Primeiro Shift+arraste para selecionar uma área, depois Ctrl+C",
 "コピーと貼り付け（PC）": "Copiar e colar (PC)",
-"：Shift を押しながらドラッグで範囲を選び、Ctrl+C でコピー、Ctrl+V で貼り付けの影が出ます。費用を確かめてクリックで置きます（続けて置けます）。Esc か右クリックでやめます。置いた設備は、指で選んで R で回せます。": ": Segure Shift e arraste para selecionar uma área, Ctrl+C copia e Ctrl+V mostra uma prévia da colagem. Confira o custo e clique para colocar (pode continuar colocando). Esc ou clique direito para sair. Máquinas já colocadas giram ao selecioná-las com a Mão e apertar R.",
 "蒸気は管を1マス進むごとに、少しずつ圧が抜けるんじゃよ。たくさん流すほど、たくさん抜ける。": "O vapor perde um pouco de pressão a cada casa de cano que percorre. Quanto mais passa, mais perde.",
 "ボイラーを増やして増えるのは蒸気の量だけじゃ。普通のボイラーの上限は 400 kPa のまま変わらん。": "Mais caldeiras só dão mais vapor. Uma caldeira comum continua no máximo de 400 kPa.",
 "遠くへ蒸気を送るより、設備をボイラーの近くに置いて品物をベルトで運ぶほうが得じゃ。ベルトは長くても何も失わん。": "Melhor pôr as máquinas perto da caldeira e levar os itens por esteira do que mandar vapor para longe. Esteira não perde nada, por mais longa que seja.",
@@ -1184,5 +1183,18 @@
 "話しかける": "Falar",
 "<button class=\"pbtn pri\" id=\"tutNext\">次へ</button>": "<button class=\"pbtn pri\" id=\"tutNext\">Próximo</button>",
 "からくり爺に話しかける": "Falar com o Velho Engrenagem",
-"：右下の老いた自動人形をクリックすると、案件に要る設計書や、次の案件の仕組みを図で教えてくれます。細かい決まりもつぶやきます。": ": Clique no velho autômato no canto inferior direito. Ele diz quais projetos os pedidos precisam e mostra em diagramas como funciona o próximo pedido. Também resmunga regras úteis."
+"：右下の老いた自動人形をクリックすると、案件に要る設計書や、次の案件の仕組みを図で教えてくれます。細かい決まりもつぶやきます。": ": Clique no velho autômato no canto inferior direito. Ele diz quais projetos os pedidos precisam e mostra em diagramas como funciona o próximo pedido. Também resmunga regras úteis.",
+"しくじったら Ctrl+Z で一つ前に戻せる。戻しすぎたら Ctrl+Y でやり直しじゃ。": "Errou? Ctrl+Z volta um passo. Voltou demais? Ctrl+Y refaz.",
+"置く前に R を押せば向きが変わる。置いたあとでも、指で選んで R じゃ。": "Aperte R antes de colocar para girar. Mesmo depois de colocado, selecione com a Mão e aperte R.",
+"Tab を押すと管だけが見える。込み入った配管を確かめるときに使うんじゃな。": "Aperte Tab para ver só os canos. Útil para conferir encanamentos enrolados.",
+"X で撤去の道具、Esc で指に戻る。右クリックでもその場で撤去できるぞ。": "X pega a ferramenta Remover, Esc volta à Mão. Clique direito também remove na hora.",
+"WASD で視点を動かし、ホイールで拡大縮小じゃ。スペースを押しながらドラッグしても動かせる。": "WASD move a vista e a roda do mouse dá zoom. Segurar Espaço e arrastar também move.",
+"ドラッグすれば、管もベルトも一度に何マスも引ける。": "Arrastando, dá para colocar muitas casas de cano ou esteira de uma vez.",
+"これ以上は戻せない": "Nada mais para desfazer",
+"資金が足りないので戻せない": "Dinheiro insuficiente para desfazer",
+"元に戻した": "Desfeito",
+"やり直せる操作がない": "Nada para refazer",
+"資金が足りないのでやり直せない": "Dinheiro insuficiente para refazer",
+"やり直した": "Refeito",
+"：Shift を押しながらドラッグで範囲を選び、Ctrl+C でコピー、Ctrl+V で貼り付けの影が出ます。費用を確かめてクリックで置きます（続けて置けます）。Esc か右クリックでやめます。置いた設備は、指で選んで R で回せます。Ctrl+Z で一つ前に戻し、Ctrl+Y でやり直せます。": ": Segure Shift e arraste para selecionar uma área, Ctrl+C copia e Ctrl+V mostra uma prévia da colagem. Confira o custo e clique para colocar (pode continuar colocando). Esc ou clique direito para sair. Máquinas já colocadas giram ao selecioná-las com a Mão e apertar R. Ctrl+Z desfaz o último passo e Ctrl+Y refaz."
 }

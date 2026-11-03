@@ -1078,7 +1078,6 @@
 "クリックで貼り付け（続けて置ける）・Esc か右クリックでやめる": "Click to paste (repeatable) · Esc or right-click to stop",
 "先に Shift+ドラッグで範囲を選んで Ctrl+C": "First Shift+drag to select an area, then Ctrl+C",
 "コピーと貼り付け（PC）": "Copy and paste (PC)",
-"：Shift を押しながらドラッグで範囲を選び、Ctrl+C でコピー、Ctrl+V で貼り付けの影が出ます。費用を確かめてクリックで置きます（続けて置けます）。Esc か右クリックでやめます。置いた設備は、指で選んで R で回せます。": ": Hold Shift and drag to select an area, Ctrl+C to copy, and Ctrl+V shows a ghost of the paste. Check the cost and click to place (you can keep placing). Esc or right-click to stop. Placed machines can be rotated by selecting them with the Hand and pressing R.",
 "蒸気は管を1マス進むごとに、少しずつ圧が抜けるんじゃよ。たくさん流すほど、たくさん抜ける。": "Steam loses a little pressure with every pipe tile it travels, you see. The more you push through, the more it loses.",
 "ボイラーを増やして増えるのは蒸気の量だけじゃ。普通のボイラーの上限は 400 kPa のまま変わらん。": "More boilers only means more steam. An ordinary boiler still tops out at 400 kPa.",
 "遠くへ蒸気を送るより、設備をボイラーの近くに置いて品物をベルトで運ぶほうが得じゃ。ベルトは長くても何も失わん。": "Better to put machines near the boiler and carry goods by belt than to pipe steam far away. A belt loses nothing, however long.",
@@ -1184,5 +1183,18 @@
 "話しかける": "Talk",
 "<button class=\"pbtn pri\" id=\"tutNext\">次へ</button>": "<button class=\"pbtn pri\" id=\"tutNext\">Next</button>",
 "からくり爺に話しかける": "Talk to Old Clockwork",
-"：右下の老いた自動人形をクリックすると、案件に要る設計書や、次の案件の仕組みを図で教えてくれます。細かい決まりもつぶやきます。": ": Click the old automaton at the bottom right. He tells you which blueprints your orders need and shows diagrams of how the next order works. He mutters handy rules, too."
+"：右下の老いた自動人形をクリックすると、案件に要る設計書や、次の案件の仕組みを図で教えてくれます。細かい決まりもつぶやきます。": ": Click the old automaton at the bottom right. He tells you which blueprints your orders need and shows diagrams of how the next order works. He mutters handy rules, too.",
+"しくじったら Ctrl+Z で一つ前に戻せる。戻しすぎたら Ctrl+Y でやり直しじゃ。": "Made a mess? Ctrl+Z takes you back one step. Went back too far? Ctrl+Y puts it right again.",
+"置く前に R を押せば向きが変わる。置いたあとでも、指で選んで R じゃ。": "Press R before placing to turn it. Even after it's placed, select it with the Hand and press R.",
+"Tab を押すと管だけが見える。込み入った配管を確かめるときに使うんじゃな。": "Press Tab to see only the pipes. Handy for checking tangled plumbing.",
+"X で撤去の道具、Esc で指に戻る。右クリックでもその場で撤去できるぞ。": "X picks the Remove tool, Esc goes back to the Hand. A right-click removes things on the spot, too.",
+"WASD で視点を動かし、ホイールで拡大縮小じゃ。スペースを押しながらドラッグしても動かせる。": "WASD moves the view and the mouse wheel zooms. You can also hold Space and drag to move around.",
+"ドラッグすれば、管もベルトも一度に何マスも引ける。": "Drag and you can lay many tiles of pipe or belt in one go.",
+"これ以上は戻せない": "Nothing more to undo",
+"資金が足りないので戻せない": "Not enough money to undo",
+"元に戻した": "Undone",
+"やり直せる操作がない": "Nothing to redo",
+"資金が足りないのでやり直せない": "Not enough money to redo",
+"やり直した": "Redone",
+"：Shift を押しながらドラッグで範囲を選び、Ctrl+C でコピー、Ctrl+V で貼り付けの影が出ます。費用を確かめてクリックで置きます（続けて置けます）。Esc か右クリックでやめます。置いた設備は、指で選んで R で回せます。Ctrl+Z で一つ前に戻し、Ctrl+Y でやり直せます。": ": Hold Shift and drag to select an area, Ctrl+C to copy, and Ctrl+V shows a ghost of the paste. Check the cost and click to place (you can keep placing). Esc or right-click to stop. Placed machines can be rotated by selecting them with the Hand and pressing R. Ctrl+Z undoes the last step and Ctrl+Y redoes it."
 }
