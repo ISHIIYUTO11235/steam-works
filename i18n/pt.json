@@ -469,7 +469,6 @@
 "材料待ち": "Aguardando materiais",
 "鉱脈に向いていない": "Não está voltada para um veio",
 "空がふさがっている": "Céu bloqueado",
-"動きが止まっている。圧が足りないのかもしれない。管は長いほど、たくさん流れるほど先で圧が落ちる。近くに圧力計を付けて確かめ、ボイラーを近くに足すか太管に替えよう。": "Parou. Talvez a pressão esteja baixa. Quanto mais longo o cano e maior o fluxo, mais a pressão cai adiante. Confira com um manômetro próximo e adicione uma caldeira perto ou troque por cano grosso.",
 "安全装置がシューシューと蒸気を逃がしている。圧が強すぎるのかもしれない。圧力計で確かめよう。": "O dispositivo de segurança está soltando vapor. Talvez a pressão esteja alta demais. Confira com um manômetro.",
 "設備の背後のマスに管を通し、ボイラーまでつなぐ。": "Passe um cano pela casa atrás da máquina e ligue-o a uma caldeira.",
 "ベルトで石炭・木炭・灯油を運び入れる。": "Traga carvão, carvão vegetal ou querosene por esteira.",
@@ -981,7 +980,6 @@
 "汽械の夜明け": "Alvorada a Vapor",
 "納品完了": "ENTREGUE",
 "黒い石炭鉱脈の隣に削岩機を置き、刃を鉱脈に向けます。ボイラーから削岩機の背後まで管を引いて蒸気を送り、出てきた石炭をベルトで出荷口へ運びます。手引きに沿えば作れます。": "Coloque uma perfuratriz ao lado do veio de carvão preto, com a broca voltada para o veio. Leve um cano da caldeira até atrás da perfuratriz para fornecer vapor e leve o carvão até a doca de envio por uma esteira. O guia mostra o passo a passo.",
-"鉄板は、鉄鉱石を反射炉で焼いて作ります。鉄鉱脈に削岩機を向けて置き、出た鉄鉱石をベルトで反射炉へ入れ、反射炉の出口から出荷口へ運びます。反射炉の使用圧力は 200〜600 kPa です。どれが鉄鉱脈かは、指ツールで地面を調べると分かります。": "Placas de ferro são feitas fundindo minério de ferro no forno revérbero. Aponte uma perfuratriz para um veio de ferro, leve o minério ao forno por esteira e leve as placas da saída do forno até a doca de envio. O forno trabalha entre 200 e 600 kPa. Use a ferramenta Mão no chão para saber qual veio é de ferro.",
 "歯車は、蒸気ハンマーで鉄板2枚から1個作ります。鉄板のラインの先に蒸気ハンマーを置きましょう。蒸気ハンマーは 300 kPa 以上ないと動かないので、ボイラーの近くに置きます。5分で8個なので、鉄板を毎分4枚以上作る必要があります。先にラインを完成させてから受注すると、納期に間に合いやすくなります。": "O martelo a vapor faz 1 engrenagem com 2 placas de ferro. Coloque um martelo no fim da linha de placas de ferro. Ele precisa de pelo menos 300 kPa, então deixe-o perto de uma caldeira. 8 engrenagens em 5 minutos exigem pelo menos 4 placas por minuto. Termine a linha antes de aceitar o pedido para cumprir o prazo com folga.",
 "銅板は、銅鉱石を反射炉で焼いて作ります。銅板以外の品が1つでも出荷口に届くと数がゼロに戻るので、ほかのラインを同じ出荷口につながないようにします。混合鉱脈を使うと鉄も出てくるので、秤弁と落とし戸ベルトを同じマスに重ねて鉄を抜き、廃棄炉へ落とします（設計書「秤弁と仕分けベルト」は「至急・歯車」を達成すると買えます）。": "Placas de cobre são feitas fundindo minério de cobre no forno revérbero. Se qualquer item que não seja placa de cobre chegar à doca, a contagem volta a zero, então não ligue outras linhas a essa doca. Um veio misto também dá ferro: empilhe uma válvula-balança e uma esteira alçapão na mesma casa para separar o ferro e jogá-lo num incinerador (o projeto “Válvula-balança e esteiras separadoras” é liberado após “Urgente: engrenagens”).",
 "鉄板を4〜6秒おきに1枚ずつ届けます。設計書「振り子弁と遮断ベルト」を買い、出荷口の手前に遮断ベルトを置きます。振り子弁で遮断ベルトの背後に蒸気を送ると、一定の周期で開閉します。1回開いたときに1枚だけ通るように周期を調整し、遮断ベルトの手前に鉄板がたまるようにしておきます。": "Entregue uma placa de ferro a cada 4–6 segundos. Compre o projeto “Válvula pêndulo e esteira comporta” e coloque uma esteira comporta logo antes da doca. Mande vapor para trás da comporta através de uma válvula pêndulo e ela abre e fecha em ciclo fixo. Ajuste o período para passar só uma placa por abertura e mantenha placas acumuladas antes da comporta.",
@@ -1010,5 +1008,7 @@
 "もっと詳しく": "Mais detalhes",
 "もう一度点検": "Verificar de novo",
 "いまやること：": "Agora: ",
-"？ヒント": "? Dica"
+"？ヒント": "? Dica",
+"動きが止まっている。圧が足りないのかもしれない。管は長いほど、たくさん流れるほど先で圧が落ちる。ボイラーを増やしても、長い管で落ちた圧は戻らない。設備をボイラーの近くに移して品物をベルトで運ぶか、管を太管に替えよう。近くに圧力計を付けて確かめよう。": "Parou. Talvez falte pressão. Quanto mais longo o cano e maior o fluxo, mais a pressão cai no caminho. Mais caldeiras não recuperam a pressão perdida num cano longo: aproxime a máquina da caldeira e leve os itens por esteira, ou troque por cano grosso. Instale um manômetro perto para conferir.",
+"鉄板は、鉄鉱石を反射炉で焼いて作ります。鉄鉱脈に削岩機を向けて置き、出た鉄鉱石をベルトで反射炉へ入れ、反射炉の出口から出荷口へ運びます。反射炉の使用圧力は 200〜600 kPa です。どれが鉄鉱脈かは、指ツールで地面を調べると分かります。鉄鉱脈が水辺から遠いときは、反射炉をボイラーの近くに置いて鉄鉱石をベルトで運びましょう。ベルトは長くしても何も失いませんが、管は長いほど圧が落ちます。": "Placas de ferro são feitas fundindo minério de ferro no forno revérbero. Aponte uma perfuratriz para um veio de ferro, leve o minério ao forno por esteira e leve as placas da saída do forno até a doca de envio. O forno trabalha entre 200 e 600 kPa. Use a ferramenta Mão no chão para saber qual veio é de ferro. Se o veio de ferro estiver longe da água, coloque o forno ao lado da caldeira e leve o minério por esteira. Esteiras não perdem nada com a distância, mas canos perdem pressão quanto mais longos."
 }

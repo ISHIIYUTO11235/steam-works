@@ -469,7 +469,6 @@
 "材料待ち": "Waiting for materials",
 "鉱脈に向いていない": "Not facing a vein",
 "空がふさがっている": "Sky is blocked",
-"動きが止まっている。圧が足りないのかもしれない。管は長いほど、たくさん流れるほど先で圧が落ちる。近くに圧力計を付けて確かめ、ボイラーを近くに足すか太管に替えよう。": "It has stopped. Maybe the pressure is too low. The longer the pipe and the more that flows, the more pressure drops downstream. Check with a nearby pressure gauge, then add a boiler nearby or switch to thick pipe.",
 "安全装置がシューシューと蒸気を逃がしている。圧が強すぎるのかもしれない。圧力計で確かめよう。": "The safety device is hissing out steam. Maybe the pressure is too high. Check with a pressure gauge.",
 "設備の背後のマスに管を通し、ボイラーまでつなぐ。": "Run a pipe through the tile behind the machine and connect it to a boiler.",
 "ベルトで石炭・木炭・灯油を運び入れる。": "Bring in coal, charcoal or kerosene by belt.",
@@ -981,7 +980,6 @@
 "汽械の夜明け": "Dawn of Steamwork",
 "納品完了": "DELIVERED",
 "黒い石炭鉱脈の隣に削岩機を置き、刃を鉱脈に向けます。ボイラーから削岩機の背後まで管を引いて蒸気を送り、出てきた石炭をベルトで出荷口へ運びます。手引きに沿えば作れます。": "Place a rock drill next to the black coal vein with its bit facing the vein. Run a pipe from the boiler to the tile behind the drill to feed it steam, then carry the coal to the shipping dock on a belt. The guide walks you through it.",
-"鉄板は、鉄鉱石を反射炉で焼いて作ります。鉄鉱脈に削岩機を向けて置き、出た鉄鉱石をベルトで反射炉へ入れ、反射炉の出口から出荷口へ運びます。反射炉の使用圧力は 200〜600 kPa です。どれが鉄鉱脈かは、指ツールで地面を調べると分かります。": "Iron plates are made by smelting iron ore in a reverberatory furnace. Point a rock drill at an iron vein, belt the ore into the furnace, and carry the plates from the furnace outlet to the shipping dock. The furnace runs at 200–600 kPa. Inspect the ground with the Hand tool to tell which vein is iron.",
 "歯車は、蒸気ハンマーで鉄板2枚から1個作ります。鉄板のラインの先に蒸気ハンマーを置きましょう。蒸気ハンマーは 300 kPa 以上ないと動かないので、ボイラーの近くに置きます。5分で8個なので、鉄板を毎分4枚以上作る必要があります。先にラインを完成させてから受注すると、納期に間に合いやすくなります。": "A steam hammer turns 2 iron plates into 1 gear. Put a steam hammer at the end of your iron plate line. It needs at least 300 kPa, so place it close to a boiler. 8 gears in 5 minutes means at least 4 iron plates per minute. Finish the line before accepting the order and the deadline is much easier.",
 "銅板は、銅鉱石を反射炉で焼いて作ります。銅板以外の品が1つでも出荷口に届くと数がゼロに戻るので、ほかのラインを同じ出荷口につながないようにします。混合鉱脈を使うと鉄も出てくるので、秤弁と落とし戸ベルトを同じマスに重ねて鉄を抜き、廃棄炉へ落とします（設計書「秤弁と仕分けベルト」は「至急・歯車」を達成すると買えます）。": "Copper plates are made by smelting copper ore in a reverberatory furnace. If even one item other than copper plate reaches the dock, the count resets to zero, so keep other lines away from that dock. A mixed vein also yields iron: stack a scale valve and a trapdoor belt on the same tile to pull the iron out and drop it into an incinerator (the “Scale valve & sorting belts” blueprint unlocks after “Rush: gears”).",
 "鉄板を4〜6秒おきに1枚ずつ届けます。設計書「振り子弁と遮断ベルト」を買い、出荷口の手前に遮断ベルトを置きます。振り子弁で遮断ベルトの背後に蒸気を送ると、一定の周期で開閉します。1回開いたときに1枚だけ通るように周期を調整し、遮断ベルトの手前に鉄板がたまるようにしておきます。": "Deliver one iron plate every 4–6 seconds. Buy the “Pendulum valve & gate belt” blueprint and put a gate belt just before the dock. Feed steam to the tile behind the gate belt through a pendulum valve and it opens and closes on a fixed cycle. Tune the period so only one plate passes per opening, and keep plates queued up in front of the gate.",
@@ -1010,5 +1008,7 @@
 "もっと詳しく": "More detail",
 "もう一度点検": "Check again",
 "いまやること：": "Now: ",
-"？ヒント": "? Hint"
+"？ヒント": "? Hint",
+"動きが止まっている。圧が足りないのかもしれない。管は長いほど、たくさん流れるほど先で圧が落ちる。ボイラーを増やしても、長い管で落ちた圧は戻らない。設備をボイラーの近くに移して品物をベルトで運ぶか、管を太管に替えよう。近くに圧力計を付けて確かめよう。": "It has stopped. Pressure may be too low. The longer the pipe and the more steam flows, the more pressure drops along the way. More boilers will not win back pressure lost in a long pipe: move the machine closer to the boiler and carry items by belt, or switch to thick pipe. Fit a pressure gauge nearby to check.",
+"鉄板は、鉄鉱石を反射炉で焼いて作ります。鉄鉱脈に削岩機を向けて置き、出た鉄鉱石をベルトで反射炉へ入れ、反射炉の出口から出荷口へ運びます。反射炉の使用圧力は 200〜600 kPa です。どれが鉄鉱脈かは、指ツールで地面を調べると分かります。鉄鉱脈が水辺から遠いときは、反射炉をボイラーの近くに置いて鉄鉱石をベルトで運びましょう。ベルトは長くしても何も失いませんが、管は長いほど圧が落ちます。": "Iron plates are made by smelting iron ore in a reverberatory furnace. Point a rock drill at an iron vein, belt the ore into the furnace, and carry the plates from the furnace outlet to the shipping dock. The furnace runs at 200–600 kPa. Inspect the ground with the Hand tool to tell which vein is iron. If the iron vein is far from water, put the furnace next to the boiler and carry the ore by belt. Belts lose nothing over distance, but pipes lose pressure the longer they get."
 }
