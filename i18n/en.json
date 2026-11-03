@@ -1061,5 +1061,7 @@
 "メモの札・向き・採掘先をすべて表示（V）": "Show all notes, directions and mining targets (V)",
 "（標準）": " (default)",
 "出口を": "Output: ",
-"へ": ""
+"へ": "",
+"刃 ": "Bit ",
+"・出口 ": " · Out "
 }
