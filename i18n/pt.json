@@ -1063,5 +1063,20 @@
 "出口を": "Saída: ",
 "へ": "",
 "刃 ": "Broca ",
-"・出口 ": " · Saída "
+"・出口 ": " · Saída ",
+"・設備 ": " · ",
+" 個を選択（Ctrl+C でコピー）": " itens selecionados (Ctrl+C para copiar)",
+"範囲の中に設備がない": "Nenhuma máquina na seleção",
+"設備 ": "",
+" 個をコピーした（Ctrl+V で貼り付け）": " itens copiados (Ctrl+V para colar)",
+"チップの設計がない": "Projeto do chip não encontrado",
+" 個を貼り付けた": " itens colados",
+"（置けなかった ": " (não foi possível colocar ",
+" 個）": ")",
+"・置けない ": " · bloqueados ",
+"・資金不足": " · dinheiro insuficiente",
+"クリックで貼り付け（続けて置ける）・Esc か右クリックでやめる": "Clique para colar (pode repetir) · Esc ou clique direito para sair",
+"先に Shift+ドラッグで範囲を選んで Ctrl+C": "Primeiro Shift+arraste para selecionar uma área, depois Ctrl+C",
+"コピーと貼り付け（PC）": "Copiar e colar (PC)",
+"：Shift を押しながらドラッグで範囲を選び、Ctrl+C でコピー、Ctrl+V で貼り付けの影が出ます。費用を確かめてクリックで置きます（続けて置けます）。Esc か右クリックでやめます。置いた設備は、指で選んで R で回せます。": ": Segure Shift e arraste para selecionar uma área, Ctrl+C copia e Ctrl+V mostra uma prévia da colagem. Confira o custo e clique para colocar (pode continuar colocando). Esc ou clique direito para sair. Máquinas já colocadas giram ao selecioná-las com a Mão e apertar R."
 }

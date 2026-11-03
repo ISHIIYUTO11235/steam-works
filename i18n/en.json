@@ -1063,5 +1063,20 @@
 "出口を": "Output: ",
 "へ": "",
 "刃 ": "Bit ",
-"・出口 ": " · Out "
+"・出口 ": " · Out ",
+"・設備 ": " · ",
+" 個を選択（Ctrl+C でコピー）": " items selected (Ctrl+C to copy)",
+"範囲の中に設備がない": "No machines in the selection",
+"設備 ": "",
+" 個をコピーした（Ctrl+V で貼り付け）": " items copied (Ctrl+V to paste)",
+"チップの設計がない": "Chip design not found",
+" 個を貼り付けた": " items pasted",
+"（置けなかった ": " (could not place ",
+" 個）": ")",
+"・置けない ": " · blocked ",
+"・資金不足": " · not enough money",
+"クリックで貼り付け（続けて置ける）・Esc か右クリックでやめる": "Click to paste (repeatable) · Esc or right-click to stop",
+"先に Shift+ドラッグで範囲を選んで Ctrl+C": "First Shift+drag to select an area, then Ctrl+C",
+"コピーと貼り付け（PC）": "Copy and paste (PC)",
+"：Shift を押しながらドラッグで範囲を選び、Ctrl+C でコピー、Ctrl+V で貼り付けの影が出ます。費用を確かめてクリックで置きます（続けて置けます）。Esc か右クリックでやめます。置いた設備は、指で選んで R で回せます。": ": Hold Shift and drag to select an area, Ctrl+C to copy, and Ctrl+V shows a ghost of the paste. Check the cost and click to place (you can keep placing). Esc or right-click to stop. Placed machines can be rotated by selecting them with the Hand and pressing R."
 }
