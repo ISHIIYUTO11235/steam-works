@@ -1056,5 +1056,7 @@
 "メモ": "Note",
 "例：反射炉の起動用": "e.g. starts the furnace",
 "」をパレットの「": "” added to the palette under “",
-"」に追加した": "”"
+"」に追加した": "”",
+"見取り図": "Overview",
+"メモの札・向き・採掘先をすべて表示（V）": "Show all notes, directions and mining targets (V)"
 }
