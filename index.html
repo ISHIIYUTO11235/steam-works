@@ -580,7 +580,7 @@ const SPLITS={splitLR:c=>[3,1],splitUS:c=>[0,c.d],splitUD:c=>[0,2],splitDS:c=>[2
 const isPipeLike=c=>!!c&&(c.t==='pipe'||c.t==='pipe2'||c.t==='lamp'||c.t==='gauge'||c.t==='accum');
 const VALVES=new Set(['chk','vNC','vNO','lever','clock','scale','prv','pswitch','superheat','counter','delay','latch']);
 const NOTE_N=[L_('ド'),L_('レ'),L_('ミ'),L_('ソ'),L_('ラ'),L_('高いド'),L_('高いレ'),L_('高いミ'),L_('高いソ'),L_('高いラ'),L_('最高ド'),L_('最高レ'),L_('最高ミ'),L_('最高ソ'),L_('最高ラ')];
-const SETS={counter:[2,3,4,5,6,8,10,12,15,20],delay:[5,10,15,20,30,40,60],organ:[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14],prv:[50,80,100,150,200,250,300,400,500,600,800,1000,1200,1300],relief:[200,300,400,500,600,700,800,900],pswitch:[100,150,200,250,300,350,400,500,600,800]};
+const SETS={counter:[1,2,3,4,5,6,8,10,12,15,20],delay:[5,10,15,20,30,40,60],organ:[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14],prv:[50,80,100,150,200,250,300,400,500,600,800,1000,1200,1300],relief:[200,300,400,500,600,700,800,900],pswitch:[100,150,200,250,300,350,400,500,600,800]};
 const START_OWNED=['trash','pipe','cross','lamp','gauge','prv','splitLR','splitUS','splitUD','splitDS','scaffold','belt','drill','boiler','chest','dock','chk','vNC','vNO','lever'];
 const BLUEPRINTS=[
   {id:'furnace',tools:['furnace'],price:150,req:'o1',name:L_('反射炉'),desc:L_('鉱石を焼いて板にする。')},
