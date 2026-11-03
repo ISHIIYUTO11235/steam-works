@@ -1052,5 +1052,9 @@
 "3. 工場の点検（推測）": "3. Inspeção da fábrica (palpite)",
 "工場全体を見て推測しました。案件と関係ない設備も含みます。原因は別のところにあるかもしれません。": "Isto é um palpite a partir da fábrica inteira. Inclui máquinas sem relação com os pedidos, e a causa real pode estar em outro lugar.",
 "ほかにも ": "Há mais ",
-" 件、気になるところがあります。": " ponto(s) que vale a pena olhar."
+" 件、気になるところがあります。": " ponto(s) que vale a pena olhar.",
+"メモ": "Nota",
+"例：反射炉の起動用": "ex.: liga o forno",
+"」をパレットの「": "” adicionado à paleta em “",
+"」に追加した": "”"
 }
