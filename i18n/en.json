@@ -1196,9 +1196,15 @@
 "やり直せる操作がない": "Nothing to redo",
 "資金が足りないのでやり直せない": "Not enough money to redo",
 "やり直した": "Redone",
-"：Shift を押しながらドラッグで範囲を選び、Ctrl+C でコピー、Ctrl+V で貼り付けの影が出ます。費用を確かめてクリックで置きます（続けて置けます）。Esc か右クリックでやめます。置いた設備は、指で選んで R で回せます。Ctrl+Z で一つ前に戻し、Ctrl+Y でやり直せます。": ": Hold Shift and drag to select an area, Ctrl+C to copy, and Ctrl+V shows a ghost of the paste. Check the cost and click to place (you can keep placing). Esc or right-click to stop. Placed machines can be rotated by selecting them with the Hand and pressing R. Ctrl+Z undoes the last step and Ctrl+Y redoes it.",
 "出荷口はいくつ置いてもよい。どれに届けても案件の数に入るから、作る設備の横に置いてしまえ。": "Build as many shipping docks as you like. Whichever one gets the goods, it counts toward the order, so just put one right beside the machine that makes them.",
 "出荷口はいくつでも": "As many docks as you like",
 "<p>出荷口は<b>何個でも</b>置けます。どれに届けても、案件の数に入ります。</p><p>作る設備のすぐ横に置けば、ベルトが短くて済みます。</p>": "<p>You can build <b>any number</b> of shipping docks. Whichever one receives the goods, they count toward the order.</p><p>Put one right beside the machine that makes them and the belt stays short.</p>",
-"出荷口はここ": "Docks are here"
+"出荷口はここ": "Docks are here",
+"：Shift を押しながらドラッグで範囲を選び、Ctrl+C でコピー、Ctrl+V で貼り付けの影が出ます。費用を確かめてクリックで置きます（続けて置けます）。Esc か右クリックでやめます。置いた設備は、指で選んで R で回せます。Ctrl+X で切り取り（撤去して代金が戻り、そのまま別の場所へ置ける）。Ctrl+Z で一つ前に戻し、Ctrl+Y でやり直せます。": ": Hold Shift and drag to select an area, Ctrl+C to copy, and Ctrl+V shows a ghost of the paste. Check the cost and click to place (you can keep placing). Esc or right-click to stop. Placed machines can be rotated by selecting them with the Hand and pressing R. Ctrl+X cuts (removes with a refund, and you can place it elsewhere right away). Ctrl+Z undoes the last step and Ctrl+Y redoes it.",
+"Shift＋ドラッグで選んで Ctrl+X なら切り取りじゃ。仕組みごと別の場所へ引っ越せるぞ。": "Shift+drag to select, then Ctrl+X to cut. You can move a whole setup somewhere else.",
+"気送管は 1〜16 の番号で行き先が決まる。同じ番号どうしで品物が飛ぶんじゃ。": "A pneumatic tube's number, 1 to 16, decides where things go. Goods fly between tubes with the same number.",
+"先に Shift+ドラッグで範囲を選んで Ctrl+X": "First Shift+drag to select an area, then Ctrl+X",
+" 個を切り取った：クリックで置く・Esc でやめる（あとで Ctrl+V でも置ける）": " items cut: click to place · Esc to stop (Ctrl+V later works too)",
+"番号 −": "No. −",
+"番号 ＋": "No. +"
 }
