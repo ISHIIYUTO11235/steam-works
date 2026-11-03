@@ -1084,7 +1084,6 @@
 "太管は、普通の管よりずっと圧が落ちにくい。長い幹線にはもってこいじゃ。": "O cano grosso perde bem menos pressão que o comum. Perfeito para linhas principais longas.",
 "圧力計の目盛りは ×100 kPa じゃ。数字は出ん。針を読むんじゃよ。": "O manômetro marca em ×100 kPa. Nada de números: você lê o ponteiro.",
 "弁は 100 kPa 以上を「1」とみなす。いったん「1」になると、60 kPa を下回るまで「0」に戻らんのじゃ。": "Uma válvula considera 100 kPa ou mais como “1”. Depois de virar “1”, só volta a “0” abaixo de 60 kPa.",
-"閉じた弁は、出口側の蒸気を抜く。止めたい設備の手前に置くんじゃな。": "Uma válvula fechada solta o vapor do lado da saída. Coloque-a logo antes da máquina que quer parar.",
 "常閉弁は、横の操作口に圧があるときだけ開く。常開弁はその逆じゃ。": "A válvula NF só abre enquanto a entrada de controle lateral tem pressão. A válvula NA faz o contrário.",
 "管はドラッグした向きにしかつながらん。隣に置いただけでは混ざらんぞ。交差させたいなら交差管じゃ。": "Os canos só se ligam na direção em que você arrasta. Colocá-los lado a lado não os mistura. Para cruzar, use o cano de cruzamento.",
 "設備は、自分の背後のマスを通る管から蒸気を受けるんじゃ。": "Uma máquina recebe vapor do cano que passa na casa atrás dela.",
@@ -1206,5 +1205,6 @@
 "先に Shift+ドラッグで範囲を選んで Ctrl+X": "Primeiro Shift+arraste para selecionar uma área, depois Ctrl+X",
 " 個を切り取った：クリックで置く・Esc でやめる（あとで Ctrl+V でも置ける）": " itens recortados: clique para colocar · Esc para sair (Ctrl+V depois também funciona)",
 "番号 −": "Nº −",
-"番号 ＋": "Nº +"
+"番号 ＋": "Nº +",
+"閉じた弁は、出口（矢印の側）の蒸気を抜く。同じマスに重ねたベルトや落とし戸も、出口の先の管も、まとめて圧がなくなるんじゃ。ただし出口側に別の蒸気が入っとると抜けきらんぞ。": "Uma válvula fechada solta o vapor da saída (o lado da seta). Esteiras ou alçapões empilhados na mesma casa e os canos depois da saída perdem pressão juntos. Mas se outro vapor entrar pelo lado da saída, não esvazia totalmente."
 }

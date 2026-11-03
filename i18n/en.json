@@ -1084,7 +1084,6 @@
 "太管は、普通の管よりずっと圧が落ちにくい。長い幹線にはもってこいじゃ。": "Thick pipe loses far less pressure than ordinary pipe. Just the thing for a long main line.",
 "圧力計の目盛りは ×100 kPa じゃ。数字は出ん。針を読むんじゃよ。": "A pressure gauge reads in ×100 kPa. No numbers, mind you. You read the needle.",
 "弁は 100 kPa 以上を「1」とみなす。いったん「1」になると、60 kPa を下回るまで「0」に戻らんのじゃ。": "A valve treats 100 kPa or more as “1”. Once it reads “1”, it won't drop back to “0” until pressure falls below 60 kPa.",
-"閉じた弁は、出口側の蒸気を抜く。止めたい設備の手前に置くんじゃな。": "A closed valve vents the steam on its outlet side. Put one just before the machine you want to stop.",
 "常閉弁は、横の操作口に圧があるときだけ開く。常開弁はその逆じゃ。": "A normally-closed valve opens only while its side control port has pressure. A normally-open valve does the opposite.",
 "管はドラッグした向きにしかつながらん。隣に置いただけでは混ざらんぞ。交差させたいなら交差管じゃ。": "Pipes only connect in the direction you drag them. Setting them side by side won't mix them. To cross two lines, use a cross pipe.",
 "設備は、自分の背後のマスを通る管から蒸気を受けるんじゃ。": "A machine takes its steam from the pipe running through the tile behind it.",
@@ -1206,5 +1205,6 @@
 "先に Shift+ドラッグで範囲を選んで Ctrl+X": "First Shift+drag to select an area, then Ctrl+X",
 " 個を切り取った：クリックで置く・Esc でやめる（あとで Ctrl+V でも置ける）": " items cut: click to place · Esc to stop (Ctrl+V later works too)",
 "番号 −": "No. −",
-"番号 ＋": "No. +"
+"番号 ＋": "No. +",
+"閉じた弁は、出口（矢印の側）の蒸気を抜く。同じマスに重ねたベルトや落とし戸も、出口の先の管も、まとめて圧がなくなるんじゃ。ただし出口側に別の蒸気が入っとると抜けきらんぞ。": "A closed valve vents the steam at its outlet (the arrow side). Belts or trapdoors stacked on the same tile, and the pipes past the outlet, all lose pressure together. But if other steam is flowing into the outlet side, it won't drain completely."
 }
