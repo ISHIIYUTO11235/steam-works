@@ -1052,5 +1052,16 @@
 "3. 工場の点検（推測）": "3. Factory check (best guess)",
 "工場全体を見て推測しました。案件と関係ない設備も含みます。原因は別のところにあるかもしれません。": "This is a guess from looking over the whole factory. It includes machines unrelated to your orders, and the real cause may lie elsewhere.",
 "ほかにも ": "",
-" 件、気になるところがあります。": " more spot(s) worth a look."
+" 件、気になるところがあります。": " more spot(s) worth a look.",
+"メモ": "Note",
+"例：反射炉の起動用": "e.g. starts the furnace",
+"」をパレットの「": "” added to the palette under “",
+"」に追加した": "”",
+"見取り図": "Overview",
+"メモの札・向き・採掘先をすべて表示（V）": "Show all notes, directions and mining targets (V)",
+"（標準）": " (default)",
+"出口を": "Output: ",
+"へ": "",
+"刃 ": "Bit ",
+"・出口 ": " · Out "
 }
