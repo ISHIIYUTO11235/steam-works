@@ -248,8 +248,8 @@ input,textarea{-webkit-user-select:text;user-select:text}
 .cardgrid span.cur{color:var(--brass)} .cardgrid span.cur::before{content:"▶ "}
 .hole{width:32px;height:22px;background:#e9dcbf;border:2px solid #000;box-shadow:inset 0 0 0 2px #b79c6c}
 .hole.on{background:#1b130a;box-shadow:inset 0 0 0 2px #6b4f2f}
-.gwrap{display:grid;grid-template-columns:320px minmax(0,1fr);gap:14px;align-items:start}
-#gachaCv{width:100%;max-width:340px;border:3px solid #000;background:#1d1611;box-shadow:inset 0 0 0 2px #6e4a16}
+.gwrap{display:grid;grid-template-columns:minmax(0,480px) minmax(0,1fr);gap:14px;align-items:start}
+#gachaCv{width:100%;max-width:480px;aspect-ratio:240/176;height:auto;image-rendering:pixelated;border:3px solid #000;background:#1d1611;box-shadow:0 0 0 2px #6e4a16,0 0 0 4px #000}
 .gside{display:flex;flex-direction:column;gap:10px}
 .gbtns{display:grid;grid-template-columns:1fr 1fr;gap:6px}
 .gres{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(200px,100%),1fr));gap:6px;margin-top:12px}
@@ -445,9 +445,9 @@ input,textarea{-webkit-user-select:text;user-select:text}
   <header><h2 id="hOrders">案件ボード</h2><span class="note" id="ordSlots"></span><button class="pbtn" data-close>閉じる</button></header>
   <div id="orderCards"></div>
 </div></div>
-<div class="modal" id="mGacha" hidden><div class="mbox" role="dialog" aria-modal="true" aria-labelledby="hGacha" style="width:min(760px,100%)">
+<div class="modal" id="mGacha" hidden><div class="mbox" role="dialog" aria-modal="true" aria-labelledby="hGacha" style="width:min(900px,100%)">
   <header><h2 id="hGacha">からくり福引き</h2><span class="note" id="gTickets"></span><button class="pbtn" data-close>閉じる</button></header>
-  <div class="gwrap"><canvas id="gachaCv" width="320" height="230" aria-label="福引き機"></canvas>
+  <div class="gwrap"><canvas id="gachaCv" width="480" height="352" aria-label="福引き機"></canvas>
     <div class="gside"><p class="lead" style="margin:0">骨董商の真鍮の福引き機。ハンドルを回すと玉が転がり出る。景品は設備の見た目、景色、BGM、そして福引きでしか手に入らない設計書。</p>
       <p class="note">★4 5%・★3 16%・★2 39%・★1 40%。10回続けて★3以上が出なければ、10回目で必ず出る。持っている景品がまた出たら、お金に替えて返す（★2 ¥200・★3 ¥600・★4 ¥1,500）。</p>
       <div class="gbtns"><button class="pbtn pri" id="g1">1回 ¥500</button><button class="pbtn pri" id="g10">10回 ¥4,500</button></div>
@@ -2766,82 +2766,100 @@ function doPull(n){ if(gAnim) return; const cost=n===10?G_COST*9:G_COST; if(W.mo
 function updGachaUI(){ $('gTickets').textContent=L_('資金 ¥')+fmt(W.money)+L_('・天井まで ')+(10-W.gacha.pity)+L_(' 回');
   const busy=!!gAnim; $('g1').disabled=busy||W.money<G_COST; $('g10').disabled=busy||W.money<G_COST*9; }
 const BALLC={1:'#b87333',2:'#c9c9c9',3:'#f3c64a',4:'rainbow'};
-/* 蒸気仕掛けの福引き機：ガラスの玉室、歯車、ボイラー、煙突の蒸気、真鍮の樋 */
-const GBALLS=Array.from({length:16},(_,k)=>({s:[1,1,1,1,1,1,2,2,2,2,2,3,3,3,4,1][k],a:k*2.39,r:.25+((k*37)%11)/13,ph:k*1.7}));
-let gPuffs=[],gLastPuff=0,gGauge=0.15,gFx=null;
-function gBallFill(k,star,x,y,r){ const col=BALLC[star]; if(col==='rainbow'){ const gr=k.createLinearGradient(x-r,y-r,x+r,y+r); ['#e0634a','#f3c64a','#7fc0ad','#6f97cf','#c0a8f0'].forEach((cc,q)=>gr.addColorStop(q/4,cc)); k.fillStyle=gr; } else { const gr=k.createRadialGradient(x-r*.35,y-r*.35,r*.1,x,y,r); gr.addColorStop(0,'#fff6dc'); gr.addColorStop(.35,col); gr.addColorStop(1,'#1b120a'); k.fillStyle=gr; }
-  k.beginPath(); k.arc(x,y,r,0,7); k.fill(); k.strokeStyle='rgba(0,0,0,.55)'; k.lineWidth=1; k.stroke(); }
-function gGear(k,x,y,r,teeth,rot,c1,c2){ k.save(); k.translate(x,y); k.rotate(rot); k.fillStyle='#000'; k.beginPath(); for(let j=0;j<teeth*2;j++){ const a=j*Math.PI/teeth, rr=j%2?r:r+5; k.lineTo(Math.cos(a)*(rr+1.5),Math.sin(a)*(rr+1.5)); } k.closePath(); k.fill();
-  const gr=k.createRadialGradient(-r*.3,-r*.3,2,0,0,r+5); gr.addColorStop(0,c1); gr.addColorStop(1,c2); k.fillStyle=gr; k.beginPath(); for(let j=0;j<teeth*2;j++){ const a=j*Math.PI/teeth, rr=j%2?r:r+5; k.lineTo(Math.cos(a)*rr,Math.sin(a)*rr); } k.closePath(); k.fill();
-  k.fillStyle='rgba(0,0,0,.45)'; for(let j=0;j<5;j++){ const a=j*Math.PI*2/5; k.beginPath(); k.arc(Math.cos(a)*r*.55,Math.sin(a)*r*.55,r*.18,0,7); k.fill(); }
-  k.fillStyle='#2a1b0e'; k.beginPath(); k.arc(0,0,r*.22,0,7); k.fill(); k.fillStyle=c1; k.beginPath(); k.arc(-1,-1,r*.1,0,7); k.fill(); k.restore(); }
-function gRivets(k,x,y,w,h,step){ k.fillStyle='#2a1b0e'; for(let q=x+4;q<x+w-2;q+=step){ k.fillRect(q,y+3,2,2); k.fillRect(q,y+h-5,2,2); } }
-function drawGacha(now){ const c=$('gachaCv'); if(!c||$('mGacha').hidden) return; const k=c.getContext('2d'),Wd=c.width,H=c.height; k.imageSmoothingEnabled=true;
-  let spin=0,phase=0,busy=false; if(gAnim){ busy=true; const el=now-gAnim.t0, dur=900+gAnim.res.length*260; spin=el<dur?el/90:0; phase=el;
+/* 蒸気仕掛けの大福引き機（ドット絵）：240×176 の低解像度で描いて2倍に拡大する */
+const GBALLS=Array.from({length:22},(_,k)=>({s:[1,2,1,3,1,2,1,2,4,1,2,3,1,2,1,2,3,1,2,1,3,2][k],a:k*2.39,r:.2+((k*37)%11)/12,ph:k*1.7}));
+const GPILE=(()=>{ const out=[]; for(const [y,n] of [[104,3],[97,5],[90,7],[83,7]]) for(let i=0;i<n;i++) out.push([120+(i-(n-1)/2)*7,y]); return out; })();
+let gPuffs=[],gLastPuff=0,gGauge=0.15,gFx=null,gLo=null,gBg=null,gLastStroke=0;
+const GP={ink:'#100a06',wa:'#1c130d',wb:'#271a11',wc:'#33231a',i0:'#16140f',i1:'#2c2823',i2:'#47413a',i3:'#6b6358',i4:'#8f8576',b0:'#3e2a0c',b1:'#6e4a16',b2:'#a87a2c',b3:'#d9ad55',b4:'#f6e0a0',c0:'#3a1a0c',c1:'#7a3f22',c2:'#c26b3d',c3:'#e3955f',g0:'#101a19',g1:'#1a2b28',g2:'#2a423d',g3:'#4d6e66',rd:'#a3281e',rd2:'#e0634a',st:'#f6ecd8'};
+const BALLPX={1:['#7a3f22','#c27a3d','#f0b080'],2:['#5a5a5a','#c9c9c9','#ffffff'],3:['#8a5a10','#f3c64a','#fff4c0']};
+function pxKit(p){ const R=(x,y,w,h,c)=>{ p.fillStyle=c; p.fillRect(Math.round(x),Math.round(y),w,h); };
+  const disc=(cx,cy,r,c)=>{ cx=Math.round(cx); cy=Math.round(cy); p.fillStyle=c; for(let dy=-r;dy<=r;dy++){ const w=Math.floor(Math.sqrt(r*r-dy*dy)+.35); p.fillRect(cx-w,cy+dy,2*w+1,1); } };
+  const ring=(cx,cy,r1,r0,c,from,to)=>{ cx=Math.round(cx); cy=Math.round(cy); p.fillStyle=c; for(let dy=-r1;dy<=r1;dy++){ if(from!=null&&(dy<from||dy>to)) continue; const wo=Math.floor(Math.sqrt(r1*r1-dy*dy)+.35); const wi=Math.abs(dy)<=r0?Math.floor(Math.sqrt(r0*r0-dy*dy)+.35):-1; if(wi<0) p.fillRect(cx-wo,cy+dy,2*wo+1,1); else { p.fillRect(cx-wo,cy+dy,wo-wi,1); p.fillRect(cx+wi+1,cy+dy,wo-wi,1); } } };
+  const line=(x0,y0,x1,y1,c,t)=>{ x0=Math.round(x0); y0=Math.round(y0); x1=Math.round(x1); y1=Math.round(y1); t=t||1; p.fillStyle=c; const dx=Math.abs(x1-x0),dy=-Math.abs(y1-y0),sx=x0<x1?1:-1,sy=y0<y1?1:-1; let e=dx+dy,n=0; while(n++<400){ p.fillRect(x0-(t>>1),y0-(t>>1),t,t); if(x0===x1&&y0===y1) break; const e2=2*e; if(e2>=dy){ e+=dy; x0+=sx; } if(e2<=dx){ e+=dx; y0+=sy; } } };
+  const dith=(x,y,w,h,c)=>{ p.fillStyle=c; for(let j=0;j<h;j++) for(let i=(j+x+y)&1;i<w;i+=2) p.fillRect(x+i,y+j,1,1); };
+  return {R,disc,ring,line,dith}; }
+function pxGear(K,cx,cy,r,teeth,ang,c0,c1,c2,c3,spokes){ const {R,disc,ring,line}=K;
+  for(let i=0;i<teeth;i++){ const a=ang+i*Math.PI*2/teeth, tx=cx+Math.cos(a)*(r+2), ty=cy+Math.sin(a)*(r+2); R(Math.round(tx)-2,Math.round(ty)-2,4,4,c0); R(Math.round(tx)-1,Math.round(ty)-1,2,2,c1); }
+  ring(cx,cy,r+1,r-4,c0); ring(cx,cy,r,r-3,c1);
+  for(let i=0;i<24;i++){ const a=Math.PI*1.05+i*Math.PI*.6/24; R(Math.round(cx+Math.cos(a)*(r-1)),Math.round(cy+Math.sin(a)*(r-1)),1,1,c3); }
+  for(let i=0;i<24;i++){ const a=Math.PI*.05+i*Math.PI*.6/24; R(Math.round(cx+Math.cos(a)*(r-1)),Math.round(cy+Math.sin(a)*(r-1)),1,1,c0); }
+  const ns=spokes||5; for(let i=0;i<ns;i++){ const a=ang+i*Math.PI*2/ns; line(cx,cy,cx+Math.cos(a)*(r-3),cy+Math.sin(a)*(r-3),c1,r>20?3:2); }
+  disc(cx,cy,Math.max(2,Math.round(r*.22)),c0); disc(cx,cy,Math.max(1,Math.round(r*.22)-1),c2); R(cx-1,cy-1,1,1,c3); }
+function pxBall(K,star,x,y,now){ const {R,disc}=K; let cs=BALLPX[star]; if(star>=4){ const h=Math.floor(now/90)%4; cs=[['#5a2a7a','#c0a8f0','#fff'],['#2a5a7a','#6fc7ef','#fff'],['#7a5a1a','#f3c64a','#fff'],['#7a2a2a','#f08080','#fff']][h]; }
+  disc(x,y,3,GP.ink); disc(x,y,2,cs[1]); R(x,y+1,2,1,cs[0]); R(x+1,y,1,2,cs[0]); R(x-1,y-2,2,1,cs[2]); R(x-2,y-1,1,1,cs[2]); }
+function gachaBg(){ const c=document.createElement('canvas'); c.width=240; c.height=176; const p=c.getContext('2d'); const K=pxKit(p),{R,dith,line}=K;
+  R(0,0,240,176,GP.wa);
+  for(let y=8;y<156;y+=7){ R(0,y,240,1,GP.ink); const off=((y/7)|0)%2?0:9; for(let x=off;x<240;x+=18) R(x,y+1,1,6,GP.ink); for(let x=off+1;x<240;x+=18) R(x,y+1,16,1,GP.wb); }
+  const win=(x0)=>{ R(x0-1,12,32,48,GP.ink); R(x0,13,30,46,'#3a1e16'); R(x0,13,30,10,'#7a3a20'); R(x0,23,30,10,'#a85a28'); R(x0,33,30,12,'#d98a3a'); R(x0,45,30,14,'#f0b860'); for(let k=0;k<4;k++) R(x0+8+((k*9)%22),48-k*3,4,8+k*3,'#2a160e'); R(x0+14,13,2,46,GP.i1); R(x0,34,30,2,GP.i1); for(let i=0;i<7;i++){ const w=Math.round(Math.sqrt(49-(7-i)*(7-i))*2.1); R(x0+15-w,6+i,w*2,1,i<1?GP.ink:'#3a1e16'); } R(x0-2,58,34,3,GP.i2); };
+  win(12); win(198);
+  R(0,0,240,6,GP.i1); R(0,5,240,1,GP.ink); for(let x=4;x<240;x+=10) R(x,2,2,2,GP.i3);
+  for(const gx of [0,232]){ R(gx,0,8,160,GP.i1); R(gx+(gx?0:7),0,1,160,GP.ink); for(let y=10;y<160;y+=12) R(gx+3,y,2,2,GP.i3); }
+  R(0,156,240,20,GP.i1); R(0,156,240,1,GP.i3); R(0,157,240,1,GP.i2); for(let x=0;x<240;x+=30){ R(x,158,1,18,GP.i0); R(x+3,160,1,1,GP.i3); R(x+26,160,1,1,GP.i3); R(x+3,172,1,1,GP.i3); R(x+26,172,1,1,GP.i3); }
+  dith(0,164,240,12,GP.i0);
+  return c; }
+function drawGacha(now){ const c=$('gachaCv'); if(!c||$('mGacha').hidden) return; const out=c.getContext('2d'); out.imageSmoothingEnabled=false;
+  if(!gLo){ gLo=document.createElement('canvas'); gLo.width=240; gLo.height=176; gBg=gachaBg(); }
+  const p=gLo.getContext('2d'); p.imageSmoothingEnabled=false; const K=pxKit(p),{R,disc,ring,line,dith}=K;
+  let phase=0,busy=false; if(gAnim){ busy=true; const el=now-gAnim.t0, dur=900+gAnim.res.length*260; phase=el;
     if(!gAnim.st){ gAnim.st=1; SFX.gstart(); }
-    const drop=Math.floor((el-700)/260); if(el>700&&drop>=gAnim.shown&&gAnim.shown<gAnim.res.length){ const r=gAnim.res[gAnim.shown]; showResult(r); SFX.ball(r.star); if(r.star>=3){ gFx={t:now,star:r.star}; if(r.star>=4){ const c2=$('gachaCv'); c2.classList.remove('shake'); void c2.offsetWidth; c2.classList.add('shake'); } } gAnim.shown++; gAnim.dropAt=now; for(let q=0;q<4;q++) gPuffs.push({x:212+Math.random()*10,y:12,vx:(Math.random()-.5)*.6,vy:-.6-Math.random()*.6,r:6+Math.random()*4,life:0,max:900+Math.random()*500}); }
+    const drop=Math.floor((el-700)/260); if(el>700&&drop>=gAnim.shown&&gAnim.shown<gAnim.res.length){ const r=gAnim.res[gAnim.shown]; showResult(r); SFX.ball(r.star); gAnim.shown++; gAnim.dropAt=now; gAnim.dropStar=r.star; for(let q=0;q<5;q++) gPuffs.push({x:120+(Math.random()-.5)*14,y:134,vx:(Math.random()-.5)*.5,vy:-.25-Math.random()*.3,r:2,life:0,max:600}); if(r.star>=3){ gFx={t:now,star:r.star}; if(r.star>=4){ c.classList.remove('shake'); void c.offsetWidth; c.classList.add('shake'); } } }
     if(el<dur&&((el/120)|0)!==gAnim.lc){ gAnim.lc=(el/120)|0; SFX.crank(); if(gAnim.lc%3===0) SFX.chuff2(); }
     if(el>dur+300){ const best=Math.max(...gAnim.res.map(r=>r.star)); if(best>=3) SFX.fanfare(best>=4); gAnim=null; updGachaUI(); } }
-  const rot=busy?phase/260:now/4000;
-  // 背景：鋲打ちの鉄壁とランプの明かり
-  const bg=k.createLinearGradient(0,0,0,H); bg.addColorStop(0,'#2a1d14'); bg.addColorStop(1,'#140d09'); k.fillStyle=bg; k.fillRect(0,0,Wd,H);
-  k.fillStyle='rgba(0,0,0,.35)'; for(let x=0;x<Wd;x+=64) k.fillRect(x,0,2,H-38); for(let x=0;x<Wd;x+=64) gRivets(k,x,0,64,H-38,10);
-  const lamp=k.createRadialGradient(150,70,10,150,70,200); lamp.addColorStop(0,'rgba(255,180,90,.22)'); lamp.addColorStop(1,'rgba(255,180,90,0)'); k.fillStyle=lamp; k.fillRect(0,0,Wd,H);
-  // 床
-  k.fillStyle='#24180f'; k.fillRect(0,H-38,Wd,38); k.fillStyle='#4a3a28'; k.fillRect(0,H-38,Wd,3); k.fillStyle='rgba(0,0,0,.3)'; for(let x=0;x<Wd;x+=24) k.fillRect(x,H-35,1,35);
-  // 歯車（左）
-  gGear(k,46,88,30,12,rot*0.8,'#e9c46a','#7a5418'); gGear(k,82,136,17,9,-rot*1.41+.2,'#d98a55','#6e3a1c'); gGear(k,30,150,12,8,rot*2+.5,'#c9b38a','#5a4a32');
-  // 銅管
-  const pipeH=(x1,x2,y,th)=>{ const g2=k.createLinearGradient(0,y-th/2,0,y+th/2); g2.addColorStop(0,'#5e2f17'); g2.addColorStop(.35,'#e3955f'); g2.addColorStop(1,'#4a2410'); k.fillStyle=g2; k.fillRect(x1,y-th/2,x2-x1,th); };
-  const pipeV=(x,y1,y2,th)=>{ const g2=k.createLinearGradient(x-th/2,0,x+th/2,0); g2.addColorStop(0,'#5e2f17'); g2.addColorStop(.35,'#e3955f'); g2.addColorStop(1,'#4a2410'); k.fillStyle=g2; k.fillRect(x-th/2,y1,th,y2-y1); };
-  pipeV(216,10,120,10); pipeH(186,216,120,8); pipeV(262,120,H-38,10); pipeH(216,262,120,10);
-  // ボイラー（右）
-  const bx=236,by=118,bw=58,bh=H-38-by; const bgd=k.createLinearGradient(bx,0,bx+bw,0); bgd.addColorStop(0,'#3a2512'); bgd.addColorStop(.4,'#9a6a2a'); bgd.addColorStop(1,'#2a190b'); k.fillStyle='#000'; k.fillRect(bx-2,by-2,bw+4,bh+4); k.fillStyle=bgd; k.fillRect(bx,by,bw,bh);
-  k.fillStyle='rgba(0,0,0,.35)'; for(let y=by+14;y<by+bh;y+=16) k.fillRect(bx,y,bw,2); gRivets(k,bx,by,bw,bh,9);
-  const fire=busy?.75+.25*Math.sin(now/60):.35+.1*Math.sin(now/300); const fg2=k.createRadialGradient(bx+bw/2,by+bh-14,2,bx+bw/2,by+bh-14,16); fg2.addColorStop(0,'rgba(255,230,140,'+fire+')'); fg2.addColorStop(1,'rgba(200,60,20,0)'); k.fillStyle='#120a06'; k.fillRect(bx+bw/2-12,by+bh-24,24,16); k.fillStyle=fg2; k.fillRect(bx+bw/2-12,by+bh-24,24,16); k.fillStyle='#000'; for(let q=0;q<4;q++) k.fillRect(bx+bw/2-11+q*6,by+bh-24,2,16);
-  // 圧力計
-  gGauge+=((busy?0.85:0.18+0.03*Math.sin(now/900))-gGauge)*0.05; const gx=bx+bw/2,gy=by+24,gr0=13; k.fillStyle='#000'; k.beginPath(); k.arc(gx,gy,gr0+3,0,7); k.fill(); const gb=k.createRadialGradient(gx-4,gy-4,1,gx,gy,gr0+2); gb.addColorStop(0,'#f6d98a'); gb.addColorStop(1,'#6e4a16'); k.fillStyle=gb; k.beginPath(); k.arc(gx,gy,gr0+2,0,7); k.fill(); k.fillStyle='#f1e6c8'; k.beginPath(); k.arc(gx,gy,gr0-1,0,7); k.fill();
-  k.strokeStyle='rgba(179,40,30,.8)'; k.lineWidth=2; k.beginPath(); k.arc(gx,gy,gr0-4,Math.PI*.55,Math.PI*.95); k.stroke();
-  const ga=Math.PI*(-1.25+1.5*gGauge+(busy?Math.sin(now/37)*.02:0)); k.strokeStyle='#1b120a'; k.lineWidth=1.5; k.beginPath(); k.moveTo(gx,gy); k.lineTo(gx+Math.cos(ga)*(gr0-3),gy+Math.sin(ga)*(gr0-3)); k.stroke(); k.fillStyle='#8a6424'; k.beginPath(); k.arc(gx,gy,2,0,7); k.fill();
-  // 煙突と蒸気
-  k.fillStyle='#000'; k.fillRect(207,0,18,14); k.fillStyle='#3a2a1a'; k.fillRect(209,0,14,12); k.fillStyle='#5e4a30'; k.fillRect(205,10,22,4);
-  if(now-gLastPuff>(busy?110:700)){ gLastPuff=now; gPuffs.push({x:216+(Math.random()-.5)*6,y:6,vx:(Math.random()-.3)*.4,vy:-.35-Math.random()*.4-(busy?.4:0),r:4+Math.random()*3,life:0,max:1100+Math.random()*700}); if(busy) SFX.pressure(); }
+  const sp=busy?1:0.12, T=busy?phase:now;
+  p.drawImage(gBg,0,0);
+  // 背景の大歯車
+  pxGear(K,120,74,62,26,T*sp/2600,'#120d09','#2a2219','#3a3024','#4a3d2c',8);
+  // 左：蒸気機関（シリンダー・クロスヘッド・はずみ車）
+  const th=busy?phase/110:now/1600, fx=34,fy=134, pinx=fx+Math.cos(th)*10, piny=fy+Math.sin(th)*10, chy=piny-Math.sqrt(Math.max(0,22*22-(pinx-fx)*(pinx-fx)));
+  R(22,64,24,40,GP.ink); R(23,65,22,38,GP.i2); R(23,65,4,38,GP.i3); R(41,65,4,38,GP.i1); for(const y of [68,82,96]){ R(22,y,24,3,GP.b1); R(22,y,24,1,GP.b3); }
+  R(30,103,8,4,GP.i1); line(fx,104,fx,chy,GP.i4,2); R(fx-5,Math.round(chy)-2,10,4,GP.b2); R(fx-5,Math.round(chy)-2,10,1,GP.b3);
+  pxGear(K,fx,fy,18,0,th,GP.ink,GP.i2,GP.i3,GP.i4,6); ring(fx,fy,19,16,GP.i1); ring(fx,fy,18,17,GP.i3,-18,-6);
+  line(fx,chy,pinx,piny,GP.b2,2); disc(pinx,piny,2,GP.b3);
+  R(46,66,34,6,GP.ink); R(46,67,34,4,GP.c2); R(46,67,34,1,GP.c3); R(46,70,34,1,GP.c1); for(const x of [52,70]){ R(x,65,3,8,GP.b1); R(x,65,1,8,GP.b3); }
+  if(busy&&now-gLastStroke>(busy?260:2000)){ gLastStroke=now; gPuffs.push({x:22,y:66,vx:-.35,vy:-.2,r:2,life:0,max:700}); }
+  // 右：圧力計の盤と大クランク
+  R(186,66,32,54,GP.ink); R(187,67,30,52,GP.b1); R(187,67,30,2,GP.b3); R(187,117,30,2,GP.b0); for(const y of [70,114]) for(const x of [190,212]) R(x,y,2,2,GP.b4);
+  gGauge+=((busy?0.85:0.2+0.04*Math.sin(now/900))-gGauge)*0.05;
+  for(const [gy,off] of [[82,0],[104,.6]]){ disc(202,gy,9,GP.ink); disc(202,gy,8,GP.b2); disc(202,gy,6,'#efe3c4'); R(196,gy+3,13,1,'#d8c8a0'); const v=Math.min(1,gGauge*(1-off*.3)+(busy?Math.sin(now/45+off*9)*.04:0)), a=Math.PI*(.75+1.5*v); line(202,gy,202+Math.cos(a)*5,gy+Math.sin(a)*5,GP.rd,1); R(201,gy-1,2,2,GP.ink); R(204,gy-5,2,1,GP.rd2); }
+  R(166,72,20,6,GP.ink); R(166,73,20,4,GP.c2); R(166,73,20,1,GP.c3);
+  const ca=busy?phase/140:-.7, kx=200,ky=140; pxGear(K,kx,ky,9,10,ca*.5,GP.ink,GP.b1,GP.b2,GP.b3,4); const hx=kx+Math.cos(ca)*16, hy=ky+Math.sin(ca)*16; line(kx,ky,hx,hy,GP.ink,4); line(kx,ky,hx,hy,GP.b3,2); disc(hx,hy,3,GP.ink); disc(hx,hy,2,GP.rd); R(Math.round(hx)-1,Math.round(hy)-1,1,1,GP.rd2);
+  // 枠のアーチと柱
+  for(const x of [72,160]){ R(x,60,8,64,GP.ink); R(x+1,60,6,64,GP.b1); R(x+1,60,2,64,GP.b3); R(x+5,60,2,64,GP.b0); R(x-1,58,10,4,GP.b2); R(x-1,58,10,1,GP.b4); R(x-1,120,10,4,GP.b2); }
+  ring(120,74,50,45,GP.ink,-50,-6); ring(120,74,49,46,GP.b1,-49,-6); ring(120,74,49,48,GP.b3,-49,-14);
   // ガラスの玉室
-  const dx=150,dy=78,R=50;
-  k.fillStyle='#000'; k.beginPath(); k.arc(dx,dy,R+7,0,7); k.fill(); const ring=k.createLinearGradient(dx-R,dy-R,dx+R,dy+R); ring.addColorStop(0,'#f6d98a'); ring.addColorStop(.5,'#9a6a2a'); ring.addColorStop(1,'#4a3010'); k.fillStyle=ring; k.beginPath(); k.arc(dx,dy,R+5,0,7); k.fill();
-  for(let j=0;j<12;j++){ const a=j*Math.PI/6; k.fillStyle='#3a2410'; k.beginPath(); k.arc(dx+Math.cos(a)*(R+2.5),dy+Math.sin(a)*(R+2.5),1.6,0,7); k.fill(); }
-  k.save(); k.beginPath(); k.arc(dx,dy,R-1,0,7); k.clip(); const gl=k.createRadialGradient(dx,dy,5,dx,dy,R); gl.addColorStop(0,'rgba(40,30,22,.55)'); gl.addColorStop(1,'rgba(10,8,6,.85)'); k.fillStyle=gl; k.fillRect(dx-R,dy-R,R*2,R*2);
-  // 撹拌羽根
-  k.save(); k.translate(dx,dy); k.rotate(busy?phase/140:now/3000); k.strokeStyle='rgba(201,150,70,.75)'; k.lineWidth=3; for(let j=0;j<3;j++){ k.rotate(Math.PI*2/3); k.beginPath(); k.moveTo(0,0); k.lineTo(R-8,0); k.stroke(); } k.restore();
-  for(const b of GBALLS){ let x,y; if(busy){ const a=b.a+phase/(180+b.r*120)+b.ph; const rr=(R-9)*(.35+.6*b.r); x=dx+Math.cos(a)*rr; y=dy+Math.sin(a)*rr+Math.sin(phase/90+b.ph)*3; } else { const col=(b.a*10)%8, row=Math.floor(b.r*3); x=dx-28+col*8+(row%2)*4; y=dy+R-10-row*8+Math.sin(now/600+b.ph)*.4; } gBallFill(k,b.s,x,y,5.5); }
-  k.restore();
-  const hl=k.createLinearGradient(dx-R,dy-R,dx,dy); hl.addColorStop(0,'rgba(255,255,255,.35)'); hl.addColorStop(1,'rgba(255,255,255,0)'); k.fillStyle=hl; k.beginPath(); k.ellipse(dx-16,dy-20,14,24,-.6,0,7); k.fill();
-  // 本体（真鍮の台座）
-  const tx=dx-48,ty=dy+R+4,tw=96,th=H-38-ty; k.fillStyle='#000'; k.beginPath(); k.moveTo(tx-2,ty+th+1); k.lineTo(tx+10,ty-2); k.lineTo(tx+tw-10,ty-2); k.lineTo(tx+tw+2,ty+th+1); k.fill();
-  const body=k.createLinearGradient(tx,0,tx+tw,0); body.addColorStop(0,'#5e3f12'); body.addColorStop(.45,'#e0b860'); body.addColorStop(1,'#4a3010'); k.fillStyle=body; k.beginPath(); k.moveTo(tx,ty+th); k.lineTo(tx+11,ty); k.lineTo(tx+tw-11,ty); k.lineTo(tx+tw,ty+th); k.fill();
-  k.fillStyle='rgba(0,0,0,.25)'; k.fillRect(tx+8,ty+th-6,tw-16,2); k.fillStyle='#2a1b0e'; for(let q=tx+16;q<tx+tw-14;q+=10) k.fillRect(q,ty+4,2,2);
-  // 取り出し口
-  k.fillStyle='#000'; k.fillRect(dx-12,ty+10,24,16); k.fillStyle='#120a06'; k.fillRect(dx-10,ty+12,20,12);
-  if(gAnim&&gAnim.dropAt&&now-gAnim.dropAt<260){ const f=(now-gAnim.dropAt)/260, r=gAnim.res[gAnim.shown-1]; if(r) gBallFill(k,r.star,dx,ty+14+f*14,5); }
-  // クランク（右、ボイラーの手前）
-  const cx2=196,cy2=dy+14; k.fillStyle='#000'; k.beginPath(); k.arc(cx2,cy2,10,0,7); k.fill(); k.fillStyle='#8a6424'; k.beginPath(); k.arc(cx2,cy2,8,0,7); k.fill();
-  const ca=busy?phase/140:-.6; k.save(); k.translate(cx2,cy2); k.rotate(ca); k.fillStyle='#000'; k.fillRect(-2,-2,26,5); k.fillStyle='#d9ad55'; k.fillRect(-1,-1,24,3); k.fillStyle='#000'; k.beginPath(); k.arc(24,0,5.5,0,7); k.fill(); k.fillStyle='#a3281e'; k.beginPath(); k.arc(24,0,4,0,7); k.fill(); k.restore();
-  // 受け皿の玉
+  ring(120,74,40,36,GP.ink); disc(120,74,36,GP.g0); disc(118,71,31,GP.g1); disc(113,64,20,GP.g2);
+  const pa=busy?phase/150:now/3000; for(let i=0;i<3;i++){ const a=pa+i*Math.PI*2/3; line(120,74,120+Math.cos(a)*30,74+Math.sin(a)*30,GP.b1,2); } disc(120,74,4,GP.b2); R(119,73,1,1,GP.b4);
+  for(const b of GBALLS){ let x,y; if(busy){ const a=b.a+phase/(170+b.r*120)+b.ph, rr=29*(.3+.68*b.r); x=120+Math.cos(a)*rr; y=74+Math.sin(a)*rr+Math.sin(phase/80+b.ph)*2; } else { const pp=GPILE.at(GBALLS.indexOf(b)); x=pp[0]; y=pp[1]; } pxBall(K,b.s,Math.round(x),Math.round(y),now); }
+  dith(100,46,12,8,'rgba(246,236,216,.55)'); R(96,56,2,10,'rgba(246,236,216,.5)'); R(99,51,2,4,'rgba(246,236,216,.5)');
+  ring(120,74,40,37,GP.b1); ring(120,74,40,39,GP.b3,-40,-10); ring(120,74,38,37,GP.b0,8,38);
+  for(let i=0;i<16;i++){ const a=i*Math.PI/8; R(Math.round(120+Math.cos(a)*38.5),Math.round(74+Math.sin(a)*38.5),1,1,GP.b4); }
+  // 王冠とパイプオルガン
+  const pipes=[[86,16],[95,22],[104,28],[113,34],[122,34],[131,28],[140,22],[149,16]];
+  for(const [x,h] of pipes){ const y0=30-h; R(x,y0,7,h,GP.ink); R(x+1,y0+1,5,h-1,GP.c2); R(x+1,y0+1,1,h-1,GP.c3); R(x+5,y0+1,1,h-1,GP.c1); R(x,y0,7,2,GP.b3); R(x+2,y0+h-7,3,2,GP.ink); }
+  R(80,28,80,8,GP.ink); R(81,29,78,6,GP.b2); R(81,29,78,1,GP.b4); R(81,34,78,1,GP.b0); for(let x=84;x<158;x+=8) R(x,31,1,1,GP.b4);
+  disc(120,40,5,GP.ink); disc(120,40,4,GP.b2); R(118,38,2,1,GP.b4);
+  const puffRate=busy?90:1400; if(now-gLastPuff>puffRate){ gLastPuff=now; const pp=pipes[Math.floor(Math.random()*pipes.length)]; gPuffs.push({x:pp[0]+3.5,y:30-pp[1]-1,vx:(Math.random()-.5)*.25,vy:-.3-Math.random()*.4-(busy?.3:0),r:busy?2:1,life:0,max:busy?900:1300}); if(busy) SFX.pressure(); }
+  // 電球のアーチ
+  const bstep=busy?70:380, bt=Math.floor(now/bstep); for(let i=0;i<=18;i++){ const a=Math.PI+i*Math.PI/18; const x=Math.round(120+Math.cos(a)*47.5), y=Math.round(74+Math.sin(a)*47.5); if(y>70) continue; const on=(i+bt)%3===0; R(x-1,y-1,3,3,GP.ink); R(x,y,1,1,on?'#fff6c0':GP.b1); if(on){ R(x-1,y,3,1,'rgba(255,230,140,.8)'); R(x,y-1,1,3,'rgba(255,230,140,.8)'); } }
+  // 台座と取り出し口
+  R(106,108,28,8,GP.ink); R(107,108,26,7,GP.b1); R(107,108,26,1,GP.b3);
+  R(76,114,88,8,GP.ink); R(77,115,86,6,GP.b2); R(77,115,86,1,GP.b4); R(77,120,86,1,GP.b0);
+  for(let y=122;y<148;y++){ const w=44+Math.floor((y-122)/3); R(120-w,y,w*2,1,y===122?GP.ink:GP.b1); R(120-w,y,1,1,GP.ink); R(120+w-1,y,1,1,GP.ink); R(120-w+1,y,2,1,GP.b2); }
+  R(86,126,20,16,GP.b0); R(134,126,20,16,GP.b0); R(87,127,18,14,GP.b1); R(135,127,18,14,GP.b1); for(const x of [96,144]){ disc(x,134,4,GP.b0); disc(x,134,3,GP.b2); R(x-1,133,1,1,GP.b4); }
+  R(108,126,24,18,GP.ink); R(110,128,20,14,'#050302'); R(108,126,24,2,GP.b3);
+  R(64,148,112,8,GP.ink); R(65,149,110,6,GP.i2); R(65,149,110,1,GP.i3); for(let x=70;x<172;x+=12) R(x,151,2,2,GP.i4);
+  // 受け皿
+  R(92,156,56,8,GP.ink); R(93,157,54,6,GP.b1); R(93,157,54,1,GP.b3); R(95,160,50,2,GP.b0);
   const tray=gAnim?gAnim.res.slice(0,gAnim.shown):lastBalls; lastBalls=tray.slice(-6);
-  k.fillStyle='#000'; k.fillRect(dx-50,H-30,100,10); k.fillStyle='#8a6424'; k.fillRect(dx-48,H-28,96,6);
-  tray.slice(-6).forEach((r,j)=>{ gBallFill(k,r.star,dx-38+j*15,H-34,6); });
-  // 蒸気の粒子
-  for(let q=gPuffs.length-1;q>=0;q--){ const p=gPuffs[q]; p.life+=16; if(p.life>p.max){ gPuffs.splice(q,1); continue; } p.x+=p.vx+Math.sin((p.life+q*50)/300)*.2; p.y+=p.vy; p.vy*=.995; p.r+=.06; const t=p.life/p.max, al=(t<.15?t/.15:1-(t-.15)/.85)*.4;
-    const gr=k.createRadialGradient(p.x,p.y,0,p.x,p.y,p.r); gr.addColorStop(0,'rgba(236,230,220,'+al+')'); gr.addColorStop(1,'rgba(236,230,220,0)'); k.fillStyle=gr; k.beginPath(); k.arc(p.x,p.y,p.r,0,7); k.fill(); }
-  // 当たりの光線とフラッシュ
-  if(gFx&&now-gFx.t<1300){ const e=(now-gFx.t)/1300, ox2=dx, oy2=ty+18; k.save(); k.translate(ox2,oy2); k.rotate(e*1.6); const n=gFx.star>=4?16:12, rl=40+e*260;
-    for(let q=0;q<n;q++){ const a=q*Math.PI*2/n; k.fillStyle=gFx.star>=4?'hsla('+((q*360/n+now/4)%360)+',90%,70%,'+(0.35*(1-e))+')':'rgba(255,215,110,'+(0.38*(1-e))+')'; k.beginPath(); k.moveTo(0,0); k.lineTo(Math.cos(a-.08)*rl,Math.sin(a-.08)*rl); k.lineTo(Math.cos(a+.08)*rl,Math.sin(a+.08)*rl); k.fill(); }
-    k.restore(); if(now-gFx.t<160){ k.fillStyle='rgba(255,250,230,'+(0.6*(1-(now-gFx.t)/160))+')'; k.fillRect(0,0,Wd,H); } }
-  // 縁の電球
-  const bstep=busy?80:420, bt=Math.floor(now/bstep); let bi=0; const bulb=(x,y)=>{ const on=(bi+bt)%3===0; bi++; k.fillStyle='#000'; k.beginPath(); k.arc(x,y,3.2,0,7); k.fill(); k.fillStyle=on?'#fff2b0':'#6e4a16'; k.beginPath(); k.arc(x,y,2.2,0,7); k.fill(); if(on){ k.fillStyle='rgba(255,220,120,.25)'; k.beginPath(); k.arc(x,y,6,0,7); k.fill(); } };
-  for(let x=10;x<Wd-4;x+=18) bulb(x,6); for(let y=24;y<H-40;y+=18){ bulb(6,y); } for(let y=24;y<H-40;y+=18){ bulb(Wd-6,y); }
-  if(gAnim&&phase<700){ for(let q=0;q<2;q++) gPuffs.push({x:120+Math.random()*60,y:dy+R+6,vx:(Math.random()-.5)*1.2,vy:-.3-Math.random()*.4,r:4,life:0,max:600}); }
-}
+  tray.slice(-6).forEach((r,j)=>pxBall(K,r.star,100+j*8,157,now));
+  if(gAnim&&gAnim.dropAt&&now-gAnim.dropAt<260){ const f=(now-gAnim.dropAt)/260; pxBall(K,gAnim.dropStar||1,120,Math.round(134+f*22),now); }
+  // 当たりの光線（ドット）
+  if(gFx&&now-gFx.t<1300){ const e=(now-gFx.t)/1300, n=gFx.star>=4?14:10; p.save(); p.translate(120,136); p.rotate(e*1.4); for(let q=0;q<n;q++){ const a=q*Math.PI*2/n, rl=20+e*170; p.fillStyle=gFx.star>=4?'hsla('+((q*360/n+now/4)%360)+',90%,70%,'+(0.4*(1-e))+')':'rgba(255,215,110,'+(0.42*(1-e))+')'; p.beginPath(); p.moveTo(0,0); p.lineTo(Math.cos(a-.09)*rl,Math.sin(a-.09)*rl); p.lineTo(Math.cos(a+.09)*rl,Math.sin(a+.09)*rl); p.fill(); } p.restore();
+    if(gFx.star>=4) for(let q=0;q<10;q++){ const sx=(q*53+Math.floor(now/60)*17)%240, sy=(q*31+Math.floor(now/60)*29)%150; R(sx,sy,1,1,'#fff'); R(sx-1,sy,3,1,'rgba(255,255,255,.5)'); R(sx,sy-1,1,3,'rgba(255,255,255,.5)'); }
+    if(now-gFx.t<140){ p.fillStyle='rgba(255,250,230,'+(0.65*(1-(now-gFx.t)/140))+')'; p.fillRect(0,0,240,176); } }
+  // 蒸気（ドットの雲）
+  for(let q=gPuffs.length-1;q>=0;q--){ const s=gPuffs[q]; s.life+=16; if(s.life>s.max){ gPuffs.splice(q,1); continue; } s.x+=s.vx+Math.sin((s.life+q*50)/300)*.12; s.y+=s.vy; s.vy*=.995; s.r+=.035; const t=s.life/s.max, al=(t<.15?t/.15:1-(t-.15)/.85)*.75; p.globalAlpha=al; disc(s.x,s.y,Math.round(s.r),'#d8cfc0'); disc(s.x-.6,s.y-.6,Math.max(0,Math.round(s.r)-1),GP.st); p.globalAlpha=1; }
+  out.drawImage(gLo,0,0,c.width,c.height); }
 let lastBalls=[];
 function showResult(r){ const el=document.createElement('div'); el.className='gcard s'+r.star; el.appendChild(prizeIcon(r,40)); const t=document.createElement('div');
   t.innerHTML='<b>'+'★'.repeat(r.star)+'</b><span></span>'+(r.isNew?'<i class="newtag2">NEW</i>':'')+(r.dup?'<small></small>':''); t.querySelector('span').textContent=r.name; if(r.dup) t.querySelector('small').textContent=r.dup; el.appendChild(t); $('gRes').appendChild(el); }
