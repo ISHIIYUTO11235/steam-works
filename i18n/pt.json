@@ -1253,5 +1253,17 @@
 " 行が目標と違う": " linhas diferem do alvo",
 "目標の書きかけ": "Alvo incompleto",
 "ポートと目標を「": "Portas e alvo ajustados à especificação de “",
-"目標の回路": "Circuito alvo"
+"目標の回路": "Circuito alvo",
+"見本：NAND": "Modelo: NAND",
+"A と B が両方1のときだけ0。下のポートが給気。買うとチップの一覧に加わる。": "0 só quando A e B são 1. A porta de baixo é a alimentação. Ao comprar, entra na sua lista de chips.",
+"A と B が違うときだけ1。買うとチップの一覧に加わる。": "1 só quando A e B são diferentes. Ao comprar, entra na sua lista de chips.",
+"組み上がった NAND のチップ。中を開いて仕組みを学べる。": "Um chip NAND pronto. Abra-o para ver como funciona.",
+"組み上がった XOR のチップ。給気なしで動く。": "Um chip XOR pronto. Funciona sem alimentação.",
+"見本のままでは納められない。自分で組み直そう": "Não dá para entregar o modelo sem mudanças. Monte o seu.",
+"コピーした（Ctrl+V で貼り付け）": "Copiado (Ctrl+V para colar)",
+"なし。外側のボタンで入力か出力にできる": "Nenhuma. Use o botão de fora para torná-la entrada ou saída",
+"（クリックで なし→入力→出力 と切り替え）": " (clique para alternar nenhuma → entrada → saída)",
+"<p class=\"note\">盤の縁のボタンで、入力と出力を1つ以上ずつ決めると表が出ます。</p>": "<p class=\"note\">Use os botões ao redor do tabuleiro para definir ao menos uma entrada e uma saída, e a tabela aparece.</p>",
+"行をクリックすると、その入力で盤の回路を動かして見られます。目標の欄はクリックで 0 → 1 → － と切り替わります。": "Clique numa linha para rodar o circuito com essas entradas. Clique numa célula do alvo para alternar 0 → 1 → –.",
+"入力に 400 kPa を入れて12秒動かしたあとの出力（100 kPa 以上を 1 とみなす）。": "Saída após 12 segundos com 400 kPa nas entradas (100 kPa ou mais conta como 1)."
 }

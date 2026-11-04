@@ -1253,5 +1253,17 @@
 " 行が目標と違う": " rows differ from target",
 "目標の書きかけ": "Target incomplete",
 "ポートと目標を「": "Ports and target set to the spec of “",
-"目標の回路": "Target circuit"
+"目標の回路": "Target circuit",
+"見本：NAND": "Sample: NAND",
+"A と B が両方1のときだけ0。下のポートが給気。買うとチップの一覧に加わる。": "0 only when both A and B are 1. The bottom port is the supply. Buying it adds it to your chips.",
+"A と B が違うときだけ1。買うとチップの一覧に加わる。": "1 only when A and B differ. Buying it adds it to your chips.",
+"組み上がった NAND のチップ。中を開いて仕組みを学べる。": "A finished NAND chip. Open it up to learn how it works.",
+"組み上がった XOR のチップ。給気なしで動く。": "A finished XOR chip. Works without a supply.",
+"見本のままでは納められない。自分で組み直そう": "You can't deliver an unchanged sample. Build your own.",
+"コピーした（Ctrl+V で貼り付け）": "Copied (Ctrl+V to paste)",
+"なし。外側のボタンで入力か出力にできる": "None. Use the button outside to make it an input or output",
+"（クリックで なし→入力→出力 と切り替え）": " (click to cycle none → input → output)",
+"<p class=\"note\">盤の縁のボタンで、入力と出力を1つ以上ずつ決めると表が出ます。</p>": "<p class=\"note\">Use the buttons around the board to set at least one input and one output, and the table appears.</p>",
+"行をクリックすると、その入力で盤の回路を動かして見られます。目標の欄はクリックで 0 → 1 → － と切り替わります。": "Click a row to run the board with those inputs. Click a target cell to cycle 0 → 1 → –.",
+"入力に 400 kPa を入れて12秒動かしたあとの出力（100 kPa 以上を 1 とみなす）。": "Output after 12 seconds with 400 kPa on the inputs (100 kPa or more counts as 1)."
 }
