@@ -1309,5 +1309,9 @@
 "。給気は": ". Supply: ",
 "信号を逆にしたいなら常開弁じゃ。入口に給気、操作口に信号をつなぐと、信号が来たときだけ止まる。チップで作るなら、縁のポートを1つ「給」にして、外からボイラーの管をつなぐんじゃよ。": "To invert a signal, use a normally-open valve. Supply into the inlet, signal into the control port, and it stops only when the signal arrives. In a chip, set one edge port to “S” (supply) and run a boiler pipe to it from outside.",
 "（クリックで なし→入力→出力→給気 と切り替え）": " (click to cycle none → input → output → supply)",
-"入力がすべて 0 の行で 1 を出すには、蒸気の元が要る。縁のポートを1つ「給」（給気）にするんじゃ。": "To output 1 when every input is 0, you need a source of steam. Set one edge port to “S” (supply)."
+"入力がすべて 0 の行で 1 を出すには、蒸気の元が要る。縁のポートを1つ「給」（給気）にするんじゃ。": "To output 1 when every input is 0, you need a source of steam. Set one edge port to “S” (supply).",
+"チップ用永久汽缶": "Chip perpetual boiler",
+"チップの中にだけ置ける小さな汽缶。矢印の側へ、最高 150 kPa の蒸気を出し続ける。外から給気をつながなくても NOT などを作れる。": "A tiny boiler that only goes inside chips. It keeps sending steam up to 150 kPa toward the arrow, so you can build NOT and the like without an outside supply.",
+"信号を逆にしたいなら常開弁じゃ。入口に給気、操作口に信号をつなぐと、信号が来たときだけ止まる。チップの中なら、チップ用永久汽缶を給気にすればよい。": "To invert a signal, use a normally-open valve. Supply into the inlet, signal into the control port, and it stops only when the signal arrives. Inside a chip, use a chip perpetual boiler as the supply.",
+"入力がすべて 0 の行で 1 を出すには、蒸気の元が要る。チップ用永久汽缶を置くか、縁のポートを1つ「給」（給気）にするんじゃ。": "To output 1 when every input is 0, you need a source of steam. Place a chip perpetual boiler, or set one edge port to “S” (supply)."
 }
