@@ -1315,5 +1315,22 @@
 "信号を逆にしたいなら常開弁じゃ。入口に給気、操作口に信号をつなぐと、信号が来たときだけ止まる。チップの中なら、チップ用永久汽缶を給気にすればよい。": "Para inverter um sinal, use uma válvula normalmente aberta. Alimentação na entrada, sinal no controle: ela só fecha quando o sinal chega. Dentro de um chip, use a caldeira perpétua de chip como alimentação.",
 "入力がすべて 0 の行で 1 を出すには、蒸気の元が要る。チップ用永久汽缶を置くか、縁のポートを1つ「給」（給気）にするんじゃ。": "Para dar 1 quando todas as entradas são 0, é preciso uma fonte de vapor. Ponha uma caldeira perpétua de chip ou marque uma porta da borda como “Al” (alimentação).",
 "A と B が両方そろったときだけ止まる信号。給気はないので、チップ用永久汽缶で蒸気を作る。": "Um sinal que só para quando A e B estão ligados. Não há alimentação, então gere vapor com a caldeira perpétua de chip.",
-"入力がすべて 0 の行で 1 を出すには、蒸気の元が要る。チップ用永久汽缶を置くんじゃ。": "Para dar 1 quando todas as entradas são 0, é preciso uma fonte de vapor. Ponha uma caldeira perpétua de chip."
+"入力がすべて 0 の行で 1 を出すには、蒸気の元が要る。チップ用永久汽缶を置くんじゃ。": "Para dar 1 quando todas as entradas são 0, é preciso uma fonte de vapor. Ponha uma caldeira perpétua de chip.",
+"列": "Col.",
+"部品欄を": "Mostrar peças em ",
+"列にする": " colunas",
+"名前を変えてから保存してください": "Mude o nome antes de salvar",
+"同じ名前のチップ「": "Já existe um chip chamado “",
+"」がすでにある。上書きすると、その設計図は今の中身に変わる": "”. Sobrescrever troca aquele projeto pelo atual",
+"（工場に置いた ": " (todos os ",
+" 個もすべて変わる）": " colocados na fábrica mudam também)",
+"。上書きしないなら、名前を変えてから保存してください。": ". Se não quiser sobrescrever, mude o nome antes de salvar.",
+"上書き保存": "Sobrescrever",
+"名前を変える": "Renomear",
+"」を上書き保存すると、": "”: sobrescrever faz com que ",
+"工場に置いた ": "todos os ",
+" 個もすべて今の中身に変わる。": " colocados na fábrica passem ao projeto atual.",
+"この設計図の中身が今のものに変わる。": "este projeto seja trocado pelo atual.",
+"元の設計図を残すなら、別の名前で新しく保存してください。": " Para manter o original, salve como novo com outro nome.",
+"新しく保存": "Salvar como novo"
 }

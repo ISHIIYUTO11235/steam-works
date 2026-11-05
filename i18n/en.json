@@ -1315,5 +1315,22 @@
 "信号を逆にしたいなら常開弁じゃ。入口に給気、操作口に信号をつなぐと、信号が来たときだけ止まる。チップの中なら、チップ用永久汽缶を給気にすればよい。": "To invert a signal, use a normally-open valve. Supply into the inlet, signal into the control port, and it stops only when the signal arrives. Inside a chip, use a chip perpetual boiler as the supply.",
 "入力がすべて 0 の行で 1 を出すには、蒸気の元が要る。チップ用永久汽缶を置くか、縁のポートを1つ「給」（給気）にするんじゃ。": "To output 1 when every input is 0, you need a source of steam. Place a chip perpetual boiler, or set one edge port to “S” (supply).",
 "A と B が両方そろったときだけ止まる信号。給気はないので、チップ用永久汽缶で蒸気を作る。": "A signal that stops only when both A and B are on. There's no supply, so make steam with a chip perpetual boiler.",
-"入力がすべて 0 の行で 1 を出すには、蒸気の元が要る。チップ用永久汽缶を置くんじゃ。": "To output 1 when every input is 0, you need a source of steam. Place a chip perpetual boiler."
+"入力がすべて 0 の行で 1 を出すには、蒸気の元が要る。チップ用永久汽缶を置くんじゃ。": "To output 1 when every input is 0, you need a source of steam. Place a chip perpetual boiler.",
+"列": "Cols",
+"部品欄を": "Show parts in ",
+"列にする": " columns",
+"名前を変えてから保存してください": "Change the name before saving",
+"同じ名前のチップ「": "A chip named “",
+"」がすでにある。上書きすると、その設計図は今の中身に変わる": "” already exists. Overwriting replaces that design with the current one",
+"（工場に置いた ": " (all ",
+" 個もすべて変わる）": " placed in the factory change too)",
+"。上書きしないなら、名前を変えてから保存してください。": ". If you don't want to overwrite, change the name before saving.",
+"上書き保存": "Overwrite",
+"名前を変える": "Rename",
+"」を上書き保存すると、": "”: overwriting means ",
+"工場に置いた ": "all ",
+" 個もすべて今の中身に変わる。": " placed in the factory change to the current design.",
+"この設計図の中身が今のものに変わる。": "this design is replaced with the current one.",
+"元の設計図を残すなら、別の名前で新しく保存してください。": " To keep the original, save it as new under another name.",
+"新しく保存": "Save as new"
 }
