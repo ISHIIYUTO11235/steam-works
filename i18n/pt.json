@@ -1313,5 +1313,7 @@
 "チップ用永久汽缶": "Caldeira perpétua de chip",
 "チップの中にだけ置ける小さな汽缶。矢印の側へ、最高 150 kPa の蒸気を出し続ける。外から給気をつながなくても NOT などを作れる。": "Uma pequena caldeira que só vai dentro de chips. Solta vapor de até 150 kPa para o lado da seta, então dá para montar NOT e afins sem alimentação externa.",
 "信号を逆にしたいなら常開弁じゃ。入口に給気、操作口に信号をつなぐと、信号が来たときだけ止まる。チップの中なら、チップ用永久汽缶を給気にすればよい。": "Para inverter um sinal, use uma válvula normalmente aberta. Alimentação na entrada, sinal no controle: ela só fecha quando o sinal chega. Dentro de um chip, use a caldeira perpétua de chip como alimentação.",
-"入力がすべて 0 の行で 1 を出すには、蒸気の元が要る。チップ用永久汽缶を置くか、縁のポートを1つ「給」（給気）にするんじゃ。": "Para dar 1 quando todas as entradas são 0, é preciso uma fonte de vapor. Ponha uma caldeira perpétua de chip ou marque uma porta da borda como “Al” (alimentação)."
+"入力がすべて 0 の行で 1 を出すには、蒸気の元が要る。チップ用永久汽缶を置くか、縁のポートを1つ「給」（給気）にするんじゃ。": "Para dar 1 quando todas as entradas são 0, é preciso uma fonte de vapor. Ponha uma caldeira perpétua de chip ou marque uma porta da borda como “Al” (alimentação).",
+"A と B が両方そろったときだけ止まる信号。給気はないので、チップ用永久汽缶で蒸気を作る。": "Um sinal que só para quando A e B estão ligados. Não há alimentação, então gere vapor com a caldeira perpétua de chip.",
+"入力がすべて 0 の行で 1 を出すには、蒸気の元が要る。チップ用永久汽缶を置くんじゃ。": "Para dar 1 quando todas as entradas são 0, é preciso uma fonte de vapor. Ponha uma caldeira perpétua de chip."
 }
