@@ -2666,7 +2666,7 @@ function undoNear(x,y){ if(!undoDepth) return; for(let s2=-1;s2<4;s2++){ const n
 function userEdit(fn){ const m=W?W.money:0; undoDepth++; try{ fn(); } finally{ undoDepth--; if(undoTx&&W) undoTx.money+=W.money-m; if(!undoDepth&&!ptrs.size) commitUndo(); } }
 function pushUndo(e){ undoStack.push(e); if(undoStack.length>UNDO_MAX) undoStack.shift(); redoStack=[]; }
 function commitUndo(){ const tx=undoTx; undoTx=null; if(!tx||!W) return; const tiles=[]; for(const [i,b] of tx.tiles){ const a=undoSnap(i); if(a!==b) tiles.push([i,b,a]); } if(tiles.length||tx.money) pushUndo({tiles,money:tx.money}); }
-function undoApply(e,k){ for(const t of e.tiles){ const i=t[0], v=JSON.parse(t[k]); W.fg[i]=v[0]; W.bg[i]=v[1]; if(W.ter[i]!==v[2]){ W.ter[i]=v[2]; W.terDirty.push(i); } } if(e.tiles.some(t=>/"t":"chip/.test(t[k]))) rebuildChips(W); W.dirty=true; if(sel) renderDetail(); }
+function undoApply(e,k){ for(const t of e.tiles){ const i=t[0], v=JSON.parse(t[k]); W.fg[i]=v[0]; W.bg[i]=v[1]; if(W.ter[i]!==v[2]){ W.ter[i]=v[2]; W.terDirty.push(i); } } if(e.tiles.some(t=>{ const v=JSON.parse(t[k])[1]; return v&&(v.t==='chip'||v.t==='chipx'); })) rebuildChips(W); W.dirty=true; if(sel) renderDetail(); }
 function undo(){ commitUndo(); const e=undoStack[undoStack.length-1]; if(!e){ toast(L_('これ以上は戻せない')); return; }
   if(W.money-e.money<0){ toast(L_('資金が足りないので戻せない')); SFX.err(); return; }
   undoStack.pop(); undoApply(e,1); W.money-=e.money; redoStack.push(e); SFX.remove&&SFX.remove(); toast(L_('元に戻した')+(e.money?L_('（')+(e.money<0?'+':'−')+L_('¥')+fmt(Math.abs(e.money))+L_('）'):'')); save(); }
