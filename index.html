@@ -1208,18 +1208,34 @@ function valveOpen(L,W){
   return 0;
 }
 const VALVE_PASSES=8;
+/* チップの中は遅れなし：管の圧の損失や、配管に残った蒸気による遅れを無くし、論理回路として1刻みで落ち着かせる。
+   蒸気の元（入力ポート・チップ用永久汽缶）の圧が、開いた弁を通ってそのまま届く。どこからも届かない線は 0 になる */
+const SETTLE_T=new Set(['vNC','vNO','latch','pswitch','chk','prv','lever']);
+function chipSettle(G){ const cs=[]; for(const s of G.segs) if(s.B.w===CHIP_N) cs.push(s); if(!cs.length) return;
+  const ls=G.links.filter(L=>L.a&&L.b&&L.b.B.w===CHIP_N);
+  for(const s of cs){ s._s=s.src?s.q/s.cap:0; s.p=s._s; }
+  for(let it=0;it<24;it++){ let ch=0;
+    for(const L of ls){ if(!L.port&&L.bit==null&&SETTLE_T.has(L.c.t)){ const o=valveOpen(L,null); L.open=o; L.c.open=o; } }
+    for(const s of cs) s._n=s._s;
+    for(const L of ls){ if(!L.open) continue; let v=L.a.p; if(!L.port&&L.c.t==='prv') v=Math.min(v,(L.c.set||200)/KPA); if(v>L.b._n) L.b._n=v; }
+    for(const s of cs){ if(Math.abs(s._n-s.p)>1e-6){ ch=1; s.p=s._n; } }
+    if(!ch) break; }
+  for(const s of cs){ s.q=s.p*s.cap; s.inflow=s.p>0?1:0; s.held=1; } }
 function flow(a,b,maxF,ka,kb){ const pa=a.q/a.cap+phiAt(a,ka),pb=b.q/b.cap+phiAt(b,kb); if(pa<=pb+1e-4) return 0; let f=(pa-pb)/(1/a.cap+1/b.cap)*0.9; if(f>maxF)f=maxF; if(f>a.q)f=a.q; a.q-=f; b.q+=f; b.inflow+=f; addS(a,ka,-f); addS(b,kb,f); return f; }
 function steamPhase1(G,W,srcFn){
-  for(const s of G.segs){s.inflow=0;s.vent=0;s.src=0;s.held=0; s.pmx=0; if(s.s) s.s.fill(0);}
+  for(const s of G.segs){s.inflow=0;s.vent=0;s.src=0;s.held=0;s.fed=0; s.pmx=0; if(s.s) s.s.fill(0);}
   for(const L of G.links){ if(L.port){L.open=1;continue;} if(L.c.t==='clock') L.c.ph=((L.c.ph||0)+1)%L.c.per;
     const o=valveOpen(L,W); if(L.bit!=null){ L.open=o; continue; } if(L.c.open&&!o&&W&&L.B===W) W.events.push(['vent',L.i]); if(W&&L.B===W&&(L.c.t==='vNC'||L.c.t==='vNO')&&(L.c.open?1:0)!==o) W.flags.flip=1; L.c.open=o; L.open=o; }
   for(const L of G.links){ if(!L.port&&L.c.t==='superheat'){ if(L.a&&L.b){ const tg=Math.min(1.5,L.a.p*1.6)*L.b.cap,room=tg-L.b.q; if(room>0){ const f=Math.min(0.6,room,L.a.q/1.6); L.a.q-=f*1.6; L.b.q+=f; L.b.inflow+=f; addS(L.a,L.ka,-f*1.6); addS(L.b,L.kb,f); L.c.act=f>0.02?1:0; } else L.c.act=0; L.b.held=1; } continue; }
     if(L.open&&L.a&&L.b){ if(!L.port&&L.c.t==='prv'){ const tg=(L.c.set||200)/KPA; const err=(tg-phiAt(L.b,L.kb))*L.b.cap-L.b.q; L.c._i=Math.max(0,Math.min(1.6,(L.c._i||0)+err*0.1)); const lim=Math.min(Math.max(0,err*0.5+L.c._i),Math.max(0,tg*L.b.cap-L.b.q)); if(lim>0) flow(L.a,L.b,Math.min(1.6,lim),L.ka,L.kb); L.b.held=1; L.b.pmx=Math.max(L.b.pmx||0,Math.min(tg,L.a.pmx||tg)); } else flow(L.a,L.b,1.6,L.ka,L.kb); } else if(!L.open&&L.b) L.b.vent=1; }
   // 開いた弁が何段も続くと、1刻みに1段ずつしか蒸気が進まず、弁ごとに圧が大きく落ちていた。開いた弁は普通の管と同じくらいの損失で通すよう、受け渡しを刻みの中で繰り返す
-  for(let pass=0;pass<VALVE_PASSES;pass++) for(const L of G.links){ if(L.open&&L.a&&L.b&&(L.port||(L.c.t!=='prv'&&L.c.t!=='superheat'))) flow(L.a,L.b,1.6,L.ka,L.kb); }
+  // チップの出力ポートが 0 のときは、閉じた弁と同じく工場側の線の蒸気を抜く
+  for(const L of G.links) if(L.port&&L.a&&L.b&&L.a.B.w===CHIP_N&&L.b.B.w!==CHIP_N&&L.a.p<SIG_OFF) L.b.vent=1;
+  for(let pass=0;pass<VALVE_PASSES;pass++) for(const L of G.links){ if(L.open&&L.a&&L.b&&(L.port||(L.c.t!=='prv'&&L.c.t!=='superheat'))) flow(L.a,L.b,L.port&&L.a.B.w===CHIP_N&&L.b.B.w!==CHIP_N?0.04:1.6,L.ka,L.kb); }
   // ボイラーは弁の受け渡しのあとに足す（先に足すと、送り出した直後の減った圧が上流側に見えてしまう）
   if(srcFn) srcFn();
   if(G.cps) for(const p of G.cps){ const sg=p.s, pk=0.15, room=Math.max(0,sg.cap*(pk-phiAt(sg,p.k))-sg.q), add=Math.min(0.15,room); sg.q+=add; sg.src=1; sg.inflow+=add; addS(sg,p.k,add); sg.pmx=Math.max(sg.pmx||0,pk); p.c.act=add>0.01?1:0.5; }
+  chipSettle(G);
   if(G.reliefs) for(const r of G.reliefs){ if(r.c.t==='whistle'||r.c.t==='organ'){ const on=r.s.p>=SIG_ON; if(r.c.t==='whistle'){ if(on){ r.s.q=Math.max(0,r.s.q-0.015); if(W&&r.B===W&&(!r.c.act||(W.tick+r.i)%12===0)) W.events.push(['whistle',r.i,r.s.p]); } r.c.act=on?1:0; } else { if(on&&!r.c.act&&W&&r.B===W){ W.events.push(['note',r.i,r.c.set||0]); onNote(W,r.c.set||0); } r.c.act=on?1:0; } continue; }
     const st=(r.c.set||500)/KPA; if(r.s.p>st){ r.s.q=st*r.s.cap; r.c.act=1; if(W&&r.B===W&&Math.random()<.3) W.events.push(['vent',r.i]); } else r.c.act=0; }
   for(const s of G.segs){ s.p=Math.max(0,s.q/s.cap); s.p1=s.p; }
@@ -1227,6 +1243,7 @@ function steamPhase1(G,W,srcFn){
 function steamPhase2(G){
   for(const s of G.segs){
     s.q-=0.0025*s.size*s.p;
+    if(s.B.w===CHIP_N){ s.p=s.q/s.cap; const v=s.p; for(let j=0;j<s.mem.length;j++) s.B.np[s.mem[j]]=v; continue; }
     if(s.vent&&s.inflow<1e-4&&!s.src&&!s.held) s.q*=0.45;
     if(s.q<1e-4) s.q=0;
     s.p=s.q/s.cap;
@@ -1237,7 +1254,7 @@ function steamPhase2(G){
 function stepChipBoard(B,defs,testIn){
   const G={segs:[],links:[],reliefs:[]}; gather(B,defs,G);
   // 圧を入れていない入力ポートは、上流の閉じた弁と同じように蒸気を抜く（入れて→止めた信号が線に残らない）
-  steamPhase1(G,null,()=>{ for(let s=0;s<4;s++){ if(!testIn[s]){ const pp=PORT_POS[s]; const c=B.bg[pp[1]*CHIP_N+pp[0]]; if(c&&c.mode==='in'){ const sg=segAt(B,(pp[1]*CHIP_N+pp[0])*4); if(sg) sg.vent=1; } continue; } const pp=PORT_POS[s]; const c=B.bg[pp[1]*CHIP_N+pp[0]]; if(!c||c.mode!=='in') continue; const sg=segAt(B,(pp[1]*CHIP_N+pp[0])*4); if(sg){ const add=Math.max(0,sg.cap*TEST_P-sg.q); sg.q+=Math.min(add,1.2); sg.src=1; sg.inflow+=1; } } });
+  steamPhase1(G,null,()=>{ for(let s=0;s<4;s++){ if(!testIn[s]){ const pp=PORT_POS[s]; const c=B.bg[pp[1]*CHIP_N+pp[0]]; if(c&&c.mode==='in'){ const sg=segAt(B,(pp[1]*CHIP_N+pp[0])*4); if(sg) sg.vent=1; } continue; } const pp=PORT_POS[s]; const c=B.bg[pp[1]*CHIP_N+pp[0]]; if(!c||c.mode!=='in') continue; const sg=segAt(B,(pp[1]*CHIP_N+pp[0])*4); if(sg){ const add=Math.max(0,sg.cap*TEST_P-sg.q); sg.q+=add; sg.src=1; sg.inflow+=1; } } });
   steamPhase2(G);
 }
 function portValue(B,side){ const pp=PORT_POS[side]; const sg=segAt(B,(pp[1]*CHIP_N+pp[0])*4); return sg?sg.p:0; }
