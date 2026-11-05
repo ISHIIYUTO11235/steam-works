@@ -1305,5 +1305,9 @@
 "」で手が止まっとるようじゃな。まず設計書「": "” parece ter travado você. Primeiro compre a planta “",
 "」を買うんじゃ。これがないと作れんぞ。": "”. Sem ela não dá para fazer.",
 "」はまだ受注しとらんようじゃ。案件ボードで受注せんと、届けても数に入らんぞ。": "” ainda não foi aceito. Aceite no quadro de pedidos, senão as entregas não contam.",
-"」で手が止まっとるようじゃな。このあたりを組み合わせると、できるかもしれん。": "” parece ter travado você. Combinar estes pode resolver."
+"」で手が止まっとるようじゃな。このあたりを組み合わせると、できるかもしれん。": "” parece ter travado você. Combinar estes pode resolver.",
+"。給気は": ". Alimentação: ",
+"信号を逆にしたいなら常開弁じゃ。入口に給気、操作口に信号をつなぐと、信号が来たときだけ止まる。チップで作るなら、縁のポートを1つ「給」にして、外からボイラーの管をつなぐんじゃよ。": "Para inverter um sinal, use uma válvula normalmente aberta. Alimentação na entrada, sinal no controle: ela só fecha quando o sinal chega. Num chip, marque uma porta da borda como “Al” (alimentação) e ligue nela um cano da caldeira por fora.",
+"（クリックで なし→入力→出力→給気 と切り替え）": " (clique para alternar nenhuma → entrada → saída → alimentação)",
+"入力がすべて 0 の行で 1 を出すには、蒸気の元が要る。縁のポートを1つ「給」（給気）にするんじゃ。": "Para dar 1 quando todas as entradas são 0, é preciso uma fonte de vapor. Marque uma porta da borda como “Al” (alimentação)."
 }

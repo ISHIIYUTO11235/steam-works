@@ -1305,5 +1305,9 @@
 "」で手が止まっとるようじゃな。まず設計書「": "” seems to have you stuck. First buy the blueprint “",
 "」を買うんじゃ。これがないと作れんぞ。": "”. You can't make it without that.",
 "」はまだ受注しとらんようじゃ。案件ボードで受注せんと、届けても数に入らんぞ。": "” hasn't been accepted yet. Accept it on the job board, or deliveries won't count.",
-"」で手が止まっとるようじゃな。このあたりを組み合わせると、できるかもしれん。": "” seems to have you stuck. Combining these might do it."
+"」で手が止まっとるようじゃな。このあたりを組み合わせると、できるかもしれん。": "” seems to have you stuck. Combining these might do it.",
+"。給気は": ". Supply: ",
+"信号を逆にしたいなら常開弁じゃ。入口に給気、操作口に信号をつなぐと、信号が来たときだけ止まる。チップで作るなら、縁のポートを1つ「給」にして、外からボイラーの管をつなぐんじゃよ。": "To invert a signal, use a normally-open valve. Supply into the inlet, signal into the control port, and it stops only when the signal arrives. In a chip, set one edge port to “S” (supply) and run a boiler pipe to it from outside.",
+"（クリックで なし→入力→出力→給気 と切り替え）": " (click to cycle none → input → output → supply)",
+"入力がすべて 0 の行で 1 を出すには、蒸気の元が要る。縁のポートを1つ「給」（給気）にするんじゃ。": "To output 1 when every input is 0, you need a source of steam. Set one edge port to “S” (supply)."
 }
