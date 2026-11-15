@@ -1523,5 +1523,7 @@
 "新しいBGM": "NOVA MÚSICA",
 "新しい品": "NOVO ITEM",
 "タップで次へ": "Toque para continuar",
-"すべて飛ばす": "Pular tudo"
+"すべて飛ばす": "Pular tudo",
+"<p>針が読めたら、右上の<b>×</b>で札を閉じましょう。</p>": "<p>Depois de ler o ponteiro, feche o painel no <b>×</b> do canto superior direito.</p>",
+"先に「向き」で向きを合わせましょう": "Ajuste a direção em \"Direção\" primeiro"
 }
