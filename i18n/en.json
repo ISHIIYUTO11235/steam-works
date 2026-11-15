@@ -1553,5 +1553,8 @@
 "空き": "Empty",
 "続ける": "Continue",
 "設備や管のあるマスには置けない": "Can't place on a tile with a machine or pipe",
-"遊び場": "Free play"
+"遊び場": "Free play",
+"の記録を消しますか？元には戻せません。": ": delete this record? This cannot be undone.",
+"記録を選ぶ": "Choose a save",
+"記録{n}": "Save {n}"
 }
