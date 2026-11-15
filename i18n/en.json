@@ -1523,5 +1523,6 @@
 "新しいBGM": "NEW MUSIC",
 "新しい品": "NEW ITEM",
 "タップで次へ": "Tap to continue",
-"すべて飛ばす": "Skip all"
+"すべて飛ばす": "Skip all",
+"<p>針が読めたら、右上の<b>×</b>で札を閉じましょう。</p>": "<p>Once you have read the needle, close the panel with the <b>×</b> at the top right.</p>"
 }
