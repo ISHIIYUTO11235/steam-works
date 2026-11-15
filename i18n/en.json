@@ -1554,7 +1554,7 @@
 "続ける": "Continue",
 "設備や管のあるマスには置けない": "Can't place on a tile with a machine or pipe",
 "遊び場": "Free play",
-"工場を選ぶ": "Choose a factory",
-"第{n}工場": "Factory {n}",
-"の記録を消しますか？元には戻せません。": ": delete this record? This cannot be undone."
+"の記録を消しますか？元には戻せません。": ": delete this record? This cannot be undone.",
+"記録を選ぶ": "Choose a save",
+"記録{n}": "Save {n}"
 }

@@ -1554,7 +1554,7 @@
 "続ける": "Continuar",
 "設備や管のあるマスには置けない": "Não dá para colocar onde há máquina ou cano",
 "遊び場": "Livre",
-"工場を選ぶ": "Escolher fábrica",
-"第{n}工場": "Fábrica {n}",
-"の記録を消しますか？元には戻せません。": ": apagar este registro? Não dá para desfazer."
+"の記録を消しますか？元には戻せません。": ": apagar este registro? Não dá para desfazer.",
+"記録を選ぶ": "Escolher save",
+"記録{n}": "Save {n}"
 }
