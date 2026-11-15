@@ -1553,5 +1553,8 @@
 "空き": "Vazio",
 "続ける": "Continuar",
 "設備や管のあるマスには置けない": "Não dá para colocar onde há máquina ou cano",
-"遊び場": "Livre"
+"遊び場": "Livre",
+"工場を選ぶ": "Escolher fábrica",
+"第{n}工場": "Fábrica {n}",
+"の記録を消しますか？元には戻せません。": ": apagar este registro? Não dá para desfazer."
 }
