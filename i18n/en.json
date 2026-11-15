@@ -1556,5 +1556,13 @@
 "遊び場": "Free play",
 "の記録を消しますか？元には戻せません。": ": delete this record? This cannot be undone.",
 "記録を選ぶ": "Choose a save",
-"記録{n}": "Save {n}"
+"記録{n}": "Save {n}",
+"鉄鉱石は<b>鉄鉱脈</b>（赤茶の粒が混じった岩）を削らんと出んぞ。手引きで削った石炭の鉱脈からは、石炭しか出ん。新しい削岩機の刃を鉄鉱脈に向けて置くんじゃ。それを反射炉で焼けば鉄板じゃ。": "Iron ore only comes from an <b>iron vein</b> (rock flecked with rusty brown). The coal vein from the tutorial gives nothing but coal. Place a new drill with its bit facing an iron vein, then smelt the ore in a furnace for iron plates.",
+"銅鉱石は<b>銅鉱脈</b>（青緑の粒が混じった岩）を削らんと出ん。削岩機の刃を銅鉱脈に向けて、反射炉で焼けば銅板じゃ。": "Copper ore only comes from a <b>copper vein</b> (rock flecked with blue-green). Point a drill's bit at a copper vein and smelt the ore in a furnace for copper plates.",
+"は出ない": " never comes out",
+"次の目標が出ました": "A new goal has arrived",
+"<p>案件を納めると、上の<b>目標</b>が次へ進みます。次は<b>「": "<p>Completing an order moves the <b>Goal</b> at the top forward. Next up: <b>\"",
+"」</b>です。</p><p>鉄板は鉄鉱石から作ります。鉄鉱石は<b>鉄鉱脈</b>を削らないと出ません。</p>": "\"</b>.</p><p>Iron plates are made from iron ore, and iron ore only comes from drilling an <b>iron vein</b>.</p>",
+"<p class=\"hint\">目標を押すと、全体の道のりが見られます。</p>": "<p class=\"hint\">Press the Goal to see the whole road ahead.</p>",
+"<button class=\"pbtn pri\" id=\"tutNext\" hidden>次へ</button>": "<button class=\"pbtn pri\" id=\"tutNext\" hidden>Next</button>"
 }

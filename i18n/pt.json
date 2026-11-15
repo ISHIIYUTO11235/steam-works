@@ -1556,5 +1556,13 @@
 "遊び場": "Livre",
 "の記録を消しますか？元には戻せません。": ": apagar este registro? Não dá para desfazer.",
 "記録を選ぶ": "Escolher save",
-"記録{n}": "Save {n}"
+"記録{n}": "Save {n}",
+"鉄鉱石は<b>鉄鉱脈</b>（赤茶の粒が混じった岩）を削らんと出んぞ。手引きで削った石炭の鉱脈からは、石炭しか出ん。新しい削岩機の刃を鉄鉱脈に向けて置くんじゃ。それを反射炉で焼けば鉄板じゃ。": "Minério de ferro só sai de um <b>veio de ferro</b> (rocha com pintas marrom-avermelhadas). O veio de carvão do tutorial só dá carvão. Coloque uma nova perfuratriz com a broca virada para um veio de ferro e funda o minério no forno para fazer chapas.",
+"銅鉱石は<b>銅鉱脈</b>（青緑の粒が混じった岩）を削らんと出ん。削岩機の刃を銅鉱脈に向けて、反射炉で焼けば銅板じゃ。": "Minério de cobre só sai de um <b>veio de cobre</b> (rocha com pintas verde-azuladas). Aponte a broca para um veio de cobre e funda no forno para fazer chapas de cobre.",
+"は出ない": " não sai",
+"次の目標が出ました": "Um novo objetivo chegou",
+"<p>案件を納めると、上の<b>目標</b>が次へ進みます。次は<b>「": "<p>Ao concluir um pedido, o <b>Objetivo</b> no topo avança. O próximo é <b>\"",
+"」</b>です。</p><p>鉄板は鉄鉱石から作ります。鉄鉱石は<b>鉄鉱脈</b>を削らないと出ません。</p>": "\"</b>.</p><p>Chapas de ferro vêm do minério de ferro, que só sai ao perfurar um <b>veio de ferro</b>.</p>",
+"<p class=\"hint\">目標を押すと、全体の道のりが見られます。</p>": "<p class=\"hint\">Aperte o Objetivo para ver o caminho todo.</p>",
+"<button class=\"pbtn pri\" id=\"tutNext\" hidden>次へ</button>": "<button class=\"pbtn pri\" id=\"tutNext\" hidden>Próximo</button>"
 }
